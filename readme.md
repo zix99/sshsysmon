@@ -14,7 +14,7 @@ Requires python 2.x
 
 Make sure the dependencies are installed:
 
-   pip install -r requirements.txt
+    pip install -r requirements.txt
 
 It is assumed that you already have a private key created and added to the `authorized_hosts` file on
 all remote servers you are interested in monitoring.  This is the easiest way to guarantee continued
@@ -26,11 +26,11 @@ The service is (currently) meant to be used in a cron job.
 
 Edit your cron jobs with
 
-   crontab -e
+    crontab -e
 
 Add an entry that runs the script every few hours: (or minutes, whatever you like)
 
-   0 */4 * * * /path/to/sshmon.py check /path/to/config.yml
+    0 */4 * * * /path/to/sshmon.py check /path/to/config.yml
 
 ### Configuration
 
