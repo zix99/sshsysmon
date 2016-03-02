@@ -6,6 +6,8 @@ need for installing agents across machines.
 Its goal is to provide simple self-hosted monitoring and alerting for small numbers and lightweight
 servers without the traditional overhead of a monitoring system.
 
+It monitors things in /proc and with simple command executions to monitor system vitals such as: memory, cpu load, drive space, swap, etc.
+
 ## Setup
 
 ### Installation
