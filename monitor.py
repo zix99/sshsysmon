@@ -34,17 +34,20 @@ class Monitor:
 
 				metrics = inspector.getMetrics()
 
-				for alert_name in alert:
-					statement = alert[alert_name]
+				if metrics:
+					for alert_name in alert:
+						statement = alert[alert_name]
 
-					try:
-						if evalCriteria(statement, metrics):
-							yield (True, alert_type, alert_name)
-						else:
-							yield (False, alert_type, alert_name)
-					except Exception,e:
-						yield (True, alert_type, "EVAL:" + alert_name)
-						printError("Error evaluating alert: %s" % e)
+						try:
+							if evalCriteria(statement, metrics):
+								yield (True, alert_type, alert_name)
+							else:
+								yield (False, alert_type, alert_name)
+						except Exception,e:
+							yield (True, alert_type, "EVAL:" + alert_name)
+							printError("Error evaluating alert: %s" % e)
+				else:
+					yield (True, "NO_DATA", "No data")
 
 			except Exception,e:
 				printError("Error executing inspector %s: %s" % (alert_type, e))
@@ -74,8 +77,11 @@ class Monitor:
 				print "## %s" % inspector.getName()
 				metrics = inspector.getMetrics()
 
-				for key in summary_items:
-					print "%s: %s" % (key.upper(), metrics.get(key, "<Missing>"))
+				if metrics:
+					for key in summary_items:
+						print "%s: %s" % (key.upper(), metrics.get(key, "<Missing>"))
+				else:
+					print "Unable to retrieve metrics"
 
 			except Exception, e:
 				printError("Error executing inspector %s: %s" % (summary_type, e))
