@@ -29,7 +29,13 @@ def run_summary(config):
 			print "ERROR: %s" % e
 
 def show_help():
-	print "This is help"
+	print "Usage: sshmon.py <command> <config>"
+	print ""
+	print "Run monitoring against servers defined in config"
+	print ""
+	print "Commands:"
+	print " check          Check and alerts servers"
+	print " summary        Summarize status of servers"
 
 def main(args):
 	if len(args) != 2:
