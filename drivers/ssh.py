@@ -21,7 +21,7 @@ class Ssh(Driver):
 			sftp = client.open_sftp()
 
 			o = StringIO()
-			for line in sftp.open("/proc/meminfo"):
+			for line in sftp.open(os.path.join(self._path, path)):
 				o.write(line)
 
 			return o.getvalue()

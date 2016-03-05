@@ -39,15 +39,24 @@ class Monitor:
 
 					try:
 						if evalCriteria(statement, metrics):
-							yield (alert_type, alert_name)
+							yield (True, alert_type, alert_name)
+						else:
+							yield (False, alert_type, alert_name)
 					except Exception,e:
+						yield (True, alert_type, "EVAL:" + alert_name)
 						printError("Error evaluating alert: %s" % e)
+
 			except Exception,e:
-				printError(e)
-				yield ("INSPECTOR_ERROR", str(e))
+				printError("Error executing inspector %s: %s" % (alert_type, e))
+				yield (True, "INSPECTOR_ERROR", str(e))
+
+	def get_fired_alerts(self):
+		for fired, alert, name in self.get_alerts():
+			if fired:
+				yield (alert, name)
 
 	def send_alerts(self):
-		for alert_type, alert_name in self.get_alerts():
+		for alert_type, alert_name in self.get_fired_alerts():
 			data = {
 				"server" : self._name,
 				"metric" : alert_type,
@@ -69,7 +78,7 @@ class Monitor:
 					print "%s: %s" % (key.upper(), metrics.get(key, "<Missing>"))
 
 			except Exception, e:
-				print "Error: %s" % e
+				printError("Error executing inspector %s: %s" % (summary_type, e))
 			print ""
 
 

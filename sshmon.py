@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import yaml
+import time
 from monitor import *
 from util.log import *
 
@@ -15,18 +16,24 @@ def run_check(config):
 
 		for alert in monitor.send_alerts():
 			count += 1
-			print "ALERT: " + alert[0]
+			print "ALERT: %s, %s" % alert
 
 	print "There were %d alert(s) triggered" % count
 
 def run_summary(config):
+	print "System Summary"
+	print time.ctime()
+	print ""
+
 	for server_name, server in config["servers"].iteritems():
+		print "-" * 48
 		print "# %s" % server_name
 		monitor = Monitor(server_name, server)
 		try:
 			monitor.printSummary()
 		except Exception, e:
-			print "ERROR: %s" % e
+			print "ERROR %s: %s" % (server_name, e)
+		print ""
 
 def show_help():
 	print "Usage: sshmon.py <command> <config>"
