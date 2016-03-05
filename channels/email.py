@@ -1,4 +1,5 @@
 from channel import Channel
+from util.log import *
 import smtplib
 
 
@@ -24,23 +25,26 @@ SshSysMon
 		self._ssl = ssl
 
 	def notify(self, model):
-		fromAddr = self._from
-		toAddr = self._to.split()
-		subj = self._subject.format(**model)
+		try:
+			fromAddr = self._from
+			toAddr = self._to.split()
+			subj = self._subject.format(**model)
 
-		message = "From: {frm}\nTo: {to}\nSubject: {subject}\n\n{body}".format(frm=fromAddr, to=toAddr, subject=subj, body=self._body)
+			message = "From: {frm}\nTo: {to}\nSubject: {subject}\n\n{body}".format(frm=fromAddr, to=toAddr, subject=subj, body=self._body)
 
-		if self._ssl:
-			server = smtplib.SMTP_SSL(self._host, self._port)
-		else:
-			server = smtplib.SMTP(self._host, self._port)
+			if self._ssl:
+				server = smtplib.SMTP_SSL(self._host, self._port)
+			else:
+				server = smtplib.SMTP(self._host, self._port)
 
-		server.ehlo()
+			server.ehlo()
 
-		if self._username:
-			if (self._tls):
-				server.starttls()
-			server.login(self._username, self._password)
+			if self._username:
+				if (self._tls):
+					server.starttls()
+				server.login(self._username, self._password)
 
-		server.sendmail(fromAddr, toAddr, message)
-		server.close()
+			server.sendmail(fromAddr, toAddr, message)
+			server.close()
+		except Exception, e:
+			printError("There was an error sending an email %s" % e)
