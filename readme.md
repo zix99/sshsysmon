@@ -39,7 +39,7 @@ Add an entry that runs the script every few hours: (or minutes, whatever you lik
 Configuration is written in yaml and is a set of servers, with a list of alerts, notification channels
 and connection details.
 
-See the [/examples](Examples) folder for more sample configs.
+See the [Examples](/examples) folder for more sample configs.
 
 An example simple configuration might look something like this:
 
