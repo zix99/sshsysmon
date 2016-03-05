@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>SshSysMon by zix99</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>SshSysMon</h1>
+        <p>SSH System Monitoring -- Server monitoring for lazy people.</p>
+
+        <p class="view"><a href="https://github.com/zix99/sshsysmon">View the Project on GitHub <small>zix99/sshsysmon</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/zix99/sshsysmon/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/zix99/sshsysmon/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/zix99/sshsysmon">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="unix-system-monitoring-over-ssh" class="anchor" href="#unix-system-monitoring-over-ssh" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Unix System Monitoring Over SSH</h1>
+
+<p>SshMon is a system/server monitoring tool that executes all of its operations over SSH without the
+need for installing agents across machines.</p>
+
+<p>Its goal is to provide simple self-hosted monitoring and alerting for small numbers and lightweight
+servers without the traditional overhead of a monitoring system.</p>
+
+<p>It monitors things in /proc and with simple command executions to monitor system vitals such as: memory, cpu load, drive space, swap, etc.</p>
+
+<h2>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h2>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Requires python 2.x</p>
+
+<p>Make sure the dependencies are installed:</p>
+
+<pre><code>pip install -r requirements.txt
+</code></pre>
+
+<p>It is assumed that you already have a private key created and added to the <code>authorized_hosts</code> file on
+all remote servers you are interested in monitoring.  This is the easiest way to guarantee continued
+authentication to other hosts.</p>
+
+<h3>
+<a id="running" class="anchor" href="#running" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running</h3>
+
+<p>The service is (currently) meant to be used in a cron job.</p>
+
+<p>Edit your cron jobs with</p>
+
+<pre><code>crontab -e
+</code></pre>
+
+<p>Add an entry that runs the script every few hours: (or minutes, whatever you like)</p>
+
+<pre><code>0 */4 * * * /path/to/sshmon.py check /path/to/config.yml
+</code></pre>
+
+<h3>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h3>
+
+<p>Configuration is written in yaml and is a set of servers, with a list of alerts, notification channels
+and connection details.</p>
+
+<p>See the <a href="/examples">Examples</a> folder for more sample configs.</p>
+
+<p>An example simple configuration might look something like this:</p>
+
+<pre><code>servers:
+  "Name of server":
+    driver: ssh
+    config:
+      host: myhostname.com
+      username: myuser
+  channels:
+    email:
+      to: myemail@gmail.com
+      subject: "Something went wrong on {server}"
+  alerts:
+      memory:
+        "Low Swap": "swap_free &lt; 50000"
+        "Low Memory": "mem_free &lt; 50000"
+      diskspace:
+        "Low Disk Space": "disk_free &lt; 500000"
+</code></pre>
+
+<p>Using Yaml's inheritance, you can often simplify configuration for many servers.</p>
+
+<pre><code>mychannels: &amp;mychannels
+  email:
+    to: myemail@gmail.com
+    subject: "Something went wrong on {server}"
+
+commonalerts: &amp;commonalerts
+  memory:
+    "Low Swap": "swap_free &lt; 50000"
+    "Low Memory": "mem_free &lt; 50000"
+  diskspace:
+    "Low Disk Space": "disk_free &lt; 500000"
+
+servers:
+  "Name of server":
+    driver: ssh
+    config:
+      host: myhostname.com
+      username: myuser
+  channels:
+    &lt;&lt;: *mychannels
+  alerts:
+    &lt;&lt;: *commonalerts
+
+</code></pre>
+
+<h4>
+<a id="drivers" class="anchor" href="#drivers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Drivers</h4>
+
+<p>Drivers are classes that define how to read information from a server.  By default, there are two drivers:</p>
+
+<h5>
+<a id="local" class="anchor" href="#local" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Local</h5>
+
+<p>The local driver is only for your local machine. There is no config for this driver.</p>
+
+<h5>
+<a id="ssh" class="anchor" href="#ssh" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SSH</h5>
+
+<p>The SSH driver is for reaching out to remote machines.  There are several config paramters for this driver:</p>
+
+<ul>
+<li>host - The hostname of the machine (IP or Domain)</li>
+<li>username - The username to connect with</li>
+<li>key - The path to the private key to use to connect (Default: ~/.ssh/id_rsa)</li>
+<li>port - The port to connect to the machine on (Default: 22)</li>
+<li>path - The path which proc is located (Default: /proc)</li>
+</ul>
+
+<h4>
+<a id="channels" class="anchor" href="#channels" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Channels</h4>
+
+<p>Channels define what can happen if an alert fires.  There a few built-in.</p>
+
+<p>There are a few variables passed in that can be used to format part of the commands:</p>
+
+<ul>
+<li>server - The server that the alert triggered on</li>
+<li>alert - The alert that triggered</li>
+<li>metric - The metric that triggered the alert</li>
+</ul>
+
+<h5>
+<a id="command" class="anchor" href="#command" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>command</h5>
+
+<p>Executes a shell command on the machine in which the script is running.</p>
+
+<p>Arguments:</p>
+
+<ul>
+<li>command - The shell command to execute</li>
+</ul>
+
+<h5>
+<a id="email" class="anchor" href="#email" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>email</h5>
+
+<p>Sends an email via a SMTP server.</p>
+
+<p>Arguments:</p>
+
+<ul>
+<li>toAddr - The address to send the email to</li>
+<li>fromAddr - The address the email should come from</li>
+<li>host - The SMTP host (default: localhost)</li>
+<li>port - The SMTP port (default: 25)</li>
+<li>subject - Subject line of email (has reasonable default)</li>
+<li>username - Username to authenticate with smtp server (default: none)</li>
+<li>password - Password to authenticate with smtp server (default: none)</li>
+<li>tls - Should use tls (default: false)</li>
+<li>ssl - Should use ssl (default: false)</li>
+</ul>
+
+<h4>
+<a id="inspectors-alert-types" class="anchor" href="#inspectors-alert-types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspectors (Alert Types)</h4>
+
+<p>Inspects are parsers that know how to read data from a driver and make sense of it.</p>
+
+<h5>
+<a id="memory" class="anchor" href="#memory" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>memory</h5>
+
+<p>The memory driver returns metrics about the systems memory (in KB):</p>
+
+<p>mem_total, mem_free, cached, swap_total, swap_free</p>
+
+<h5>
+<a id="disk" class="anchor" href="#disk" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>disk</h5>
+
+<p>The Disk driver returns status of the disk space (in GB)</p>
+
+<p>Arguments:</p>
+
+<ul>
+<li>device - The name of the device (Optional, eg /dev/sda)</li>
+<li>mount - The mount point of the device (default: /)</li>
+</ul>
+
+<p>Returns: size, used, available, percent_full</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>The MIT License (MIT)
+Copyright (c) 2016 Chris LaPointe</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/zix99">zix99</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
