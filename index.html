@@ -57,6 +57,25 @@ all remote servers you are interested in monitoring.  This is the easiest way to
 authentication to other hosts.</p>
 
 <h3>
+<a id="setting-up-a-ssh-key-pair" class="anchor" href="#setting-up-a-ssh-key-pair" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting up a ssh key pair</h3>
+
+<p>On debian-based linux systems, setting up a key-pair to use with SSH is easy.  I would recommend
+you make a new linux user to only do monitoring on each machine, but it isn't required.</p>
+
+<p>First, create a new SSH key if you don't already have one. Follow the prompts, but leave the
+password blank</p>
+
+<pre><code>ssh-keygen
+</code></pre>
+
+<p>Now, install it on a user on another machine that you want to monitor</p>
+
+<pre><code>ssh-copy-id username@hostname
+</code></pre>
+
+<p>Now you're all set up to use sshsysmon over SSH to the other host</p>
+
+<h3>
 <a id="running" class="anchor" href="#running" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running</h3>
 
 <p>The service is (currently) meant to be used in a cron job.</p>
@@ -88,43 +107,21 @@ and connection details.</p>
       host: myhostname.com
       username: myuser
   channels:
-    email:
-      to: myemail@gmail.com
-      subject: "Something went wrong on {server}"
+    - type: email
+      config:
+        toAddr: myemail@gmail.com
+        subject: "Something went wrong on {server}"
   alerts:
-      memory:
+    - type: memory
+      alarms:
         "Low Swap": "swap_free &lt; 50000"
         "Low Memory": "mem_free &lt; 50000"
-      diskspace:
+    - type: diskspace
+      alarms:
         "Low Disk Space": "disk_free &lt; 500000"
 </code></pre>
 
-<p>Using Yaml's inheritance, you can often simplify configuration for many servers.</p>
-
-<pre><code>mychannels: &amp;mychannels
-  email:
-    to: myemail@gmail.com
-    subject: "Something went wrong on {server}"
-
-commonalerts: &amp;commonalerts
-  memory:
-    "Low Swap": "swap_free &lt; 50000"
-    "Low Memory": "mem_free &lt; 50000"
-  diskspace:
-    "Low Disk Space": "disk_free &lt; 500000"
-
-servers:
-  "Name of server":
-    driver: ssh
-    config:
-      host: myhostname.com
-      username: myuser
-  channels:
-    &lt;&lt;: *mychannels
-  alerts:
-    &lt;&lt;: *commonalerts
-
-</code></pre>
+<p>You can often use YAML's inheritance to simplify your config for more than 1 server.</p>
 
 <h4>
 <a id="drivers" class="anchor" href="#drivers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Drivers</h4>
