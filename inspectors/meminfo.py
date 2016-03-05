@@ -14,3 +14,6 @@ class MemInfo(Inspector):
 			"swap_total" : vals.get("swaptotal"),
 			"swap_free" : vals.get("SwapFree")
 		}
+
+	def getName(self):
+		return "Memory"

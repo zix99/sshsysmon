@@ -36,8 +36,11 @@ class Monitor:
 				for alert_name in alert:
 					statement = alert[alert_name]
 
-					if evalCriteria(statement, metrics):
-						yield (alert_type, alert_name)
+					try:
+						if evalCriteria(statement, metrics):
+							yield (alert_type, alert_name)
+					except Exception,e:
+						printError("Error evaluating alert: %s" % e)
 			except Exception,e:
 				yield ("INSPECTOR_ERROR", str(e))
 
