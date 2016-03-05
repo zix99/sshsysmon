@@ -5,6 +5,8 @@ from monitor import *
 from util.log import *
 
 def run_check(config):
+	count = 0
+
 	for server_name in config["servers"]:
 		printInfo("Checking server: %s..." % server_name)
 
@@ -12,7 +14,19 @@ def run_check(config):
 		monitor = Monitor(server_name, server)
 
 		for alert in monitor.send_alerts():
+			count += 1
 			print "ALERT: " + alert[0]
+
+	print "There were %d alert(s) triggered" % count
+
+def run_summary(config):
+	for server_name, server in config["servers"].iteritems():
+		print "# %s" % server_name
+		monitor = Monitor(server_name, server)
+		try:
+			monitor.printSummary()
+		except Exception, e:
+			print "ERROR: %s" % e
 
 def show_help():
 	print "This is help"

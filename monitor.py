@@ -12,7 +12,8 @@ class Monitor:
 	def __init__(self, name, config):
 		self._name = name
 		self._driver = drivers.createDriver(config["driver"], config["config"])
-		self._alerts = config["alerts"]
+		self._alerts = config["alerts"] if "alerts" in config else {}
+		self._summary = config["summary"] if "summary" in config else {}
 
 		self._channels = []
 		for channel_type in config["channels"]:
@@ -49,5 +50,19 @@ class Monitor:
 			for channel in self._channels:
 				channel.notify(self._name, alert_type, alert_name)
 				yield (alert_type, alert_name)
+
+	def printSummary(self):
+		for summary_type, summary_items in self._summary.iteritems():
+			try:
+				inspector = inspectors.createInspector(summary_type, self._driver)
+				print "## %s" % inspector.getName()
+				metrics = inspector.getMetrics()
+
+				for key in summary_items:
+					print "%s: %s" % (key.upper(), metrics.get(key, "<Missing>"))
+
+			except Exception, e:
+				print "Error: %s" % e
+			print ""
 
 
