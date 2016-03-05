@@ -51,44 +51,22 @@ servers:
       host: myhostname.com
       username: myuser
   channels:
-    email:
-      to: myemail@gmail.com
-      subject: "Something went wrong on {server}"
+    - type: email
+      config:
+        toAddr: myemail@gmail.com
+        subject: "Something went wrong on {server}"
   alerts:
-      memory:
+    - type: memory
+      alarms:
         "Low Swap": "swap_free < 50000"
         "Low Memory": "mem_free < 50000"
-      diskspace:
+    - type: diskspace
+      alarms:
         "Low Disk Space": "disk_free < 500000"
 ```
 
-Using Yaml's inheritance, you can often simplify configuration for many servers.
+You can often use YAML's inheritance to simplify your config for more than 1 server.
 
-```
-mychannels: &mychannels
-  email:
-    to: myemail@gmail.com
-    subject: "Something went wrong on {server}"
-
-commonalerts: &commonalerts
-  memory:
-    "Low Swap": "swap_free < 50000"
-    "Low Memory": "mem_free < 50000"
-  diskspace:
-    "Low Disk Space": "disk_free < 500000"
-
-servers:
-  "Name of server":
-    driver: ssh
-    config:
-      host: myhostname.com
-      username: myuser
-  channels:
-    <<: *mychannels
-  alerts:
-    <<: *commonalerts
-      
-```
 
 #### Drivers
 

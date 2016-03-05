@@ -12,9 +12,9 @@ Sincerely,
 SshSysMon
 """
 
-	def __init__(self, toAddr, fromAddr, host = 'localhost', port=25, body=DEFAULT_BODY, subject = DEFAULT_SUBJECT, username = None, password = None, tls = False, ssl = False):
+	def __init__(self, toAddr, fromAddr = None, host = 'localhost', port=25, body=DEFAULT_BODY, subject = DEFAULT_SUBJECT, username = None, password = None, tls = False, ssl = False):
 		self._to = toAddr
-		self._from = fromAddr
+		self._from = fromAddr or toAddr
 		self._subject = subject
 		self._body = body
 		self._host = host
