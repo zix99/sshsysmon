@@ -39,6 +39,8 @@ Add an entry that runs the script every few hours: (or minutes, whatever you lik
 Configuration is written in yaml and is a set of servers, with a list of alerts, notification channels
 and connection details.
 
+See the [/examples](Examples) folder for more sample configs.
+
 An example simple configuration might look something like this:
 
 ```
@@ -90,9 +92,76 @@ servers:
 
 #### Drivers
 
+Drivers are classes that define how to read information from a server.  By default, there are two drivers:
+
+##### Local
+
+The local driver is only for your local machine. There is no config for this driver.
+
+##### SSH
+
+The SSH driver is for reaching out to remote machines.  There are several config paramters for this driver:
+
+  * host - The hostname of the machine (IP or Domain)
+  * username - The username to connect with
+  * key - The path to the private key to use to connect (Default: ~/.ssh/id_rsa)
+  * port - The port to connect to the machine on (Default: 22)
+  * path - The path which proc is located (Default: /proc)
+
 #### Channels
 
+Channels define what can happen if an alert fires.  There a few built-in.
+
+There are a few variables passed in that can be used to format part of the commands:
+
+  * server - The server that the alert triggered on
+  * alert - The alert that triggered
+  * metric - The metric that triggered the alert
+
+##### command
+
+Executes a shell command on the machine in which the script is running.
+
+Arguments:
+
+  * command - The shell command to execute
+
+##### email
+
+Sends an email via a SMTP server.
+
+Arguments:
+
+  * toAddr - The address to send the email to
+  * fromAddr - The address the email should come from
+  * host - The SMTP host (default: localhost)
+  * port - The SMTP port (default: 25)
+  * subject - Subject line of email (has reasonable default)
+  * username - Username to authenticate with smtp server (default: none)
+  * password - Password to authenticate with smtp server (default: none)
+  * tls - Should use tls (default: false)
+  * ssl - Should use ssl (default: false)
+
 #### Inspectors (Alert Types)
+
+Inspects are parsers that know how to read data from a driver and make sense of it.
+
+##### memory
+
+The memory driver returns metrics about the systems memory (in KB):
+
+mem_total, mem_free, cached, swap_total, swap_free
+
+##### disk
+
+The Disk driver returns status of the disk space (in GB)
+
+Arguments:
+
+  * device - The name of the device (Optional, eg /dev/sda)
+  * mount - The mount point of the device (default: /)
+
+Returns: size, used, available, percent_full
 
 ## License
 
