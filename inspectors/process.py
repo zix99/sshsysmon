@@ -2,11 +2,11 @@ from inspector import Inspector
 from fnmatch import fnmatch
 
 class Process(Inspector):
-	def __init__(self, driver, process):
+	def __init__(self, driver, name):
 		self._driver = driver
-		self._process = process
+		self._process = name
 
-	def getMetrics():
+	def getMetrics(self):
 		data = self._driver.sh("ps -A u")
 
 		for line in data.splitlines():
@@ -25,5 +25,5 @@ class Process(Inspector):
 
 		return None
 
-	def getName():
+	def getName(self):
 		return "Process: %s" % self._process
