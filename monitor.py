@@ -47,8 +47,14 @@ class Monitor:
 
 	def send_alerts(self):
 		for alert_type, alert_name in self.get_alerts():
+			data = {
+				"server" : self._name,
+				"metric" : alert_type,
+				"alert" : alert_name
+			}
+
 			for channel in self._channels:
-				channel.notify(self._name, alert_type, alert_name)
+				channel.notify(data)
 				yield (alert_type, alert_name)
 
 	def printSummary(self):

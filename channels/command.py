@@ -6,9 +6,9 @@ class Command(Channel):
 	def __init__(self, command):
 		self._command = command
 
-	def notify(self, server, metric, alert):
+	def notify(self, model):
 		try:
-			parsed = self._command.format(server=server, metric=metric, alert=alert)
+			parsed = self._command.format(**model)
 			subprocess.call(parsed, shell=True)
 		except Exception, e:
 			printError(e)
