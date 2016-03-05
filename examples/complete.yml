@@ -1,0 +1,31 @@
+
+
+_alerts: &common_alerts
+  alerts:
+    - type: memory
+      alarms:
+        "Swap < 100MB" : "swap_free < 100000"
+        "Memory < 10MB" : "mem_free < 10000"
+    - type: disk
+      alarms:
+        "Disk > 80%" : "percent_full > 80"
+    - type: loadavg
+      alarms:
+        "Load Average > 1.5" : "load_15m > 1.5"
+
+_channels: &common_channels
+  channels:
+    - type: email
+      config:
+        toAddr: <YOUR EMAIL>
+
+_default: &default
+  <<: *common_alerts
+  <<: *common_channels
+
+servers:
+  localhost:
+    <<: *default
+    driver: local
+
+

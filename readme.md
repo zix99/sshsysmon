@@ -8,6 +8,9 @@ servers without the traditional overhead of a monitoring system.
 
 It monitors things in /proc and with simple command executions to monitor system vitals such as: memory, cpu load, drive space, swap, etc.
 
+
+
+
 ## Setup
 
 ### Installation
@@ -22,6 +25,25 @@ It is assumed that you already have a private key created and added to the `auth
 all remote servers you are interested in monitoring.  This is the easiest way to guarantee continued
 authentication to other hosts.
 
+### Setting up a ssh key pair
+
+On debian-based linux systems, setting up a key-pair to use with SSH is easy.  I would recommend
+you make a new linux user to only do monitoring on each machine, but it isn't required.
+
+First, create a new SSH key if you don't already have one. Follow the prompts, but leave the
+password blank
+
+    ssh-keygen
+
+Now, install it on a user on another machine that you want to monitor
+
+    ssh-copy-id username@hostname
+
+Now you're all set up to use sshsysmon over SSH to the other host
+
+
+
+
 ### Running
 
 The service is (currently) meant to be used in a cron job.
@@ -33,6 +55,9 @@ Edit your cron jobs with
 Add an entry that runs the script every few hours: (or minutes, whatever you like)
 
     0 */4 * * * /path/to/sshmon.py check /path/to/config.yml
+
+
+
 
 ### Configuration
 
@@ -140,6 +165,9 @@ Arguments:
   * mount - The mount point of the device (default: /)
 
 Returns: size, used, available, percent_full
+
+
+
 
 ## License
 

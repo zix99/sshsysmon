@@ -1,0 +1,16 @@
+servers:
+  localhost:
+    driver: local
+    channels:
+    - type: email
+      config:
+        toAddr: <TO ADDRESS>
+        username: <USERNAME>
+        password: <PASSWORD>
+        host: "smtp.gmail.com"
+        port: 465
+        ssl: true
+    alerts:
+      - type: disk
+        alarms:
+          "Percent Full > 20%" : "percent_full > 20"
