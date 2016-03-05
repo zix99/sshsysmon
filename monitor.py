@@ -51,7 +51,7 @@ class Monitor:
 			data = {
 				"server" : self._name,
 				"metric" : alert_type,
-				"alert" : alert_name
+				"alert" : alert_name,
 			}
 
 			for channel in self._channels:
