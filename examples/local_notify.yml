@@ -1,0 +1,24 @@
+common: &common
+  channels:
+    command:
+      command: "notify-send -u critical \"{server}\" \"Server threw {alert} alert\""
+  alerts:
+      memory:
+        "Low Swap": "swap_free < 50000"
+        "Low Memory": "mem_free < 500000"
+      disk:
+        "Low Disk": "percent_full > 50"
+  summary:
+    memory:
+      - "swap_free"
+      - "mem_free"
+    disk:
+      - "size"
+      - "available"
+      - "percent_full"
+
+servers:
+  localhost:
+    <<: *common
+    driver: local
+    
