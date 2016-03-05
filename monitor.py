@@ -11,9 +11,9 @@ def evalCriteria(statement, data):
 class Monitor:
 	def __init__(self, name, config):
 		self._name = name
-		self._driver = drivers.createDriver(config["driver"], config["config"])
-		self._alerts = config["alerts"] if "alerts" in config else {}
-		self._summary = config["summary"] if "summary" in config else {}
+		self._driver = drivers.createDriver(config.get("driver"), config.get("config", {}))
+		self._alerts = config.get("alerts", {})
+		self._summary = config.get("summary", {})
 
 		self._channels = []
 		for channel_type in config["channels"]:
@@ -43,6 +43,7 @@ class Monitor:
 					except Exception,e:
 						printError("Error evaluating alert: %s" % e)
 			except Exception,e:
+				printError(e)
 				yield ("INSPECTOR_ERROR", str(e))
 
 	def send_alerts(self):
