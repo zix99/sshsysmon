@@ -1,5 +1,6 @@
 import subprocess
 from channel import Channel
+from util.log import *
 
 class Command(Channel):
 	def __init__(self, command):
@@ -10,5 +11,5 @@ class Command(Channel):
 			parsed = self._command.format(server=server, metric=metric, alert=alert)
 			subprocess.call(parsed, shell=True)
 		except Exception, e:
-			print e
+			printError(e)
 

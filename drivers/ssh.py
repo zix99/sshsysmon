@@ -15,7 +15,7 @@ class Ssh(Driver):
 
 		self._key = RSAKey.from_private_key_file(os.path.expanduser(key or Ssh.DEFAULT_KEY_PATH))
 
-	def readfile(self, path):
+	def readFile(self, path):
 		client = self._connect()
 		try:
 			sftp = client.open_sftp()

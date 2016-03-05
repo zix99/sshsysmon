@@ -2,10 +2,12 @@
 import sys
 import yaml
 from monitor import *
+from util.log import *
 
 def run_check(config):
 	for server_name in config["servers"]:
-		print server_name
+		printInfo("Checking server: %s..." % server_name)
+
 		server = config["servers"][server_name]
 		monitor = Monitor(server_name, server)
 
@@ -20,7 +22,11 @@ def main(args):
 		show_help()
 		sys.exit(1)
 
-	config = yaml.load(open(args[1]))
+	try:
+		config = yaml.load(open(args[1]))
+	except Exception, e:
+		print "Error parsing config:", str(e)
+		sys.exit(1)
 
 	if args[0] == "check":
 		run_check(config)

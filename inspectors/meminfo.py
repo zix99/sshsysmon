@@ -1,14 +1,16 @@
-from commonproc import *
+from inspector import Inspector
+import parsers
 
-class MemInfo(CommonProc):
+class MemInfo(Inspector):
 	def __init__(self, driver):
-		CommonProc.__init__(self, driver.readfile("meminfo"))
-		
-		self.mem_total = self.get("MemTotal")
-		self.mem_free = self.get("MemFree")
-		self.cached = self.get("Cached")
-		self.swap_total = self.get("SwapTotal")
-		self.swap_free = self.get("SwapFree")
+		self._driver = driver
 
-	def __str__(self):
-		return "Mem Total: {mtotal}".format(mtotal=self.mem_total)
+	def getMetrics(self):
+		vals = parsers.splitLines(self._driver.readFile("meminfo"))
+		return {
+			"mem_total": vals.get("memtotal"),
+			"mem_free" : vals.get("memfree"),
+			"cached" : vals.get("cached"),
+			"swap_total" : vals.get("swaptotal"),
+			"swap_free" : vals.get("SwapFree")
+		}

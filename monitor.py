@@ -1,6 +1,12 @@
 import drivers
 import inspectors
 import channels
+from util.log import *
+
+def evalCriteria(statement, data):
+	for k,v in data.iteritems():
+		exec("%s = %s" % (k,v))
+	return eval(statement)
 
 class Monitor:
 	def __init__(self, name, config):
@@ -17,19 +23,20 @@ class Monitor:
 
 	def get_alerts(self):
 		for alert_type in self._alerts:
-			print "Checking alert %s..." % alert_type
+			printInfo("Checking alert: %s..." % alert_type)
 			alert = self._alerts[alert_type]
 
 			try:
 				inspector = inspectors.createInspector(alert_type, self._driver)
-				print inspector.mem_free
+				if not inspector:
+					raise Exception("Unknown inspector type: %s" % alert_type)
+
+				metrics = inspector.getMetrics()
 
 				for alert_name in alert:
 					statement = alert[alert_name]
-					def evalContainer(m):
-						return eval(statement)
 
-					if evalContainer(inspector):
+					if evalCriteria(statement, metrics):
 						yield (alert_type, alert_name)
 			except Exception,e:
 				yield ("INSPECTOR_ERROR", str(e))
