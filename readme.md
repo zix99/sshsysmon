@@ -56,10 +56,10 @@ servers:
       subject: "Something went wrong on {server}"
   alerts:
       memory:
-        "Low Swap": "m.swap_free < 50000"
-        "Low Memory": "m.mem_free < 50000"
+        "Low Swap": "swap_free < 50000"
+        "Low Memory": "mem_free < 50000"
       diskspace:
-        "Low Disk Space": "m.disk_free < 500000"
+        "Low Disk Space": "disk_free < 500000"
 ```
 
 Using Yaml's inheritance, you can often simplify configuration for many servers.
@@ -72,10 +72,10 @@ mychannels: &mychannels
 
 commonalerts: &commonalerts
   memory:
-    "Low Swap": "m.swap_free < 50000"
-    "Low Memory": "m.mem_free < 50000"
+    "Low Swap": "swap_free < 50000"
+    "Low Memory": "mem_free < 50000"
   diskspace:
-    "Low Disk Space": "m.disk_free < 500000"
+    "Low Disk Space": "disk_free < 500000"
 
 servers:
   "Name of server":
