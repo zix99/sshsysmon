@@ -59,8 +59,8 @@ class Monitor:
 			channel_type = channel.get('type')
 			channel_config = channel.get('config', {})
 
-			inst = channels.createChannel(channel_type, channel_config)
 			try:
+				inst = channels.createChannel(channel_type, channel_config)
 				inst.notify(data)
 			except Exception, e:
 				printError("Error notifying channel: %s" % e)
