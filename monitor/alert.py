@@ -12,7 +12,7 @@ class Alert:
 			return eval(self.statement)
 		except Exception, e:
 			print "Error validating alert %s:%s: %s" % (self.serverName, self.name, e)
-		return False
+		return True
 
 	def __repr__(self):
 		return "[%s:%s]" % (self.serverName, self.name)

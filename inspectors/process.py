@@ -2,7 +2,7 @@ from inspector import Inspector
 from fnmatch import fnmatch
 
 class Process(Inspector):
-	def __init__(self, driver, name):
+	def __init__(self, driver, name = ""):
 		self._driver = driver
 		self._process = name
 

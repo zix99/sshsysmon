@@ -37,6 +37,7 @@ class Server:
 
 			except Exception,e:
 				print "Error executing inspector %s: %s" % (alert_type, e)
+				alerts.append(Alert(self._name, "NO_DATA", "True", {}))
 
 		return alerts
 
@@ -68,14 +69,7 @@ class Server:
 			summary_config = summary.get('config', {})
 			try:
 				inspector = inspectors.createInspector(summary_type, self._driver, summary_config)
-				print "## %s" % inspector.getName()
-				metrics = inspector.getMetrics()
-
-				if metrics:
-					for key in summary_items:
-						print "%s: %s" % (key.upper(), metrics.get(key, "<Missing>"))
-				else:
-					print "Unable to retrieve metrics"
+				print inspector.getSummary()
 
 			except Exception, e:
 				print "Error executing inspector %s: %s" % (summary_type, e)

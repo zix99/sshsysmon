@@ -1,6 +1,7 @@
 from fnmatch import fnmatch
+from inspector import Inspector
 
-class DiskSpace:
+class DiskSpace(Inspector):
 	def __init__(self, driver, device = None, mount = "/"):
 		self._driver = driver
 		self._device = device
@@ -34,3 +35,6 @@ class DiskSpace:
 			"available" : int(metric[3]) / KB_TO_GB,
 			"percent_full" : int(metric[4][:-1])
 		}
+
+	def getSummary(self):
+		return "## Disk Space\n" + self._driver.sh("df -h")
