@@ -12,4 +12,5 @@ def createInspector(name, driver, config):
 		return LoadAvg(driver, **config)
 	if name == "process":
 		return Process(driver, **config)
-	return None
+	
+	raise Exception("Unknown inspector type %s" % name)

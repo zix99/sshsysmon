@@ -1,5 +1,4 @@
 from channel import Channel
-from util.log import *
 import smtplib
 
 
@@ -47,4 +46,4 @@ SshSysMon
 			server.sendmail(fromAddr, toAddr, message)
 			server.close()
 		except Exception, e:
-			printError("There was an error sending an email %s" % e)
+			print "There was an error sending an email %s" % e

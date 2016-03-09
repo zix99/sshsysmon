@@ -6,4 +6,5 @@ def createChannel(name, args):
 		return Email(**args)
 	if name == "command":
 		return Command(**args)
-	return None
+	
+	raise Exception("Unknown channel type %s" % name)

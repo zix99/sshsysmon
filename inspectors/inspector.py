@@ -8,4 +8,4 @@ class Inspector:
 		return {}
 
 	def getName(self):
-		return "Undefined"
+		return self.__class__.__name__ or "Undefined"

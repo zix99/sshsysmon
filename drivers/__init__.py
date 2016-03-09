@@ -6,4 +6,5 @@ def createDriver(name, args):
 		return Local(**args)
 	elif name == "ssh":
 		return Ssh(**args)
-	return None
+	
+	raise Exception("Unknown driver type %s" % name)

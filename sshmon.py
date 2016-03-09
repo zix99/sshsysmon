@@ -3,20 +3,19 @@ import sys
 import yaml
 import time
 from monitor import *
-from util.log import *
 
 def run_check(config):
 	count = 0
 
 	for server_name in config["servers"]:
-		printInfo("Checking server: %s..." % server_name)
+		print "Checking server: %s..." % server_name
 
-		server = config["servers"][server_name]
-		monitor = Monitor(server_name, server)
-
-		for alert in monitor.send_alerts():
-			count += 1
-			print "ALERT: %s, %s" % alert
+		try:
+			server = config["servers"][server_name]
+			server = Server(server_name, server)
+			count += len(server.notifyChannelsOfAlerts())
+		except Exception, e:
+			print "Error checking server %s: %s" % (server_name, e)
 
 	print "There were %d alert(s) triggered" % count
 
@@ -26,11 +25,10 @@ def run_summary(config):
 	print ""
 
 	for server_name, server in config["servers"].iteritems():
-		print "-" * 48
-		print "# %s" % server_name
-		monitor = Monitor(server_name, server)
+		print "########## %s ##########" % server_name
 		try:
-			monitor.printSummary()
+			server = Server(server_name, server)
+			server.printSummary()
 		except Exception, e:
 			print "ERROR %s: %s" % (server_name, e)
 		print ""
