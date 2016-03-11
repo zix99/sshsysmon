@@ -9,7 +9,7 @@ class Server:
 		self._name = name
 		self._driver = drivers.createDriver(config.get("driver"), config.get("config", {}))
 		self._alerts = config.get("alerts", [])
-		self._summary = config.get("summary", [])
+		self._summary = config.get("summary") or config.get("alerts") or []
 		self._channels = config.get("channels", [])
 
 
