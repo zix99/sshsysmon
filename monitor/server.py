@@ -65,7 +65,6 @@ class Server:
 	def printSummary(self):
 		for summary in self._summary:
 			summary_type = summary.get('type')
-			summary_items = summary.get('items', [])
 			summary_config = summary.get('config', {})
 			try:
 				inspector = inspectors.createInspector(summary_type, self._driver, summary_config)

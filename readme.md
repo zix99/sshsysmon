@@ -106,7 +106,7 @@ servers:
       alarms:
         "Low Swap": "swap_free < 50000"
         "Low Memory": "mem_free < 50000"
-    - type: diskspace
+    - type: disk
       alarms:
         "Low Disk Space": "disk_free < 500000"
   summary: # Optional, if not provided, alerts will be used to auto-configure summary
