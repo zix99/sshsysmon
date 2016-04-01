@@ -169,7 +169,7 @@ gmail, see the examples.
 Arguments:
 
   * toAddr - The address to send the email to
-  * fromAddr - The address the email should come from
+  * fromAddr - The address the email should come from (default: username@hostname)
   * host - The SMTP host (default: localhost)
   * port - The SMTP port (default: 25)
   * subject - Subject line of email (has reasonable default)
