@@ -1,0 +1,14 @@
+servers:
+  localhost:
+    driver: local
+    channels:
+    - type: command
+      config:
+        command: "notify-send -u critical \"{server}\" \"Server threw {alert} alert\""
+    alerts:
+      - type: disk
+        alarms:
+          "Percent Full > 20%" : "percent_full > 20"
+    summary:
+      - type: memory
+      - type: disk

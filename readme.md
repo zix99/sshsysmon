@@ -96,12 +96,12 @@ servers:
     config:
       host: myhostname.com
       username: myuser
-  channels:
+  channels: # Notification targets
     - type: email
       config:
         toAddr: myemail@gmail.com
         subject: "Something went wrong on {server}"
-  alerts:
+  alerts: # All alerts and inspectors
     - type: memory
       alarms:
         "Low Swap": "swap_free < 50000"
@@ -109,9 +109,16 @@ servers:
     - type: diskspace
       alarms:
         "Low Disk Space": "disk_free < 500000"
+  summary: # Optional, if not provided, alerts will be used to auto-configure summary
+    - type: memory
+    - type: diskspace
 ```
 
 You can often use YAML's inheritance to simplify your config for more than 1 server.
+
+
+All servers are iterated throw, and queries for given inspector types. The resulting metrics are compared to
+the alerts, and if any of them are unmet, a notification it sent to all configured channels.
 
 Configuration is built on three concepts: Drivers, Inspectors, and Channels.
 
@@ -155,6 +162,9 @@ Arguments:
 ##### email
 
 Sends an email via a SMTP server.
+
+By default, it assumes a local SMTP server is setup.  For more complex configs, such as how to use
+gmail, see the examples.
 
 Arguments:
 
