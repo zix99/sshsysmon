@@ -53,8 +53,8 @@ servers without the traditional overhead of a monitoring system.</p>
 </code></pre>
 
 <p>It is assumed that you already have a private key created and added to the <code>authorized_hosts</code> file on
-all remote servers you are interested in monitoring.  This is the easiest way to guarantee continued
-authentication to other hosts.</p>
+all remote servers you are interested in monitoring.  While password authentication is supported, this
+is the easiest way to guarantee continued authentication to other hosts.</p>
 
 <h3>
 <a id="setting-up-a-ssh-key-pair" class="anchor" href="#setting-up-a-ssh-key-pair" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting up a ssh key pair</h3>
@@ -77,6 +77,33 @@ password blank</p>
 
 <h3>
 <a id="running" class="anchor" href="#running" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running</h3>
+
+<p>The service has two commands, <code>summary</code> and <code>check</code>.</p>
+
+<h4>
+<a id="summary" class="anchor" href="#summary" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Summary</h4>
+
+<p><code>summary</code> will print out a human-readable summary of all servers specified in the config. It is a
+great way to validate your config.</p>
+
+<p>It can be executed with:</p>
+
+<pre><code>./sshmon.py summary &lt;myconfig.yml&gt;
+</code></pre>
+
+<h4>
+<a id="check" class="anchor" href="#check" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Check</h4>
+
+<p><code>check</code> is meant to be executed as part of a scheduled job, and will notify all channels in the config
+if a condition is unmet.</p>
+
+<p>It can be excuted with:</p>
+
+<pre><code>./sshmon.py check &lt;myconfig.yml&gt;
+</code></pre>
+
+<h3>
+<a id="running-scheduled-job" class="anchor" href="#running-scheduled-job" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running Scheduled Job</h3>
 
 <p>The service is (currently) meant to be used in a cron job.</p>
 
@@ -106,22 +133,30 @@ and connection details.</p>
     config:
       host: myhostname.com
       username: myuser
-  channels:
+  channels: # Notification targets
     - type: email
       config:
         toAddr: myemail@gmail.com
         subject: "Something went wrong on {server}"
-  alerts:
+  alerts: # All alerts and inspectors
     - type: memory
       alarms:
         "Low Swap": "swap_free &lt; 50000"
         "Low Memory": "mem_free &lt; 50000"
-    - type: diskspace
+    - type: disk
       alarms:
         "Low Disk Space": "disk_free &lt; 500000"
+  summary: # Optional, if not provided, alerts will be used to auto-configure summary
+    - type: memory
+    - type: diskspace
 </code></pre>
 
 <p>You can often use YAML's inheritance to simplify your config for more than 1 server.</p>
+
+<p>All servers are iterated throw, and queries for given inspector types. The resulting metrics are compared to
+the alerts, and if any of them are unmet, a notification it sent to all configured channels.</p>
+
+<p>Configuration is built on three concepts: Drivers, Inspectors, and Channels.</p>
 
 <h4>
 <a id="drivers" class="anchor" href="#drivers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Drivers</h4>
@@ -141,6 +176,7 @@ and connection details.</p>
 <ul>
 <li>host - The hostname of the machine (IP or Domain)</li>
 <li>username - The username to connect with</li>
+<li>password - (Not recommended, use key instead) The ssh user's password</li>
 <li>key - The path to the private key to use to connect (Default: ~/.ssh/id_rsa)</li>
 <li>port - The port to connect to the machine on (Default: 22)</li>
 <li>path - The path which proc is located (Default: /proc)</li>
@@ -175,11 +211,14 @@ and connection details.</p>
 
 <p>Sends an email via a SMTP server.</p>
 
+<p>By default, it assumes a local SMTP server is setup.  For more complex configs, such as how to use
+gmail, see the examples.</p>
+
 <p>Arguments:</p>
 
 <ul>
 <li>toAddr - The address to send the email to</li>
-<li>fromAddr - The address the email should come from</li>
+<li>fromAddr - The address the email should come from (default: username@hostname)</li>
 <li>host - The SMTP host (default: localhost)</li>
 <li>port - The SMTP port (default: 25)</li>
 <li>subject - Subject line of email (has reasonable default)</li>
@@ -195,14 +234,14 @@ and connection details.</p>
 <p>Inspects are parsers that know how to read data from a driver and make sense of it.</p>
 
 <h5>
-<a id="memory" class="anchor" href="#memory" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>memory</h5>
+<a id="memory-memory" class="anchor" href="#memory-memory" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Memory (memory)</h5>
 
 <p>The memory driver returns metrics about the systems memory (in KB):</p>
 
-<p>mem_total, mem_free, cached, swap_total, swap_free</p>
+<p>Metrics: mem_total, mem_free, cached, swap_total, swap_free</p>
 
 <h5>
-<a id="disk" class="anchor" href="#disk" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>disk</h5>
+<a id="disk-space-disk" class="anchor" href="#disk-space-disk" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Disk Space (disk)</h5>
 
 <p>The Disk driver returns status of the disk space (in GB)</p>
 
@@ -213,7 +252,25 @@ and connection details.</p>
 <li>mount - The mount point of the device (default: /)</li>
 </ul>
 
-<p>Returns: size, used, available, percent_full</p>
+<p>Metrics: size, used, available, percent_full</p>
+
+<h5>
+<a id="load-average-loadavg" class="anchor" href="#load-average-loadavg" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Load Average (loadavg)</h5>
+
+<p>The load average inspector returns the system's current 1/5/15 minute <a href="http://blog.scoutapp.com/articles/2009/07/31/understanding-load-averages">load average</a>.</p>
+
+<p>Metrics: load_1m, load_5m, load_15m</p>
+
+<h5>
+<a id="process-monitor-process" class="anchor" href="#process-monitor-process" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Process Monitor (process)</h5>
+
+<p>This inspector will allow you monitor a process on the given machine.</p>
+
+<p>It takes in one <strong>required</strong> config <code>name</code>. This will use <a href="https://docs.python.org/2/library/fnmatch.html">wildcard matching</a> with <code>*</code> and <code>?</code>.</p>
+
+<p>Metrics: user, pid, cpu, mem, tty</p>
+
+<hr>
 
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
