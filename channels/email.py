@@ -1,6 +1,13 @@
 from channel import Channel
 import smtplib
 
+def _getDefaultEmail():
+	try:
+		import getpass
+		import socket
+		return "%s@%s" % (getpass.getuser(), socket.gethostname())
+	except:
+		return "root@unkown"
 
 class Email(Channel):
 	DEFAULT_SUBJECT = "[ALERT] {server} failed on {alert}"
@@ -13,7 +20,7 @@ SshSysMon
 
 	def __init__(self, toAddr, fromAddr = None, host = 'localhost', port=25, body=DEFAULT_BODY, subject = DEFAULT_SUBJECT, username = None, password = None, tls = False, ssl = False):
 		self._to = toAddr
-		self._from = fromAddr or toAddr
+		self._from = fromAddr or _getDefaultEmail()
 		self._subject = subject
 		self._body = body
 		self._host = host
