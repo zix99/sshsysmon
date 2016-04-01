@@ -48,7 +48,7 @@ The service has two commands, `summary` and `check`.
 
 #### Summary
 
-Summary will print out a human-readable summary of all servers specified in the config. It is a
+`summary` will print out a human-readable summary of all servers specified in the config. It is a
 great way to validate your config.
 
 It can be executed with:
@@ -57,7 +57,7 @@ It can be executed with:
 
 #### Check
 
-Check is meant to be executed as part of a scheduled job, and will notify all channels in the config
+`check` is meant to be executed as part of a scheduled job, and will notify all channels in the config
 if a condition is unmet.
 
 It can be excuted with:
