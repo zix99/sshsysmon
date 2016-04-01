@@ -22,8 +22,8 @@ Make sure the dependencies are installed:
     pip install -r requirements.txt
 
 It is assumed that you already have a private key created and added to the `authorized_hosts` file on
-all remote servers you are interested in monitoring.  This is the easiest way to guarantee continued
-authentication to other hosts.
+all remote servers you are interested in monitoring.  While password authentication is supported, this
+is the easiest way to guarantee continued authentication to other hosts.
 
 ### Setting up a ssh key pair
 
@@ -42,9 +42,30 @@ Now, install it on a user on another machine that you want to monitor
 Now you're all set up to use sshsysmon over SSH to the other host
 
 
-
-
 ### Running
+
+The service has two commands, `summary` and `check`.
+
+#### Summary
+
+Summary will print out a human-readable summary of all servers specified in the config. It is a
+great way to validate your config.
+
+It can be executed with:
+
+    ./sshmon.py summary <myconfig.yml>
+
+#### Check
+
+Check is meant to be executed as part of a scheduled job, and will notify all channels in the config
+if a condition is unmet.
+
+It can be excuted with:
+
+    ./sshmon.py check <myconfig.yml>
+
+
+### Running Scheduled Job
 
 The service is (currently) meant to be used in a cron job.
 
@@ -92,6 +113,7 @@ servers:
 
 You can often use YAML's inheritance to simplify your config for more than 1 server.
 
+Configuration is built on three concepts: Drivers, Inspectors, and Channels.
 
 #### Drivers
 
@@ -107,6 +129,7 @@ The SSH driver is for reaching out to remote machines.  There are several config
 
   * host - The hostname of the machine (IP or Domain)
   * username - The username to connect with
+  * password - (Not recommended, use key instead) The ssh user's password
   * key - The path to the private key to use to connect (Default: ~/.ssh/id_rsa)
   * port - The port to connect to the machine on (Default: 22)
   * path - The path which proc is located (Default: /proc)
@@ -149,13 +172,13 @@ Arguments:
 
 Inspects are parsers that know how to read data from a driver and make sense of it.
 
-##### memory
+##### Memory (memory)
 
 The memory driver returns metrics about the systems memory (in KB):
 
-mem_total, mem_free, cached, swap_total, swap_free
+Metrics: mem_total, mem_free, cached, swap_total, swap_free
 
-##### disk
+##### Disk Space (disk)
 
 The Disk driver returns status of the disk space (in GB)
 
@@ -164,10 +187,23 @@ Arguments:
   * device - The name of the device (Optional, eg /dev/sda)
   * mount - The mount point of the device (default: /)
 
-Returns: size, used, available, percent_full
+Metrics: size, used, available, percent_full
 
+##### Load Average (loadavg)
 
+The load average inspector returns the system's current 1/5/15 minute [load average](http://blog.scoutapp.com/articles/2009/07/31/understanding-load-averages).
 
+Metrics: load_1m, load_5m, load_15m
+
+##### Process Monitor (process)
+
+This inspector will allow you monitor a process on the given machine.
+
+It takes in one **required** config `name`. This will use [wildcard matching](https://docs.python.org/2/library/fnmatch.html) with `*` and `?`.
+
+Metrics: user, pid, cpu, mem, tty
+
+---
 
 ## License
 
