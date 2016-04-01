@@ -14,7 +14,10 @@ class Ssh(Driver):
 		self._port = port
 		self._path = path
 
-		self._key = RSAKey.from_private_key_file(os.path.expanduser(key or Ssh.DEFAULT_KEY_PATH))
+		if not password or key:
+			self._key = RSAKey.from_private_key_file(os.path.expanduser(key or Ssh.DEFAULT_KEY_PATH))
+		else:
+			self._key = None
 
 	def readFile(self, path):
 		client = self._connect()
@@ -38,5 +41,5 @@ class Ssh(Driver):
 	def _connect(self):
 		client = SSHClient()
 		client.set_missing_host_key_policy(AutoAddPolicy())
-		client.connect(hostname = self._host, username=self._username, password=self._password, pkey=self._key, port=self._port)
+		client.connect(hostname = self._host, username=self._username, password=self._password, pkey=self._key, port=self._port, look_for_keys=False)
 		return client
