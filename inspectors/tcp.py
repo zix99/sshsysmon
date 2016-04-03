@@ -27,7 +27,7 @@ class Tcp(Inspector):
 			ret[port] = (sock.connect_ex((self._driver.getHost(), port)) == 0)
 			sock.close()
 
-		ret['all'] = len(filter(lambda x: not x, ret.itervalues())) == 0
+		ret['all'] = sum(1 for p in ret.itervalues() if not p) == 0
 
 		return ret
 
