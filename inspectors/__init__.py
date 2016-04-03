@@ -2,6 +2,7 @@ from meminfo import MemInfo
 from diskspace import DiskSpace
 from loadavg import LoadAvg
 from process import Process
+from tcp import Tcp
 
 def createInspector(name, driver, config):
 	if name == "memory":
@@ -12,5 +13,7 @@ def createInspector(name, driver, config):
 		return LoadAvg(driver, **config)
 	if name == "process":
 		return Process(driver, **config)
+	if name == "tcp":
+		return Tcp(driver, **config)
 	
 	raise Exception("Unknown inspector type %s" % name)

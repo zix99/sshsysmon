@@ -192,7 +192,7 @@ Metrics: mem_total, mem_free, cached, swap_total, swap_free
 
 The Disk driver returns status of the disk space (in GB)
 
-Arguments:
+Config:
 
   * device - The name of the device (Optional, eg /dev/sda)
   * mount - The mount point of the device (default: /)
@@ -212,6 +212,21 @@ This inspector will allow you monitor a process on the given machine.
 It takes in one **required** config `name`. This will use [wildcard matching](https://docs.python.org/2/library/fnmatch.html) with `*` and `?`.
 
 Metrics: user, pid, cpu, mem, tty
+
+##### TCP (tcp)
+
+The TCP inspector will try to establish a connection on a given port with the same
+remote as the driver.  It's important to note that this does **not** go over SSH, and will
+not verify anything more than that the port is willing to establish a connection.
+
+Config:
+
+  * ports: A list, single port, or CSV of ports to check
+
+Metrics:
+
+  * A dictionary of the requested ports, and true if they are open, otherwise false
+  * A special `all` metric which will be true if all ports are open
 
 ---
 

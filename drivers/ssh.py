@@ -43,3 +43,6 @@ class Ssh(Driver):
 		client.set_missing_host_key_policy(AutoAddPolicy())
 		client.connect(hostname = self._host, username=self._username, password=self._password, pkey=self._key, port=self._port, look_for_keys=False)
 		return client
+
+	def getHost(self):
+		return self._host

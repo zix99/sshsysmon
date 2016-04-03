@@ -8,3 +8,6 @@ class Driver:
 
 	def sh(self, cmd):
 		raise NotImplementedError()
+
+	def getHost(self):
+		raise NotImplementedError()
