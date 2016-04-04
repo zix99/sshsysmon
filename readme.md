@@ -228,6 +228,21 @@ Metrics:
   * A dictionary of the requested ports, and true if they are open, otherwise false
   * A special `all` metric which will be true if all ports are open
 
+
+##### Custom Command (exec)
+
+`exec` runs a custom command and returns `stdout`, `stderr`, and `status` (returncode).
+
+Config:
+
+  * command: The shell command to execute
+
+Metrics:
+
+  * stdout: The out string of the command
+  * stderr: The err string of the command
+  * status: The returncode of the command (0 means normal)
+
 ---
 
 ## License
