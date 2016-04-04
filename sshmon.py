@@ -47,7 +47,7 @@ def parseArgs(args):
 	p.add_argument('config', help="YML config file")
 
 	p.add_argument('-v', '--verbose', action='store_true', help="Enable verbose logging")
-	p.add_argument('-f', '--format', help="Specify template format to output summary")
+	p.add_argument('-f', '--format', help="Specify template format to output summary (markdown)", default="md")
 
 	return p.parse_args(args)
 
