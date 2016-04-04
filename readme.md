@@ -30,17 +30,16 @@ is the easiest way to guarantee continued authentication to other hosts.
 On debian-based linux systems, setting up a key-pair to use with SSH is easy.  I would recommend
 you make a new linux user to only do monitoring on each machine, but it isn't required.
 
-First, create a new SSH key if you don't already have one. Follow the prompts, but leave the
+```bash
+# 1. Create a new SSH key if you don't already have one. Follow the prompts, but leave the
 password blank
+ssh-keygen
 
-    ssh-keygen
+# 2. Install it on a user on another machine that you want to monitor
+ssh-copy-id username@remotehost
+```
 
-Now, install it on a user on another machine that you want to monitor
-
-    ssh-copy-id username@hostname
-
-Now you're all set up to use sshsysmon over SSH to the other host
-
+Now you're all set up to use sshsysmon over SSH to the other host.
 
 ### Running
 
@@ -55,7 +54,9 @@ It can be executed with:
 
     ./sshmon.py summary <myconfig.yml>
 
-It also can be told to use various templates. See templating section below.
+It also can be told to use various templates. See templating section below. Eg, to use the html template:
+
+    ./sshmon.py -f html summary <myconfig.yml>
 
 #### Check
 
