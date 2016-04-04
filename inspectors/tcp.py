@@ -24,7 +24,7 @@ class Tcp(Inspector):
 
 		for port in self._ports:
 			sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			ret[port] = (sock.connect_ex((self._driver.getHost(), port)) == 0)
+			ret['port_%d' % port] = (sock.connect_ex((self._driver.getHost(), port)) == 0)
 			sock.close()
 
 		ret['all'] = sum(1 for p in ret.itervalues() if not p) == 0

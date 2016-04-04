@@ -225,7 +225,7 @@ Config:
 
 Metrics:
 
-  * A dictionary of the requested ports, and true if they are open, otherwise false
+  * A dictionary of the requested ports, prefixed with `port_`, and true if they are open, otherwise false (eg `port_22`)
   * A special `all` metric which will be true if all ports are open
 
 
