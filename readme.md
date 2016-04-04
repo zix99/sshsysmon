@@ -31,8 +31,7 @@ On debian-based linux systems, setting up a key-pair to use with SSH is easy.  I
 you make a new linux user to only do monitoring on each machine, but it isn't required.
 
 ```bash
-# 1. Create a new SSH key if you don't already have one. Follow the prompts, but leave the
-password blank
+# 1. Create a new SSH key if you don't already have one. Follow the prompts, but leave the password blank
 ssh-keygen
 
 # 2. Install it on a user on another machine that you want to monitor
