@@ -2,9 +2,10 @@
 import sys
 import yaml
 import time
-from monitor import *
 import logging
 import argparse
+from templates import template
+from monitor import *
 
 def run_check(config):
 	count = 0
@@ -21,19 +22,23 @@ def run_check(config):
 
 	print "There were %d alert(s) triggered" % count
 
-def run_summary(config):
-	print "System Summary"
-	print time.ctime()
-	print ""
-
+def run_summary(config, templateName=None):
+	servers = []
 	for server_name, server in config["servers"].iteritems():
-		print "########## %s ##########" % server_name
 		try:
 			server = Server(server_name, server)
-			server.printSummary()
+			servers.append(server.getSummary())
 		except Exception, e:
-			print "ERROR %s: %s" % (server_name, e)
-		print ""
+			logging.warning("Unable to add server summary for %s: %s" % (server_name, e))
+
+	data = {
+		"ctime" : time.ctime(),
+		"servers" : servers
+	}
+
+	print template(templateName, data)
+
+
 
 def parseArgs(args):
 	p = argparse.ArgumentParser(description = "Run monitoring against servers defined in config")
@@ -42,6 +47,7 @@ def parseArgs(args):
 	p.add_argument('config', help="YML config file")
 
 	p.add_argument('-v', '--verbose', action='store_true', help="Enable verbose logging")
+	p.add_argument('-f', '--format', help="Specify template format to output summary")
 
 	return p.parse_args(args)
 
@@ -60,7 +66,7 @@ def main(args):
 	if opts.command == "check":
 		run_check(config)
 	elif opts.command == "summary":
-		run_summary(config)
+		run_summary(config, opts.format)
 	else:
 		show_help()
 		sys.exit(1)

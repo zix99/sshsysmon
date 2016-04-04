@@ -63,16 +63,28 @@ class Server:
 		return alerts
 
 	# Prints out summary to stdout
-	def printSummary(self):
+	def getSummary(self):
+		results = []
 		for summary in self._summary:
 			summary_type = summary.get('type')
 			summary_config = summary.get('config', {})
 			try:
 				inspector = inspectors.createInspector(summary_type, self._driver, summary_config)
-				print inspector.getSummary()
+				
+				results.append({
+					"type" : summary_type,
+					"config" : summary_config,
+					"text" : inspector.getSummary(),
+					"name" : inspector.getName(),
+					"metrics" : inspector.getMetrics()
+				})
 
 			except Exception, e:
 				logging.warning("Error executing inspector %s: %s" % (summary_type, e))
-			print ""
+
+		return {
+			"name" : self._name,
+			"inspectors" : results
+		}
 
 

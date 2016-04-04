@@ -13,7 +13,6 @@ class Inspector:
 	def getSummary(self, itemFilter = None):
 		o = StringIO()
 
-		o.write("## %s\n" % self.getName())
 		metrics = self.getMetrics()
 
 		if metrics:

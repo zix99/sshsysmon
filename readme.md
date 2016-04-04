@@ -55,6 +55,8 @@ It can be executed with:
 
     ./sshmon.py summary <myconfig.yml>
 
+It also can be told to use various templates. See templating section below.
+
 #### Check
 
 `check` is meant to be executed as part of a scheduled job, and will notify all channels in the config
@@ -242,6 +244,37 @@ Metrics:
   * stdout: The out string of the command
   * stderr: The err string of the command
   * status: The returncode of the command (0 means normal)
+
+
+
+
+### Templating
+
+SshSysMon uses handlebars for output templating.  It is passed the data structure in the below format
+and will turn it in to the desired document and export to stdout.  If not template is specified,
+it will be output in JSON.
+
+```json
+{
+  "ctime" : GENERATION_TIME,
+  "servers" : [
+    {
+      "name" : NAME_OF_SERVER,
+      "inspectors" : [
+        {
+          "type" : INSPECTOR_TYPE,
+          "name" : INSPECTOR_NAME,
+          "config" : INSPECTOR_CONFIG,
+          "text" : SUMMARY_TEXT,
+          "metrics" : {RAW_METRICS,...}
+        },
+        ...
+      ]
+    },
+    ...
+  ]
+}
+```
 
 ---
 

@@ -32,7 +32,6 @@ class MemInfo(Inspector):
 		metrics = self.getMetrics()
 
 		o = StringIO()
-		o.write("## Memory\n")
 		o.write("Mem Total:  %s\n" % formatKB(metrics["mem_total"]))
 		o.write("Mem Free :  %s\n" % formatKB(metrics["mem_free"]))
 		o.write("Swap Total: %s\n" % formatKB(metrics["swap_total"]))

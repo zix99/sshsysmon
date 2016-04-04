@@ -37,4 +37,4 @@ class DiskSpace(Inspector):
 		}
 
 	def getSummary(self):
-		return "## Disk Space\n" + self._driver.sh("df -h")['stdout']
+		return self._driver.sh("df -h")['stdout']

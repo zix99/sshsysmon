@@ -17,7 +17,7 @@ class Tcp(Inspector):
 			raise Exception('Invalid data type for ports')
 
 	def getName(self):
-		return "TCP Port %d" % self._port
+		return "TCP Port %s" % self._ports
 
 	def getMetrics(self):
 		ret = {}
@@ -35,7 +35,6 @@ class Tcp(Inspector):
 		metrics = self.getMetrics();
 
 		o = StringIO()
-		o.write("## TCP\n")
 		for k,v in metrics.iteritems():
 			o.write("Port %s: %s\n" % (k, "Open" if v else "Closed"))
 
