@@ -1,3 +1,5 @@
+import logging
+
 class Alert:
 	def __init__(self, serverName, name, statement, data):
 		self.serverName = serverName
@@ -11,7 +13,7 @@ class Alert:
 				exec("%s = %s" % (k,v))
 			return eval(self.statement)
 		except Exception, e:
-			print "Error validating alert %s:%s: %s" % (self.serverName, self.name, e)
+			logging.warning("Error validating alert %s:%s: %s" % (self.serverName, self.name, e))
 		return True
 
 	def __repr__(self):

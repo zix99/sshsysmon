@@ -1,5 +1,6 @@
 from channel import Channel
 import smtplib
+import logging
 
 def _getDefaultEmail():
 	try:
@@ -53,4 +54,4 @@ SshSysMon
 			server.sendmail(fromAddr, toAddr, message)
 			server.close()
 		except Exception, e:
-			print "There was an error sending an email %s" % e
+			logging.error("There was an error sending an email %s" % e)

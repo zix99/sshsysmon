@@ -1,4 +1,5 @@
 import channels
+import logging
 
 class ChannelGroup:
 	def __init__(self, channelList):
@@ -12,7 +13,7 @@ class ChannelGroup:
 				inst = channels.createChannel(channel_type, channel_config)
 				self._channels.append(inst)
 			except Exception, e:
-				print "Error notifying channel: %s" % e
+				logging.warning("Error notifying channel: %s" % e)
 
 	def notify(self, alert, data = {}):
 		payload = data.copy()
@@ -26,4 +27,4 @@ class ChannelGroup:
 			try:
 				channel.notify(payload)
 			except Exception, e:
-				print "Error notifying channel %s: %s" % (channel, e)
+				logging.warning("Error notifying channel %s: %s" % (channel, e))

@@ -3,6 +3,7 @@ from alert import *
 import drivers
 import inspectors
 import config
+import logging
 
 class Server:
 	def __init__(self, name, config):
@@ -21,7 +22,7 @@ class Server:
 			alert_alarms = alert.get('alarms', {})
 			alert_config = alert.get('config', {})
 
-			if config.VERBOSE: print "Creating inspector: %s..." % alert_type
+			logging.debug("Creating inspector: %s..." % alert_type)
 
 			try:
 				inspector = inspectors.createInspector(alert_type, self._driver, alert_config)
@@ -36,7 +37,7 @@ class Server:
 					alerts.append(Alert(self._name, alarm_name, statement, metrics))
 
 			except Exception,e:
-				print "Error executing inspector %s: %s" % (alert_type, e)
+				logging.warning("Error executing inspector %s: %s" % (alert_type, e))
 				alerts.append(Alert(self._name, "NO_DATA", "True", {}))
 
 		return alerts
@@ -44,9 +45,9 @@ class Server:
 	def getFailedAlerts(self):
 		failedAlerts = []
 		for alert in self.createAlerts():
-			if config.VERBOSE: print "Evaluating alert " + alert.name
+			logging.debug("Evaluating alert " + alert.name)
 			if alert.eval():
-				if config.VERBOSE: print "  ALERT FIRED"
+				logging.debug("  ALERT FIRED")
 				failedAlerts.append(alert)
 		return failedAlerts
 
@@ -56,7 +57,7 @@ class Server:
 
 		alerts = self.getFailedAlerts()
 		for alert in alerts:
-			if config.VERBOSE: print "Notifying channel of alert: %s" % alert
+			logging.debug("Notifying channel of alert: %s" % alert)
 			channels.notify(alert)
 
 		return alerts
@@ -71,7 +72,7 @@ class Server:
 				print inspector.getSummary()
 
 			except Exception, e:
-				print "Error executing inspector %s: %s" % (summary_type, e)
+				logging.warning("Error executing inspector %s: %s" % (summary_type, e))
 			print ""
 
 

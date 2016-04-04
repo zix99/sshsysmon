@@ -1,2 +1,0 @@
-
-VERBOSE = True

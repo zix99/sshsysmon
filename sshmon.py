@@ -3,19 +3,21 @@ import sys
 import yaml
 import time
 from monitor import *
+import logging
+import argparse
 
 def run_check(config):
 	count = 0
 
 	for server_name in config["servers"]:
-		print "Checking server: %s..." % server_name
+		logging.info("Checking server: %s..." % server_name)
 
 		try:
 			server = config["servers"][server_name]
 			server = Server(server_name, server)
 			count += len(server.notifyChannelsOfAlerts())
 		except Exception, e:
-			print "Error checking server %s: %s" % (server_name, e)
+			logging.error("Error checking server %s: %s" % (server_name, e))
 
 	print "There were %d alert(s) triggered" % count
 
@@ -33,29 +35,31 @@ def run_summary(config):
 			print "ERROR %s: %s" % (server_name, e)
 		print ""
 
-def show_help():
-	print "Usage: sshmon.py <command> <config>"
-	print ""
-	print "Run monitoring against servers defined in config"
-	print ""
-	print "Commands:"
-	print " check          Check and alerts servers"
-	print " summary        Summarize status of servers"
+def parseArgs(args):
+	p = argparse.ArgumentParser(description = "Run monitoring against servers defined in config")
+
+	p.add_argument('command', help="Command to execute", choices=['check', 'summary'])
+	p.add_argument('config', help="YML config file")
+
+	p.add_argument('-v', '--verbose', action='store_true', help="Enable verbose logging")
+
+	return p.parse_args(args)
 
 def main(args):
-	if len(args) != 2:
-		show_help()
-		sys.exit(1)
+	opts = parseArgs(args)
+
+	logging.basicConfig(level = logging.DEBUG if opts.verbose else logging.INFO)
+	logging.getLogger('paramiko').setLevel(logging.WARNING)
 
 	try:
-		config = yaml.load(open(args[1]))
+		config = yaml.load(open(opts.config))
 	except Exception, e:
-		print "Error parsing config:", str(e)
+		logging.error("Error parsing config:" + str(e))
 		sys.exit(1)
 
-	if args[0] == "check":
+	if opts.command == "check":
 		run_check(config)
-	elif args[0] == "summary":
+	elif opts.command == "summary":
 		run_summary(config)
 	else:
 		show_help()
