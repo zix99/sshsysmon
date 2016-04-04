@@ -14,24 +14,22 @@ class Ssh(Driver):
 		self._port = port
 		self._path = path
 
+		self._client = None
+		self._ftp = None
+
 		if not password or key:
 			self._key = RSAKey.from_private_key_file(os.path.expanduser(key or Ssh.DEFAULT_KEY_PATH))
 		else:
 			self._key = None
 
 	def readFile(self, path):
-		client = self._connect()
-		try:
-			sftp = client.open_sftp()
+		sftp = self._connectFtp()
 
-			o = StringIO()
-			for line in sftp.open(os.path.join(self._path, path)):
-				o.write(line)
+		o = StringIO()
+		for line in sftp.open(os.path.join(self._path, path)):
+			o.write(line)
 
-			return o.getvalue()
-
-		finally:
-			client.close()
+		return o.getvalue()
 
 	def sh(self, cmd):
 		client = self._connect()
@@ -43,10 +41,18 @@ class Ssh(Driver):
 		}
 
 	def _connect(self):
-		client = SSHClient()
-		client.set_missing_host_key_policy(AutoAddPolicy())
-		client.connect(hostname = self._host, username=self._username, password=self._password, pkey=self._key, port=self._port, look_for_keys=False)
-		return client
+		if not self._client:
+			client = SSHClient()
+			client.set_missing_host_key_policy(AutoAddPolicy())
+			client.connect(hostname = self._host, username=self._username, password=self._password, pkey=self._key, port=self._port, look_for_keys=False)
+			self._client = client
+		return self._client
+
+	def _connectFtp(self):
+		if not self._ftp:
+			client = self._connect()
+			self._ftp = client.open_sftp()
+		return self._ftp
 
 	def getHost(self):
 		return self._host
