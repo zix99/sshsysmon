@@ -12,8 +12,13 @@ class Local(Driver):
 		return open(os.path.join(self._path, path), 'r').read()
 
 	def sh(self, cmd):
-		proc = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
-		return proc.stdout.read()
+		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+		proc.wait()
+		return {
+			"stdout": proc.stdout.read(),
+			"stderr": proc.stderr.read(),
+			"status": proc.returncode
+		}
 
 	def getHost(self):
 		return "127.0.0.1"

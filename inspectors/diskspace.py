@@ -16,7 +16,7 @@ class DiskSpace(Inspector):
 		metric = None
 
 		#Parse and find matching metric
-		for line in df.splitlines():
+		for line in df['stdout'].splitlines():
 			segs = line.split()
 			if self._device and fnmatch(segs[0], self._device): #mount point
 				metric = segs
@@ -37,4 +37,4 @@ class DiskSpace(Inspector):
 		}
 
 	def getSummary(self):
-		return "## Disk Space\n" + self._driver.sh("df -h")
+		return "## Disk Space\n" + self._driver.sh("df -h")['stdout']

@@ -7,7 +7,7 @@ class Process(Inspector):
 		self._process = name
 
 	def getMetrics(self):
-		data = self._driver.sh("ps -A u")
+		data = self._driver.sh("ps -A u")['stdout']
 
 		for line in data.splitlines():
 			# User, pid, cpu, mem, vsz, rss, tty, stat, start, time, cmd
