@@ -119,7 +119,7 @@ servers:
 You can often use YAML's inheritance to simplify your config for more than 1 server.
 
 
-All servers are iterated throw, and queries for given inspector types. The resulting metrics are compared to
+All servers are iterated through, and queried for given inspector types. The resulting metrics are compared to
 the alerts, and if any of them are unmet, a notification it sent to all configured channels.
 
 Configuration is built on three concepts: Drivers, Inspectors, and Channels.
