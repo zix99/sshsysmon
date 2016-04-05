@@ -2,7 +2,6 @@ from channelgroup import *
 from alert import *
 import drivers
 import inspectors
-import config
 import logging
 
 class Server:

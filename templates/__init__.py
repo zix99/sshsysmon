@@ -26,9 +26,14 @@ def __template(src, data):
 	hbTemplate = hbCompiler.compile(unicode(src))
 	return hbTemplate(data, helpers = __helpers)
 
+def __getPath(name):
+	if name.startswith(".") or name.startswith("/"):
+		return name
+	return path.join(TEMPLATE_PATH, name + ".hb")
+
 def template(name, data):
 	if name:
-		tplPath = path.join(TEMPLATE_PATH, name + ".hb")
+		tplPath = __getPath(name)
 		if path.isfile(tplPath):
 			logging.debug("Building template with: " + tplPath)
 			return __template(open(tplPath, 'r').read(), data)
