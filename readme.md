@@ -106,11 +106,11 @@ servers:
   alerts: # All alerts and inspectors
     - type: memory
       alarms:
-        "Low Swap": "swap_free < 50000"
-        "Low Memory": "mem_free < 50000"
+        "Low Swap": "swap_free.mb < 50"
+        "Low Memory": "mem_free.mb < 5"
     - type: disk
       alarms:
-        "Low Disk Space": "disk_free < 500000"
+        "Low Disk Space": "disk_free.gb < 5"
   summary: # Optional, if not provided, alerts will be used to auto-configure summary
     - type: memory
     - type: diskspace
@@ -123,6 +123,13 @@ All servers are iterated through, and queried for given inspector types. The res
 the alerts, and if any of them are unmet, a notification it sent to all configured channels.
 
 Configuration is built on three concepts: Drivers, Inspectors, and Channels.
+
+#### Data Format
+
+All sizes (that is, number of bytes), is enapsulated by the `ByteSize` class, which has helper methods for both friendly
+output, and size casting in the form of `b`, `kb`, `mb`, etc.  eg, you can write `mem_free.mb > 50`.
+
+Percentages will always be presented in their 0-100 form.
 
 #### Drivers
 
@@ -186,7 +193,7 @@ Inspects are parsers that know how to read data from a driver and make sense of 
 
 ##### Memory (memory)
 
-The memory driver returns metrics about the systems memory (in KB):
+The memory driver returns metrics about the systems memory:
 
 Metrics: mem_total, mem_free, cached, swap_total, swap_free
 

@@ -1,14 +1,12 @@
 from fnmatch import fnmatch
 from inspector import Inspector
+from util import ByteSize
 
 class DiskSpace(Inspector):
 	def __init__(self, driver, device = None, mount = "/"):
 		self._driver = driver
 		self._device = device
 		self._mount = mount
-
-	def getName(self):
-		return "Disk Space"
 
 	def getMetrics(self):
 		df = self._driver.sh("df")
@@ -28,13 +26,16 @@ class DiskSpace(Inspector):
 		if not metric:
 			return {}
 
-		KB_TO_GB = 1024 * 1024
 		return {
-			"size" : int(metric[1]) / KB_TO_GB,
-			"used" : int(metric[2]) / KB_TO_GB,
-			"available" : int(metric[3]) / KB_TO_GB,
+			"size" : ByteSize(metric[1], "kb"),
+			"used" : ByteSize(metric[2], "kb"),
+			"available" : ByteSize(metric[3], "kb"),
 			"percent_full" : int(metric[4][:-1])
 		}
 
+	def getName(self):
+		return "Disk Space: %s" % (self._device or self._mount)
+
 	def getSummary(self):
-		return self._driver.sh("df -h")['stdout']
+		metrics = self.getMetrics()
+		return "%s: %s total, %s used, %s free (%s%%)\n" % (self._device or self._mount, metrics['size'], metrics['used'], metrics['available'], metrics['percent_full'])
