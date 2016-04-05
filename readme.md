@@ -257,31 +257,7 @@ Metrics:
 
 ### Templating
 
-SshSysMon uses handlebars for output templating.  It is passed the data structure in the below format
-and will turn it in to the desired document and export to stdout.  If not template is specified,
-it will be output in JSON.
-
-```json
-{
-  "ctime" : GENERATION_TIME,
-  "servers" : [
-    {
-      "name" : NAME_OF_SERVER,
-      "inspectors" : [
-        {
-          "type" : INSPECTOR_TYPE,
-          "name" : INSPECTOR_NAME,
-          "config" : INSPECTOR_CONFIG,
-          "text" : SUMMARY_TEXT,
-          "metrics" : {RAW_METRICS,...}
-        },
-        ...
-      ]
-    },
-    ...
-  ]
-}
-```
+SshSysMon uses handlebars to template its summary output.  See the [templating](/templating) for more information.
 
 ---
 
