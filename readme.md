@@ -257,7 +257,7 @@ Metrics:
 
 ### Templating
 
-SshSysMon uses handlebars to template its summary output.  See the [templating](/templating) for more information.
+SshSysMon uses handlebars to template its summary output.  See the [templating](/templates) for more information.
 
 ---
 
