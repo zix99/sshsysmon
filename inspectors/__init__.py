@@ -4,6 +4,7 @@ from loadavg import LoadAvg
 from process import Process
 from tcp import Tcp
 from executer import Exec
+from http import Http
 
 def createInspector(name, driver, config):
 	if name == "memory":
@@ -18,5 +19,7 @@ def createInspector(name, driver, config):
 		return Tcp(driver, **config)
 	if name == "exec":
 		return Exec(driver, **config)
+	if name == "http":
+		return Http(driver, **config)
 	
 	raise Exception("Unknown inspector type %s" % name)

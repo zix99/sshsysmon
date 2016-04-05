@@ -25,6 +25,7 @@ def run_check(config):
 def run_summary(config, templateName=None):
 	servers = []
 	for server_name, server in config["servers"].iteritems():
+		logging.debug("Checking server: %s..." % server_name)
 		try:
 			server = Server(server_name, server)
 			servers.append(server.getSummary())

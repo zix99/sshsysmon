@@ -237,6 +237,23 @@ Metrics:
   * A dictionary of the requested ports, prefixed with `port_`, and true if they are open, otherwise false (eg `port_22`)
   * A special `all` metric which will be true if all ports are open
 
+##### HTTP (http)
+
+The Http connector will attempt to do a GET request on a http/https endpoint, and return the data if able.
+
+Config:
+
+  * path: The path to request on (default '/')
+  * port: The port to request at (default 80 for http, 443 for https)
+  * https: True/false if https (default: http)
+  * json: true/false if it should attempt to parse the response as json (Default: false)
+  * match: A regex to match against (default: None)
+
+Metrics:
+
+  * success: A true/false whether the request returns a 2xx, and all requirements were met (matches, or parses)
+  * match: Whether or not the regex matched. `None` if no match requested
+  * json: The parsed json, if requested
 
 ##### Custom Command (exec)
 
