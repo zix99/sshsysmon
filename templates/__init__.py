@@ -16,9 +16,15 @@ def __ifEq(this, options, left, right):
 def __replace(this, val, match, withVal):
 	return val.replace(match.decode('string_escape'), withVal.decode('string_escape'))
 
+def __coalesce(this, *args):
+	for arg in args:
+		if arg: return arg
+	return None
+
 __helpers = {
 	'ifEq' : __ifEq,
-	'replace' : __replace
+	'replace' : __replace,
+	'coalesce' : __coalesce
 }
 
 def __template(src, data):

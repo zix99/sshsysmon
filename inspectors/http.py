@@ -13,9 +13,7 @@ class Http(Inspector):
 		self._https = https
 
 	def getMetrics(self):
-		print self
 		url = "%s://%s:%d%s" % ("https" if self._https else "http", self._driver.getHost(), self._port, self._path)
-		print url
 
 		out = {
 			"match": None,
@@ -25,8 +23,6 @@ class Http(Inspector):
 
 		try:
 			req = urllib2.Request(url)
-			print req
-
 			response = urllib2.urlopen(req)
 			content = response.read()
 

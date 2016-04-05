@@ -1,5 +1,5 @@
 {{!-- Template for writing summary in markdown --}}
-# System Summary
+# {{coalesce meta.title 'System Summary'}}
 {{ctime}}
 
 {{#servers}}

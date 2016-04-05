@@ -34,7 +34,8 @@ def run_summary(config, templateName=None):
 
 	data = {
 		"ctime" : time.ctime(),
-		"servers" : servers
+		"servers" : servers,
+		"meta" : config.get('meta', {})
 	}
 
 	print template(templateName, data)

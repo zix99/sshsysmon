@@ -30,10 +30,20 @@ Example:
 {{replace text 'thing' 'other'}}
 ```
 
+### coalesce
+
+Display the first non-null value from left to right.
+
+Example:
+```
+{{coalesce data.val 'Default value'}}
+```
+
 ## Data Format
 ```json
 {
   "ctime" : GENERATION_TIME,
+  "meta" : {META_FROM_CONFIG,...}
   "servers" : [
     {
       "name" : NAME_OF_SERVER,
