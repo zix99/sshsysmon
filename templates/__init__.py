@@ -8,14 +8,17 @@ TEMPLATE_PATH = path.dirname(path.realpath(__file__))
 
 # Controlling methods for template building
 def __ifEq(this, options, left, right):
-	print left, right
 	if left == right:
 		return options['fn'](this)
 	else:
 		return options['inverse'](this)
 
+def __replace(this, val, match, withVal):
+	return val.replace(match.decode('string_escape'), withVal.decode('string_escape'))
+
 __helpers = {
-	'ifEq' : __ifEq
+	'ifEq' : __ifEq,
+	'replace' : __replace
 }
 
 def __template(src, data):
