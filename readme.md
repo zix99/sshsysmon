@@ -92,6 +92,10 @@ See the [Examples](/examples) folder for more sample configs.
 An example simple configuration might look something like this:
 
 ```
+meta: #Meta section (Optional). Used by summary templates
+  title: "My Cluster Summary"
+  author: "Me"
+
 servers:
   "Name of server":
     driver: ssh
