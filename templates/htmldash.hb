@@ -9,6 +9,7 @@ Meta variables:
 Colors from: http://clrs.cc/
 
 --}}
+<!DOCTYPE html>
 <html>
 	<head>
 		<!-- Bootstrap and font awesome -->
@@ -26,6 +27,12 @@ Colors from: http://clrs.cc/
 		<style type="text/css">
 		.inspector {
 			height: 350px;
+		}
+		pre {
+			max-height: 120px;
+			overflow: auto;
+			word-wrap: normal;
+			white-space: pre;
 		}
 		</style>
 
@@ -53,11 +60,11 @@ Colors from: http://clrs.cc/
 			</div>
 		</nav>
 		
-		<a name="top" />
+		<a name="top"></a>
 
 		{{#servers}}
 		<div class="container">
-			<a name="{{name}}" />
+			<a name="{{name}}"></a>
 			<div class="page-header">
 				<h1>{{name}}</h1>
 			</div>
@@ -173,19 +180,80 @@ Colors from: http://clrs.cc/
 								</script>
 							{{/ifEq}}
 
+							{{!-- TCP --}}
+							{{#ifEq type 'tcp'}}
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Port</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{#each metrics}}
+									<tr>
+										<td>{{@key}}</td>
+										<td>
+											{{#if .}}
+											<span class="glyphicon glyphicon-ok" style="color: #2ECC40"></span>
+											{{else}}
+											<span class="glyphicon glyphicon-remove" style="color: #FF4136"></span>
+											{{/if}}
+										</td>
+									</tr>
+									{{/each}}
+								</tbody>
+							</table>
+							{{/ifEq}}
+
+							{{!-- HTTP --}}
+							{{#ifEq type 'http'}}
+							<a href="{{metrics.url}}" target="_blank"><samp>{{metrics.url}}</samp></a>
+							<p>
+								Success:
+								{{#if metrics.success}}
+								<span class="glyphicon glyphicon-ok" style="color: #2ECC40"></span> True
+								{{else}}
+								<span class="glyphicon glyphicon-remove" style="color: #FF4136"></span> False
+								{{/if}}
+							</p>
+							<p>
+								Status: <code>{{metrics.status}}</code>
+							</p>
+
+							{{#if metrics.json}}
+							<pre>{{metrics.json}}</pre>
+							{{/if}}
+
+							{{/ifEq}}
+
 							{{!-- Exec --}}
 							{{#ifEq type 'exec'}}
 							<p>Return: <code>{{metrics.status}}</code></p>
 							Stdout:
-							<pre>
-{{metrics.stdout}}
-							</pre>
+							<pre>{{metrics.stdout}}</pre>
 							Stderr:
-							<pre>
-{{metrics.stderr}}
-							</pre>
+							<pre>{{metrics.stderr}}</pre>
 							{{/ifEq}}
 
+							{{!-- Process --}}
+							{{#ifEq type 'process'}}
+							{{#if metrics}}
+
+							<table class="table table-striped">
+								{{#each metrics}}
+								<tr>
+									<td>{{@key}}</td>
+									<td>{{.}}</td>
+								</tr>
+								{{/each}}
+							</table>
+
+							{{else}}
+							<div class="alert alert-danger">No metrics for process</div>
+							{{/if}}
+
+							{{/ifEq}}
 
 						</div>
 					{{/inspectors}}

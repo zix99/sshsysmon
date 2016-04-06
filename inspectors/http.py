@@ -12,33 +12,42 @@ class Http(Inspector):
 		self._match = match
 		self._https = https
 
+
+	def getUrl(self):
+		return "%s://%s:%d%s" % ("https" if self._https else "http", self._driver.getHost(), self._port, self._path)
+
 	def getMetrics(self):
-		url = "%s://%s:%d%s" % ("https" if self._https else "http", self._driver.getHost(), self._port, self._path)
+		url = self.getUrl()
 
 		out = {
 			"match": None,
-			"json": {}
+			"json": {},
+			"status": 0,
+			"success": True,
+			"url" : url
 		}
-		success = True
-
+		
 		try:
 			req = urllib2.Request(url)
 			response = urllib2.urlopen(req)
 			content = response.read()
-
-			out = {}
+			out['status'] = response.getcode()
 
 			if self._match:
 				out['match'] = matches = re.search(self._match, content) != None
 				if not matches:
-					success = False
+					out['success'] = False
 
 			if self._json:
 				out['json'] = jsonParser.loads(content)
 
+		except urllib2.HTTPError, e:
+			out['status'] = e.getcode()
+			out['success'] = False
 		except:
-			success = False
-
-		out['success'] = success
+			out['success'] = False
 
 		return out
+
+	def getName(self):
+		return "Http: %s" % self._path
