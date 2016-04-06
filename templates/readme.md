@@ -47,6 +47,7 @@ Example:
   "servers" : [
     {
       "name" : NAME_OF_SERVER,
+      "_id" : SANITIZED_NAME_OF_SERVER,
       "inspectors" : [
         {
           "type" : INSPECTOR_TYPE,

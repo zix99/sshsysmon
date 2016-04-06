@@ -6,6 +6,7 @@ import logging
 import argparse
 from templates import template
 from monitor import *
+from util import sanitize
 
 def run_check(config):
 	count = 0
@@ -28,7 +29,9 @@ def run_summary(config, templateName=None):
 		logging.debug("Checking server: %s..." % server_name)
 		try:
 			server = Server(server_name, server)
-			servers.append(server.getSummary())
+			summary = server.getSummary()
+			summary["_id"] = sanitize(summary['name'])
+			servers.append(summary)
 		except Exception, e:
 			logging.warning("Unable to add server summary for %s: %s" % (server_name, e))
 
