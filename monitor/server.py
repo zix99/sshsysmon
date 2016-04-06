@@ -1,5 +1,6 @@
 from channelgroup import *
 from alert import *
+from util import sanitize
 import drivers
 import inspectors
 import logging
@@ -75,7 +76,8 @@ class Server:
 					"config" : summary_config,
 					"text" : inspector.getSummary(),
 					"name" : inspector.getName(),
-					"metrics" : inspector.getMetrics()
+					"metrics" : inspector.getMetrics(),
+					"_id" : sanitize(inspector.getName())
 				})
 
 			except Exception, e:
