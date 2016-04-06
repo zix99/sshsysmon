@@ -1,13 +1,41 @@
 # SshSysMon Templates
 
-Templates control how the SshSysMon summary is output to stdout.
+Templates control how the SshSysMon `summary` is output to stdout.
 SshSysMon uses handlebars for output templating.  It is passed the data structure in the below format
-and will turn it in to the desired document and export to stdout.  If not template is specified,
+and will turn it in to the desired document and write to stdout.  If no template is specified,
 it will be output in JSON.
 
-The default templtae is `md` (markdown).
+The default template is `md` (markdown).
+
+## Data Format
+```json
+{
+  "ctime" : GENERATION_TIME,
+  "meta" : {META_FROM_CONFIG,...}
+  "servers" : [
+    {
+      "name" : NAME_OF_SERVER,
+      "inspectors" : [
+        {
+          "type" : INSPECTOR_TYPE,
+          "name" : INSPECTOR_NAME,
+          "config" : INSPECTOR_CONFIG,
+          "text" : SUMMARY_TEXT,
+          "metrics" : {RAW_METRICS,...}
+        },
+        ...
+      ]
+    },
+    ...
+  ]
+}
+```
+
 
 ## Helpers
+
+There are a few generic helpers added to our handlebars template that add useful functionality
+for generating views.
 
 ### ifEq
 
@@ -38,29 +66,3 @@ Example:
 ```
 {{coalesce data.val 'Default value'}}
 ```
-
-## Data Format
-```json
-{
-  "ctime" : GENERATION_TIME,
-  "meta" : {META_FROM_CONFIG,...}
-  "servers" : [
-    {
-      "name" : NAME_OF_SERVER,
-      "_id" : SANITIZED_NAME_OF_SERVER,
-      "inspectors" : [
-        {
-          "type" : INSPECTOR_TYPE,
-          "name" : INSPECTOR_NAME,
-          "config" : INSPECTOR_CONFIG,
-          "text" : SUMMARY_TEXT,
-          "metrics" : {RAW_METRICS,...}
-        },
-        ...
-      ]
-    },
-    ...
-  ]
-}
-```
-
