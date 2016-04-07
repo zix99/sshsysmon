@@ -31,13 +31,15 @@
         <h1>
 <a id="unix-system-monitoring-over-ssh" class="anchor" href="#unix-system-monitoring-over-ssh" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Unix System Monitoring Over SSH</h1>
 
-<p>SshMon is a system/server monitoring tool that executes all of its operations over SSH without the
+<p>SshSysMon is a system/server monitoring tool that executes all of its operations over SSH without the
 need for installing agents across machines.</p>
 
-<p>Its goal is to provide simple self-hosted monitoring and alerting for small numbers and lightweight
+<p>Its goal is to provide simple self-hosted monitoring and alerting for small numbers of lightweight
 servers without the traditional overhead of a monitoring system.</p>
 
 <p>It monitors things in /proc and with simple command executions to monitor system vitals such as: memory, cpu load, drive space, swap, etc.</p>
+
+<p><img src="/examples/htmldash.jpg" alt="Html Dashboard" title="Example of the HTML Summary Output"></p>
 
 <h2>
 <a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h2>
@@ -59,21 +61,16 @@ is the easiest way to guarantee continued authentication to other hosts.</p>
 <h3>
 <a id="setting-up-a-ssh-key-pair" class="anchor" href="#setting-up-a-ssh-key-pair" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting up a ssh key pair</h3>
 
+<p><strong>You only need to do this if you are monitoring a remote server.</strong></p>
+
 <p>On debian-based linux systems, setting up a key-pair to use with SSH is easy.  I would recommend
 you make a new linux user to only do monitoring on each machine, but it isn't required.</p>
 
-<p>First, create a new SSH key if you don't already have one. Follow the prompts, but leave the
-password blank</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># 1. Create a new SSH key if you don't already have one. Follow the prompts, but leave the password blank</span>
+ssh-keygen
 
-<pre><code>ssh-keygen
-</code></pre>
-
-<p>Now, install it on a user on another machine that you want to monitor</p>
-
-<pre><code>ssh-copy-id username@hostname
-</code></pre>
-
-<p>Now you're all set up to use sshsysmon over SSH to the other host</p>
+<span class="pl-c"># 2. Install it on a user on another machine that you want to monitor</span>
+ssh-copy-id username@remotehost</pre></div>
 
 <h3>
 <a id="running" class="anchor" href="#running" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running</h3>
@@ -88,7 +85,12 @@ great way to validate your config.</p>
 
 <p>It can be executed with:</p>
 
-<pre><code>./sshmon.py summary &lt;myconfig.yml&gt;
+<pre><code>./sshmon.py summary examples/starter.yml
+</code></pre>
+
+<p>It also can be told to use various templates. See templating section below. Eg, to use the html template:</p>
+
+<pre><code>./sshmon.py -f html summary examples/starter.yml
 </code></pre>
 
 <h4>
@@ -105,7 +107,7 @@ if a condition is unmet.</p>
 <h3>
 <a id="running-scheduled-job" class="anchor" href="#running-scheduled-job" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running Scheduled Job</h3>
 
-<p>The service is (currently) meant to be used in a cron job.</p>
+<p>The best way to run the service automatically is with a cron job.</p>
 
 <p>Edit your cron jobs with</p>
 
@@ -127,7 +129,11 @@ and connection details.</p>
 
 <p>An example simple configuration might look something like this:</p>
 
-<pre><code>servers:
+<pre><code>meta: #Meta section (Optional). Used by summary templates
+  title: "My Cluster Summary"
+  author: "Me"
+
+servers:
   "Name of server":
     driver: ssh
     config:
@@ -141,11 +147,11 @@ and connection details.</p>
   alerts: # All alerts and inspectors
     - type: memory
       alarms:
-        "Low Swap": "swap_free &lt; 50000"
-        "Low Memory": "mem_free &lt; 50000"
+        "Low Swap": "swap_free.mb &lt; 50"
+        "Low Memory": "mem_free.mb &lt; 5"
     - type: disk
       alarms:
-        "Low Disk Space": "disk_free &lt; 500000"
+        "Low Disk Space": "disk_free.gb &lt; 5"
   summary: # Optional, if not provided, alerts will be used to auto-configure summary
     - type: memory
     - type: diskspace
@@ -153,10 +159,20 @@ and connection details.</p>
 
 <p>You can often use YAML's inheritance to simplify your config for more than 1 server.</p>
 
-<p>All servers are iterated throw, and queries for given inspector types. The resulting metrics are compared to
+<p>All servers are iterated through, and queried for given inspector types. The resulting metrics are compared to
 the alerts, and if any of them are unmet, a notification it sent to all configured channels.</p>
 
 <p>Configuration is built on three concepts: Drivers, Inspectors, and Channels.</p>
+
+<h4>
+<a id="data-format" class="anchor" href="#data-format" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Data Format</h4>
+
+<p>All sizes (that is, number of bytes), is enapsulated by the <code>ByteSize</code> class, which has helper methods for both friendly
+output, and size casting in the form of <code>b</code>, <code>kb</code>, <code>mb</code>, etc.  eg, you can write <code>mem_free.mb &gt; 50</code>.</p>
+
+<p>Percentages will always be presented in their 0-100 form.</p>
+
+<h2></h2>
 
 <h4>
 <a id="drivers" class="anchor" href="#drivers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Drivers</h4>
@@ -181,6 +197,8 @@ the alerts, and if any of them are unmet, a notification it sent to all configur
 <li>port - The port to connect to the machine on (Default: 22)</li>
 <li>path - The path which proc is located (Default: /proc)</li>
 </ul>
+
+<h2></h2>
 
 <h4>
 <a id="channels" class="anchor" href="#channels" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Channels</h4>
@@ -228,6 +246,8 @@ gmail, see the examples.</p>
 <li>ssl - Should use ssl (default: false)</li>
 </ul>
 
+<h2></h2>
+
 <h4>
 <a id="inspectors-alert-types" class="anchor" href="#inspectors-alert-types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspectors (Alert Types)</h4>
 
@@ -236,7 +256,7 @@ gmail, see the examples.</p>
 <h5>
 <a id="memory-memory" class="anchor" href="#memory-memory" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Memory (memory)</h5>
 
-<p>The memory driver returns metrics about the systems memory (in KB):</p>
+<p>The memory driver returns metrics about the systems memory:</p>
 
 <p>Metrics: mem_total, mem_free, cached, swap_total, swap_free</p>
 
@@ -245,7 +265,7 @@ gmail, see the examples.</p>
 
 <p>The Disk driver returns status of the disk space (in GB)</p>
 
-<p>Arguments:</p>
+<p>Config:</p>
 
 <ul>
 <li>device - The name of the device (Optional, eg /dev/sda)</li>
@@ -269,6 +289,74 @@ gmail, see the examples.</p>
 <p>It takes in one <strong>required</strong> config <code>name</code>. This will use <a href="https://docs.python.org/2/library/fnmatch.html">wildcard matching</a> with <code>*</code> and <code>?</code>.</p>
 
 <p>Metrics: user, pid, cpu, mem, tty</p>
+
+<h5>
+<a id="tcp-tcp" class="anchor" href="#tcp-tcp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TCP (tcp)</h5>
+
+<p>The TCP inspector will try to establish a connection on a given port with the same
+remote as the driver.  It's important to note that this does <strong>not</strong> go over SSH, and will
+not verify anything more than that the port is willing to establish a connection.</p>
+
+<p>Config:</p>
+
+<ul>
+<li>ports: A list, single port, or CSV of ports to check</li>
+</ul>
+
+<p>Metrics:</p>
+
+<ul>
+<li>A dictionary of the requested ports, prefixed with <code>port_</code>, and true if they are open, otherwise false (eg <code>port_22</code>)</li>
+<li>A special <code>all</code> metric which will be true if all ports are open</li>
+</ul>
+
+<h5>
+<a id="http-http" class="anchor" href="#http-http" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>HTTP (http)</h5>
+
+<p>The Http connector will attempt to do a GET request on a http/https endpoint, and return the data if able.</p>
+
+<p>Config:</p>
+
+<ul>
+<li>path: The path to request on (default '/')</li>
+<li>port: The port to request at (default 80 for http, 443 for https)</li>
+<li>https: True/false if https (default: http)</li>
+<li>json: true/false if it should attempt to parse the response as json (Default: false)</li>
+<li>match: A regex to match against (default: None)</li>
+</ul>
+
+<p>Metrics:</p>
+
+<ul>
+<li>success: A true/false whether the request returns a 2xx, and all requirements were met (matches, or parses)</li>
+<li>match: Whether or not the regex matched. <code>None</code> if no match requested</li>
+<li>json: The parsed json, if requested</li>
+<li>url: The requested url</li>
+</ul>
+
+<h5>
+<a id="custom-command-exec" class="anchor" href="#custom-command-exec" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Custom Command (exec)</h5>
+
+<p><code>exec</code> runs a custom command and returns <code>stdout</code>, <code>stderr</code>, and <code>status</code> (returncode).</p>
+
+<p>Config:</p>
+
+<ul>
+<li>command: The shell command to execute</li>
+</ul>
+
+<p>Metrics:</p>
+
+<ul>
+<li>stdout: The out string of the command</li>
+<li>stderr: The err string of the command</li>
+<li>status: The returncode of the command (0 means normal)</li>
+</ul>
+
+<h3>
+<a id="templating" class="anchor" href="#templating" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Templating</h3>
+
+<p>SshSysMon uses handlebars to template its summary output.  See the <a href="/templates">templating</a> for more information.</p>
 
 <hr>
 
