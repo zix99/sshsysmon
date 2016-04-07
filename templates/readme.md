@@ -67,3 +67,15 @@ Example:
 {{coalesce data.val 'Default value'}}
 ```
 
+### alphanum
+
+Mutates the value to be only alphanumeric, replacing all special chars with '_' by default.
+
+Example:
+```
+{{alphanum text}}
+```
+
+```
+{{alphanum text '-'}}
+```

@@ -6,6 +6,7 @@ import logging
 import argparse
 from templates import template
 from monitor import *
+from util import sanitize
 
 def run_check(config):
 	count = 0

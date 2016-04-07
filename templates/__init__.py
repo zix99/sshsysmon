@@ -2,6 +2,7 @@ from os import path
 import json
 import logging
 import pybars
+from util import sanitize
 
 TEMPLATE_PATH = path.dirname(path.realpath(__file__))
 
@@ -21,10 +22,14 @@ def __coalesce(this, *args):
 		if arg: return arg
 	return None
 
+def __alphanum(this, val, replaceWith='_'):
+	return sanitize(val, replaceWith)
+
 __helpers = {
 	'ifEq' : __ifEq,
 	'replace' : __replace,
-	'coalesce' : __coalesce
+	'coalesce' : __coalesce,
+	'alphanum': __alphanum
 }
 
 def __template(src, data):

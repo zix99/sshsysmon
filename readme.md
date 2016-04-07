@@ -258,6 +258,7 @@ Metrics:
   * success: A true/false whether the request returns a 2xx, and all requirements were met (matches, or parses)
   * match: Whether or not the regex matched. `None` if no match requested
   * json: The parsed json, if requested
+  * url: The requested url
 
 ##### Custom Command (exec)
 
