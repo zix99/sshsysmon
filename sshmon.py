@@ -29,9 +29,7 @@ def run_summary(config, templateName=None):
 		logging.debug("Checking server: %s..." % server_name)
 		try:
 			server = Server(server_name, server)
-			summary = server.getSummary()
-			summary["_id"] = sanitize(summary['name'])
-			servers.append(summary)
+			servers.append(server.getSummary())
 		except Exception, e:
 			logging.warning("Unable to add server summary for %s: %s" % (server_name, e))
 

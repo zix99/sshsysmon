@@ -76,8 +76,7 @@ class Server:
 					"config" : summary_config,
 					"text" : inspector.getSummary(),
 					"name" : inspector.getName(),
-					"metrics" : inspector.getMetrics(),
-					"_id" : sanitize(inspector.getName())
+					"metrics" : inspector.getMetrics()
 				})
 
 			except Exception, e:

@@ -83,7 +83,7 @@ Colors from: http://clrs.cc/
 							{{#ifEq type 'memory'}}
 								<div class="col-xs-6">
 									<h3>Mem</h3>
-									<canvas id="memgraph-{{../_id}}" width="150" height="150"></canvas>
+									<canvas id="memgraph-{{alphanum ../name}}" width="150" height="150"></canvas>
 									<table class="table table-condensed">
 										<tr><td>Free</td><td>{{metrics.mem_free}}</td></tr>
 										<tr><td>Total</td><td>{{metrics.mem_total}}</td></tr>
@@ -91,7 +91,7 @@ Colors from: http://clrs.cc/
 								</div>
 								<div class="col-xs-6">
 									<h3>Swap</h3>
-									<canvas id="swapgraph-{{../_id}}" width="150" height="150"></canvas>
+									<canvas id="swapgraph-{{alphanum ../name}}" width="150" height="150"></canvas>
 									<table class="table table-condensed">
 										<tr><td>Free</td><td>{{metrics.swap_free}}</td></tr>
 										<tr><td>Total</td><td>{{metrics.swap_total}}</td></tr>
@@ -112,7 +112,7 @@ Colors from: http://clrs.cc/
 										}
 									];
 
-									var ctx = document.getElementById("memgraph-{{../_id}}").getContext("2d");
+									var ctx = document.getElementById("memgraph-{{alphanum ../name}}").getContext("2d");
 									new Chart(ctx).Doughnut(data);
 								})();
 
@@ -130,7 +130,7 @@ Colors from: http://clrs.cc/
 										}
 									];
 
-									var ctx = document.getElementById("swapgraph-{{../_id}}").getContext("2d");
+									var ctx = document.getElementById("swapgraph-{{alphanum ../name}}").getContext("2d");
 									new Chart(ctx).Doughnut(data);
 								})();
 								</script>
@@ -138,7 +138,7 @@ Colors from: http://clrs.cc/
 
 							{{!-- Disk space --}}
 							{{#ifEq type 'disk'}}
-								<canvas id="disk-{{../_id}}-{{_id}}" width="150" height="150"></canvas>
+								<canvas id="disk-{{alphanum ../name}}-{{alphanum name}}" width="150" height="150"></canvas>
 								<script type="text/javascript">
 								(function(){
 									var data = [
@@ -154,7 +154,7 @@ Colors from: http://clrs.cc/
 										}
 									];
 
-									var ctx = document.getElementById("disk-{{../_id}}-{{_id}}").getContext("2d");
+									var ctx = document.getElementById("disk-{{alphanum ../name}}-{{alphanum name}}").getContext("2d");
 									new Chart(ctx).Pie(data);
 								})();
 								</script>
@@ -176,7 +176,7 @@ Colors from: http://clrs.cc/
 
 							{{!-- Load Average --}}
 							{{#ifEq type 'loadavg'}}
-								<canvas id="loadavg-{{../_id}}" width="300" height="150"></canvas>
+								<canvas id="loadavg-{{alphanum ../name}}" width="300" height="150"></canvas>
 								<script type="text/javascript">
 								(function(){
 									var data = {
@@ -193,7 +193,7 @@ Colors from: http://clrs.cc/
 										]
 									};
 
-									var ctx = document.getElementById("loadavg-{{../_id}}").getContext("2d");
+									var ctx = document.getElementById("loadavg-{{alphanum ../name}}").getContext("2d");
 									new Chart(ctx).Bar(data);
 								})();
 								</script>
