@@ -68,9 +68,12 @@ class Server:
 		for summary in self._summary:
 			summary_type = summary.get('type')
 			summary_config = summary.get('config', {})
+			logging.debug('Creating summary for %s...' % summary_type)
 			try:
+				logging.debug("Creating inspector...")
 				inspector = inspectors.createInspector(summary_type, self._driver, summary_config)
 				
+				logging.debug("Generating summary metrics...")
 				results.append({
 					"type" : summary_type,
 					"config" : summary_config,
