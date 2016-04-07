@@ -68,18 +68,35 @@ class Server:
 		for summary in self._summary:
 			summary_type = summary.get('type')
 			summary_config = summary.get('config', {})
+			summary_alarms = summary.get('alarms', {})
+
 			logging.debug('Creating summary for %s...' % summary_type)
 			try:
 				logging.debug("Creating inspector...")
 				inspector = inspectors.createInspector(summary_type, self._driver, summary_config)
 				
+				logging.debug("Retrieving metrics...")
+				metrics = inspector.getMetrics()
+
+				logging.debug("Processing alarms...")
+				alarms = []
+				for alarm_name, statement in summary_alarms.iteritems():
+					alert = Alert(self._name, alarm_name, statement, metrics)
+					alarms.append({
+						"name" : alarm_name,
+						"fired" : alert.eval(),
+						"statement" : statement
+						})
+
+
 				logging.debug("Generating summary metrics...")
 				results.append({
 					"type" : summary_type,
 					"config" : summary_config,
 					"text" : inspector.getSummary(),
 					"name" : inspector.getName(),
-					"metrics" : inspector.getMetrics()
+					"metrics" : metrics,
+					"alarms" : alarms
 				})
 
 			except Exception, e:

@@ -5,11 +5,20 @@
 {{#servers}}
 ## {{name}}
 
+### Alarms
+{{#inspectors}}{{#alarms}}
+{{{name}}}:	{{fired}}
+
+{{/alarms}}{{/inspectors}}
+
+### Inspectors
+
 {{#inspectors}}
-### {{name}}
+#### {{name}}
 {{text}}
 
 {{/inspectors}}
 
+--
 
 {{/servers}}
