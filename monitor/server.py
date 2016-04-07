@@ -47,7 +47,7 @@ class Server:
 		for alert in self.createAlerts():
 			logging.debug("Evaluating alert " + alert.name)
 			if alert.eval():
-				logging.debug("  ALERT FIRED")
+				logging.info("ALERT: %s", alert.name)
 				failedAlerts.append(alert)
 		return failedAlerts
 

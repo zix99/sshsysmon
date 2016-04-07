@@ -17,8 +17,8 @@ class Alert:
 
 	def eval(self):
 		try:
-			for k,v in self._data.iteritems():
-				exec("%s = %s" % (k,getLiteral(v)))
+			for k in self._data.iterkeys():
+				exec("%s = self._data['%s']" % (k, k))
 			return eval(self.statement)
 		except Exception, e:
 			logging.warning("Error validating alert %s:%s: %s" % (self.serverName, self.name, e))

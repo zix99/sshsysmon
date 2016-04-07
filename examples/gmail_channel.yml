@@ -1,3 +1,6 @@
+# This example shows how to use gmail to notify via a channel
+# You need to have a gmail account, and enter your email, username, and password below
+
 servers:
   localhost:
     driver: local

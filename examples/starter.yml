@@ -1,0 +1,35 @@
+# This config will cover a normal case
+# It provides simple defaults, and alerts, based on a normal use-case
+
+meta:
+  name: My System Monitor
+  author: zix99
+
+# Define default alerts which can be used by multiple servers
+_shared: &shared
+  channels:
+    - type: email
+      config:
+        toAddr: <MY EMAIL>
+  alerts:
+    - type: memory
+      alarms:
+        "Memory < 1MB" : "mem_free.mb < 1"
+        "Swap < 10MB" : "swap_free.mb < 10"
+    - type: disk
+      alarms:
+        "Disk Space < 1GB" : "available.gb < 1"
+    - type: tcp
+      config:
+        ports: 22
+      alarms:
+        "Not listening on ssh" : "not port_22"
+    - type: loadavg
+      alarms:
+        "High load" : "load_15m > 0.1"
+  
+# Define our servers
+servers:
+  "localhost":
+    driver: local
+    <<: *shared

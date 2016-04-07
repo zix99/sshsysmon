@@ -1,3 +1,5 @@
+# This example shows how you can use the summary directive to override alerts in certain situations
+
 servers:
   localhost:
     driver: local
@@ -9,6 +11,6 @@ servers:
       - type: disk
         alarms:
           "Percent Full > 20%" : "percent_full > 20"
-    summary:
+    summary:  # Summary will override 'alerts' when run with `summary` command
       - type: memory
       - type: disk

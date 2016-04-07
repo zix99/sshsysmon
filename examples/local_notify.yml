@@ -1,7 +1,7 @@
 servers:
   localhost:
     driver: local
-    channels:
+    channels: # Execute a command if an alert is fired
     - type: command
       config:
         command: "notify-send -u critical \"{server}\" \"Server threw {alert} alert\""

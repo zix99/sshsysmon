@@ -1,4 +1,4 @@
-
+# This is a simple example of how you can use inheritance to simplify your config
 
 _alerts: &common_alerts
   alerts:
