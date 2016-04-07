@@ -28,7 +28,7 @@ Colors from: http://clrs.cc/
 		.inspector {
 			height: 350px;
 		}
-		pre {
+		pre.cmdbox {
 			max-height: 120px;
 			overflow: auto;
 			word-wrap: normal;
@@ -246,7 +246,7 @@ Colors from: http://clrs.cc/
 							</table>
 
 							{{#if metrics.json}}
-							<pre>{{metrics.json}}</pre>
+							<pre class="cmdbox">{{metrics.json}}</pre>
 							{{/if}}
 
 							{{/ifEq}}
@@ -256,9 +256,9 @@ Colors from: http://clrs.cc/
 							<p>Exec: <code>{{config.command}}</code></p>
 							<p>Return: <code>{{metrics.status}}</code></p>
 							Stdout:
-							<pre>{{metrics.stdout}}</pre>
+							<pre class="cmdbox">{{metrics.stdout}}</pre>
 							Stderr:
-							<pre>{{metrics.stderr}}</pre>
+							<pre class="cmdbox">{{metrics.stderr}}</pre>
 							{{/ifEq}}
 
 							{{!-- Process --}}
