@@ -14,6 +14,9 @@
 
 {{#servers}}
 	<h2>{{name}}</h2>
+	{{#inspectors}}{{#alarms}}
+		{{name}}: {{fired}}<br/>
+	{{/alarms}}{{/inspectors}}
 	{{#inspectors}}
 		<h3>{{name}}</h3>
 		<p>Type: {{type}}</p>
