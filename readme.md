@@ -1,9 +1,9 @@
 # Unix System Monitoring Over SSH
 
-SshMon is a system/server monitoring tool that executes all of its operations over SSH without the
+SshSysMon is a system/server monitoring tool that executes all of its operations over SSH without the
 need for installing agents across machines.
 
-Its goal is to provide simple self-hosted monitoring and alerting for small numbers and lightweight
+Its goal is to provide simple self-hosted monitoring and alerting for small numbers of lightweight
 servers without the traditional overhead of a monitoring system.
 
 It monitors things in /proc and with simple command executions to monitor system vitals such as: memory, cpu load, drive space, swap, etc.
@@ -27,6 +27,8 @@ is the easiest way to guarantee continued authentication to other hosts.
 
 ### Setting up a ssh key pair
 
+**You only need to do this if you are monitoring a remote server.**
+
 On debian-based linux systems, setting up a key-pair to use with SSH is easy.  I would recommend
 you make a new linux user to only do monitoring on each machine, but it isn't required.
 
@@ -38,7 +40,6 @@ ssh-keygen
 ssh-copy-id username@remotehost
 ```
 
-Now you're all set up to use sshsysmon over SSH to the other host.
 
 ### Running
 
@@ -51,11 +52,11 @@ great way to validate your config.
 
 It can be executed with:
 
-    ./sshmon.py summary <myconfig.yml>
+    ./sshmon.py summary examples/starter.yml
 
 It also can be told to use various templates. See templating section below. Eg, to use the html template:
 
-    ./sshmon.py -f html summary <myconfig.yml>
+    ./sshmon.py -f html summary examples/starter.yml
 
 #### Check
 
@@ -69,7 +70,7 @@ It can be excuted with:
 
 ### Running Scheduled Job
 
-The service is (currently) meant to be used in a cron job.
+The best way to run the service automatically is with a cron job.
 
 Edit your cron jobs with
 
@@ -78,8 +79,6 @@ Edit your cron jobs with
 Add an entry that runs the script every few hours: (or minutes, whatever you like)
 
     0 */4 * * * /path/to/sshmon.py check /path/to/config.yml
-
-
 
 
 ### Configuration
@@ -135,6 +134,8 @@ output, and size casting in the form of `b`, `kb`, `mb`, etc.  eg, you can write
 
 Percentages will always be presented in their 0-100 form.
 
+--
+
 #### Drivers
 
 Drivers are classes that define how to read information from a server.  By default, there are two drivers:
@@ -153,6 +154,8 @@ The SSH driver is for reaching out to remote machines.  There are several config
   * key - The path to the private key to use to connect (Default: ~/.ssh/id_rsa)
   * port - The port to connect to the machine on (Default: 22)
   * path - The path which proc is located (Default: /proc)
+
+--
 
 #### Channels
 
@@ -190,6 +193,8 @@ Arguments:
   * password - Password to authenticate with smtp server (default: none)
   * tls - Should use tls (default: false)
   * ssl - Should use ssl (default: false)
+
+--
 
 #### Inspectors (Alert Types)
 
