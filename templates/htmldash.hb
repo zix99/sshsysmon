@@ -75,6 +75,26 @@ Colors from: http://clrs.cc/
 
 			<div class="container-fluid">
 				<div class="row">
+					{{!-- Alarms --}}
+					<div class="col-xs-4 inspector">
+						<h2>Alarms</h2>
+						<table class="table table-condensed table-striped">
+							{{#inspectors}}{{#alarms}}
+							<tr>
+								<td title="{{statement}}">{{name}}</td>
+								<td>
+									{{#if fired}}
+									<span class="glyphicon glyphicon-remove" style="color: #FF4136"></span>
+									{{else}}
+									<span class="glyphicon glyphicon-ok" style="color: #2ECC40"></span>
+									{{/if}}
+								</td>
+							</tr>
+							{{/alarms}}{{/inspectors}}
+						</table>
+					</div>
+
+
 					{{#inspectors}}
 						<div class="col-xs-4 inspector">
 							<h2>{{name}}</h2>
