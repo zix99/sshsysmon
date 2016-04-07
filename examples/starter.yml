@@ -2,7 +2,7 @@
 # It provides simple defaults, and alerts, based on a normal use-case
 
 meta:
-  name: My System Monitor
+  title: My System Monitor
   author: zix99
 
 # Define default alerts which can be used by multiple servers
@@ -26,7 +26,7 @@ _shared: &shared
         "Not listening on ssh" : "not port_22"
     - type: loadavg
       alarms:
-        "High load" : "load_15m > 0.1"
+        "High load" : "load_15m > 1"
   
 # Define our servers
 servers:

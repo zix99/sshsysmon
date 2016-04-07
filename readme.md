@@ -9,6 +9,7 @@ servers without the traditional overhead of a monitoring system.
 It monitors things in /proc and with simple command executions to monitor system vitals such as: memory, cpu load, drive space, swap, etc.
 
 
+![Html Dashboard](/examples/htmldash.jpg "Example of the HTML Summary Output")
 
 
 ## Setup
