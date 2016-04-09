@@ -16,11 +16,17 @@ It monitors things in /proc and with simple command executions to monitor system
 
 ### Installation
 
-Requires python 2.x
+```bash
+# Requires python 2.x and pip:
+apt-get install python python-pip
 
-Make sure the dependencies are installed:
+# Download the latest SshSysMon:
+wget -O - https://github.com/zix99/sshsysmon/archive/master.tar.gz | tar xzv
 
-    pip install -r requirements.txt
+# Make sure the dependencies are installed:
+cd sshsysmon-master/
+pip install -r requirements.txt
+```
 
 It is assumed that you already have a private key created and added to the `authorized_hosts` file on
 all remote servers you are interested in monitoring.  While password authentication is supported, this
