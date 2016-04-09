@@ -93,8 +93,8 @@ Add an entry that runs the script every few hours: (or minutes, whatever you lik
 
 ### Configuration
 
-Configuration is written in yaml and is a set of servers, with a list of alerts, notification channels
-and connection details.
+Configuration is written in yaml and is a set of servers, with a list of monitors with alarms,
+notification channels and connection details.
 
 See the [Examples](/examples) folder for more sample configs.
 
@@ -111,29 +111,27 @@ servers:
     config:
       host: myhostname.com
       username: myuser
-  channels: # Notification targets
-    - type: email
-      config:
-        toAddr: myemail@gmail.com
-        subject: "Something went wrong on {server}"
-  alerts: # All alerts and inspectors
-    - type: memory
-      alarms:
-        "Low Swap": "swap_free.mb < 50"
-        "Low Memory": "mem_free.mb < 5"
-    - type: disk
-      alarms:
-        "Low Disk Space": "disk_free.gb < 5"
-  summary: # Optional, if not provided, alerts will be used to auto-configure summary
-    - type: memory
-    - type: diskspace
+    channels: # Notification targets
+      - type: email
+        config:
+          toAddr: myemail@gmail.com
+          subject: "Something went wrong on {server}"
+    monitors: # All alerts and inspectors
+      - type: memory
+        alarms:
+          "Low Swap": "swap_free.mb < 50"
+          "Low Memory": "mem_free.mb < 5"
+      - type: disk
+        alarms:
+          "Low Disk Space": "disk_free.gb < 5"
+        summary: false # Optional, use if you don't want a monitor to show up in the summary
 ```
 
 You can often use YAML's inheritance to simplify your config for more than 1 server.
 
 
-All servers are iterated through, and queried for given inspector types. The resulting metrics are compared to
-the alerts, and if any of them are unmet, a notification it sent to all configured channels.
+All servers are iterated through, and queried for given inspector types. The resulting `metrics` are compared to
+the `alarms`, and if any of them are unmet, a notification it sent to all configured `channels`.
 
 Configuration is built on three concepts: Drivers, Inspectors, and Channels.
 

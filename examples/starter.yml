@@ -11,7 +11,7 @@ _shared: &shared
     - type: email
       config:
         toAddr: <MY EMAIL>
-  alerts:
+  monitors:
     - type: memory
       alarms:
         "Memory < 1MB" : "mem_free.mb < 1"

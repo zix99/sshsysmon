@@ -1,7 +1,7 @@
 # This is a simple example of how you can use inheritance to simplify your config
 
-_alerts: &common_alerts
-  alerts:
+_monitors: &common_monitors
+  monitors:
     - type: memory
       alarms:
         "Swap < 100MB" : "swap_free.mb < 100"
@@ -20,7 +20,7 @@ _channels: &common_channels
         toAddr: <YOUR EMAIL>
 
 _default: &default
-  <<: *common_alerts
+  <<: *common_monitors
   <<: *common_channels
 
 servers:
