@@ -18,14 +18,14 @@ It monitors things in /proc and with simple command executions to monitor system
 
 ```bash
 # Requires python 2.x and pip:
-apt-get install python python-pip
+sudo apt-get install -y python python-pip python-dev
 
 # Download the latest SshSysMon:
 wget -O - https://github.com/zix99/sshsysmon/archive/master.tar.gz | tar xzv
 
 # Make sure the dependencies are installed:
 cd sshsysmon-master/
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
 
 # Test it out!
 ./sshmon.py summary examples/starter.yml
