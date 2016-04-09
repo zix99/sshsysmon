@@ -65,7 +65,7 @@ class Server:
 	def getSummary(self):
 		results = []
 		for monitor in self._monitors:
-			if monitor.get('summary', True): #Ability to hide at monitor level
+			if monitor.get('summarize', True): #Ability to hide at monitor level
 				monitor_type = monitor.get('type')
 				monitor_config = monitor.get('config', {})
 				monitor_alarms = monitor.get('alarms', {})

@@ -124,7 +124,7 @@ servers:
       - type: disk
         alarms:
           "Low Disk Space": "disk_free.gb < 5"
-        summary: false # Optional, use if you don't want a monitor to show up in the summary
+        summarize: false # Optional, use if you don't want a monitor to show up in the summary
 ```
 
 You can often use YAML's inheritance to simplify your config for more than 1 server.
