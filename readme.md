@@ -26,15 +26,18 @@ wget -O - https://github.com/zix99/sshsysmon/archive/master.tar.gz | tar xzv
 # Make sure the dependencies are installed:
 cd sshsysmon-master/
 pip install -r requirements.txt
-```
 
-It is assumed that you already have a private key created and added to the `authorized_hosts` file on
-all remote servers you are interested in monitoring.  While password authentication is supported, this
-is the easiest way to guarantee continued authentication to other hosts.
+# Test it out!
+./sshmon.py summary examples/starter.yml
+```
 
 ### Setting up a ssh key pair
 
 **You only need to do this if you are monitoring a remote server.**
+
+The best way to connect to remote servers is with private key created and added to the `authorized_hosts` file on
+all systems you are interested in monitoring.  While password authentication is supported, this
+is the easiest way to guarantee continued authentication to other hosts.
 
 On debian-based linux systems, setting up a key-pair to use with SSH is easy.  I would recommend
 you make a new linux user to only do monitoring on each machine, but it isn't required.
