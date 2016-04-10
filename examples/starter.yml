@@ -11,7 +11,7 @@ _shared: &shared
     - type: email
       config:
         toAddr: <MY EMAIL>
-  alerts:
+  monitors:
     - type: memory
       alarms:
         "Memory < 1MB" : "mem_free.mb < 1"
@@ -24,6 +24,7 @@ _shared: &shared
         ports: 22
       alarms:
         "Not listening on ssh" : "not port_22"
+      summarize: false # We don't want TCP to show explicitely in the summary
     - type: loadavg
       alarms:
         "High load" : "load_15m > 1"

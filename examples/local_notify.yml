@@ -5,7 +5,7 @@ servers:
     - type: command
       config:
         command: "notify-send -u critical \"{server}\" \"Server threw {alert} alert\""
-    alerts:
+    monitors:
       - type: disk
         alarms:
           "Percent Full > 20%" : "percent_full > 20"

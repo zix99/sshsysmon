@@ -9,35 +9,34 @@ class Server:
 	def __init__(self, name, config):
 		self._name = name
 		self._driver = drivers.createDriver(config.get("driver"), config.get("config", {}))
-		self._alerts = config.get("alerts", [])
-		self._summary = config.get("summary") or config.get("alerts") or []
+		self._monitors = config.get('monitors', [])
 		self._channels = config.get("channels", [])
 
 
 	def createAlerts(self):
 		alerts = []
 
-		for alert in self._alerts:
-			alert_type = alert.get('type')
-			alert_alarms = alert.get('alarms', {})
-			alert_config = alert.get('config', {})
+		for monitor in self._monitors:
+			monitor_type = monitor.get('type')
+			monitor_alarms = monitor.get('alarms', {})
+			monitor_config = monitor.get('config', {})
 
-			logging.debug("Creating inspector: %s..." % alert_type)
+			logging.debug("Creating inspector: %s..." % monitor_type)
 
 			try:
-				inspector = inspectors.createInspector(alert_type, self._driver, alert_config)
+				inspector = inspectors.createInspector(monitor_type, self._driver, monitor_config)
 				if not inspector:
-					raise Exception("Unknown inspector type: %s" % alert_type)
+					raise Exception("Unknown inspector type: %s" % monitor_type)
 
 				metrics = inspector.getMetrics()
 				if not metrics:
 					raise Exception("Inspector returned no data: %s" % inspector.getName())
 
-				for alarm_name, statement in alert_alarms.iteritems():
+				for alarm_name, statement in monitor_alarms.iteritems():
 					alerts.append(Alert(self._name, alarm_name, statement, metrics))
 
 			except Exception,e:
-				logging.warning("Error executing inspector %s: %s" % (alert_type, e))
+				logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
 				alerts.append(Alert(self._name, "NO_DATA", "True", {}))
 
 		return alerts
@@ -65,42 +64,43 @@ class Server:
 	# Prints out summary to stdout
 	def getSummary(self):
 		results = []
-		for summary in self._summary:
-			summary_type = summary.get('type')
-			summary_config = summary.get('config', {})
-			summary_alarms = summary.get('alarms', {})
+		for monitor in self._monitors:
+			if monitor.get('summarize', True): #Ability to hide at monitor level
+				monitor_type = monitor.get('type')
+				monitor_config = monitor.get('config', {})
+				monitor_alarms = monitor.get('alarms', {})
 
-			logging.debug('Creating summary for %s...' % summary_type)
-			try:
-				logging.debug("Creating inspector...")
-				inspector = inspectors.createInspector(summary_type, self._driver, summary_config)
-				
-				logging.debug("Retrieving metrics...")
-				metrics = inspector.getMetrics()
+				logging.debug('Creating summary for %s...' % monitor_type)
+				try:
+					logging.debug("Creating inspector...")
+					inspector = inspectors.createInspector(monitor_type, self._driver, monitor_config)
+					
+					logging.debug("Retrieving metrics...")
+					metrics = inspector.getMetrics()
 
-				logging.debug("Processing alarms...")
-				alarms = []
-				for alarm_name, statement in summary_alarms.iteritems():
-					alert = Alert(self._name, alarm_name, statement, metrics)
-					alarms.append({
-						"name" : alarm_name,
-						"fired" : alert.eval(),
-						"statement" : statement
-						})
+					logging.debug("Processing alarms...")
+					alarms = []
+					for alarm_name, statement in monitor_alarms.iteritems():
+						alert = Alert(self._name, alarm_name, statement, metrics)
+						alarms.append({
+							"name" : alarm_name,
+							"fired" : alert.eval(),
+							"statement" : statement
+							})
 
 
-				logging.debug("Generating summary metrics...")
-				results.append({
-					"type" : summary_type,
-					"config" : summary_config,
-					"text" : inspector.getSummary(),
-					"name" : inspector.getName(),
-					"metrics" : metrics,
-					"alarms" : alarms
-				})
+					logging.debug("Generating summary metrics...")
+					results.append({
+						"type" : monitor_type,
+						"config" : monitor_config,
+						"text" : inspector.getSummary(),
+						"name" : inspector.getName(),
+						"metrics" : metrics,
+						"alarms" : alarms
+					})
 
-			except Exception, e:
-				logging.warning("Error executing inspector %s: %s" % (summary_type, e))
+				except Exception, e:
+					logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
 
 		return {
 			"name" : self._name,
