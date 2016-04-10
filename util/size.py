@@ -33,6 +33,9 @@ class ByteSize:
 	def pb(self):
 		return self._bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0 / 1024.0
 
+	def __json__(self):
+		return self._bytes
+
 	def __int__(self):
 		return self._bytes
 

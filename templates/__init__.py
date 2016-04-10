@@ -42,8 +42,15 @@ def __getPath(name):
 		return name
 	return path.join(TEMPLATE_PATH, name + ".hb")
 
+class __ComplexEncoder(json.JSONEncoder):
+	def default(self, obj):
+		if hasattr(obj, '__json__'):
+			return obj.__json__()
+		else:
+			return json.JSONEncoder.default(self, obj)
+
 def template(name, data):
-	if name:
+	if name and name != 'json':
 		tplPath = __getPath(name)
 		if path.isfile(tplPath):
 			logging.debug("Building template with: " + tplPath)
@@ -51,4 +58,4 @@ def template(name, data):
 		else:
 			logging.error("Unable to find requested template: " + name)
 
-	return json.dumps(data)
+	return json.dumps(data, cls=__ComplexEncoder)
