@@ -2,7 +2,10 @@ from channel import Channel
 import time
 
 class StdOut(Channel):
-	def __init__(self, timeFormat = "ctime"):
+	DEFAULT_FORMAT = "{time}\t{server}\t{inspector}\t{alert}"
+
+	def __init__(self, format=DEFAULT_FORMAT, timeFormat = "ctime"):
+		self._format = format
 		self._timeFormat = timeFormat
 
 	def notify(self, model):
@@ -12,4 +15,9 @@ class StdOut(Channel):
 		else:
 			stime = time.ctime()
 
-		print "%s\t%s\t%s\t%s" % (stime, model['server'], model['inspector'], model['alert'])
+		data = {
+			'time' : stime
+		}
+		data.update(model)
+
+		print self._format.format(**data)

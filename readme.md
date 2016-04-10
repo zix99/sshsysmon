@@ -181,7 +181,8 @@ Writes tab-separated data to stdout.  Can be appended to file with bash `>>` ope
 
 Arguments:
 
-  * timeFormat - Either `ctime` or `epoch`, the format which time is output
+  * timeFormat - Either `ctime` or `epoch`, the format which time is output. Default: `ctime`
+  * format - The format string used to write output. Default: `{time}\t{server}\t{inspector}\t{alert}`
 
 ##### command
 
