@@ -39,27 +39,35 @@ servers without the traditional overhead of a monitoring system.</p>
 
 <p>It monitors things in /proc and with simple command executions to monitor system vitals such as: memory, cpu load, drive space, swap, etc.</p>
 
+<p><img src="/examples/htmldash.jpg" alt="Html Dashboard" title="Example of the HTML Summary Output"></p>
+
 <h2>
 <a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h2>
 
 <h3>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
 
-<p>Requires python 2.x</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Requires python 2.x and pip:</span>
+sudo apt-get install -y python python-pip python-dev
 
-<p>Make sure the dependencies are installed:</p>
+<span class="pl-c"># Download the latest SshSysMon:</span>
+wget -O - https://github.com/zix99/sshsysmon/archive/master.tar.gz <span class="pl-k">|</span> tar xzv
 
-<pre><code>pip install -r requirements.txt
-</code></pre>
+<span class="pl-c"># Make sure the dependencies are installed:</span>
+<span class="pl-c1">cd</span> sshsysmon-master/
+sudo pip install -r requirements.txt
 
-<p>It is assumed that you already have a private key created and added to the <code>authorized_hosts</code> file on
-all remote servers you are interested in monitoring.  While password authentication is supported, this
-is the easiest way to guarantee continued authentication to other hosts.</p>
+<span class="pl-c"># Test it out!</span>
+./sshmon.py summary examples/starter.yml</pre></div>
 
 <h3>
 <a id="setting-up-a-ssh-key-pair" class="anchor" href="#setting-up-a-ssh-key-pair" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting up a ssh key pair</h3>
 
 <p><strong>You only need to do this if you are monitoring a remote server.</strong></p>
+
+<p>The best way to connect to remote servers is with private key created and added to the <code>authorized_hosts</code> file on
+all systems you are interested in monitoring.  While password authentication is supported, this
+is the easiest way to guarantee continued authentication to other hosts.</p>
 
 <p>On debian-based linux systems, setting up a key-pair to use with SSH is easy.  I would recommend
 you make a new linux user to only do monitoring on each machine, but it isn't required.</p>
@@ -120,8 +128,8 @@ if a condition is unmet.</p>
 <h3>
 <a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h3>
 
-<p>Configuration is written in yaml and is a set of servers, with a list of alerts, notification channels
-and connection details.</p>
+<p>Configuration is written in yaml and is a set of servers, with a list of monitors with alarms,
+notification channels and connection details.</p>
 
 <p>See the <a href="/examples">Examples</a> folder for more sample configs.</p>
 
@@ -137,28 +145,26 @@ servers:
     config:
       host: myhostname.com
       username: myuser
-  channels: # Notification targets
-    - type: email
-      config:
-        toAddr: myemail@gmail.com
-        subject: "Something went wrong on {server}"
-  alerts: # All alerts and inspectors
-    - type: memory
-      alarms:
-        "Low Swap": "swap_free.mb &lt; 50"
-        "Low Memory": "mem_free.mb &lt; 5"
-    - type: disk
-      alarms:
-        "Low Disk Space": "disk_free.gb &lt; 5"
-  summary: # Optional, if not provided, alerts will be used to auto-configure summary
-    - type: memory
-    - type: diskspace
+    channels: # Notification targets
+      - type: email
+        config:
+          toAddr: myemail@gmail.com
+          subject: "Something went wrong on {server}"
+    monitors: # All alerts and inspectors
+      - type: memory
+        alarms:
+          "Low Swap": "swap_free.mb &lt; 50"
+          "Low Memory": "mem_free.mb &lt; 5"
+      - type: disk
+        alarms:
+          "Low Disk Space": "disk_free.gb &lt; 5"
+        summarize: false # Optional, use if you don't want a monitor to show up in the summary
 </code></pre>
 
 <p>You can often use YAML's inheritance to simplify your config for more than 1 server.</p>
 
-<p>All servers are iterated through, and queried for given inspector types. The resulting metrics are compared to
-the alerts, and if any of them are unmet, a notification it sent to all configured channels.</p>
+<p>All servers are iterated through, and queried for given inspector types. The resulting <code>metrics</code> are compared to
+the <code>alarms</code>, and if any of them are unmet, a notification it sent to all configured <code>channels</code>.</p>
 
 <p>Configuration is built on three concepts: Drivers, Inspectors, and Channels.</p>
 
@@ -209,6 +215,17 @@ output, and size casting in the form of <code>b</code>, <code>kb</code>, <code>m
 <li>server - The server that the alert triggered on</li>
 <li>alert - The alert that triggered</li>
 <li>metric - The metric that triggered the alert</li>
+</ul>
+
+<h5>
+<a id="stdout" class="anchor" href="#stdout" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>stdout</h5>
+
+<p>Writes tab-separated data to stdout.  Can be appended to file with bash <code>&gt;&gt;</code> operator.</p>
+
+<p>Arguments:</p>
+
+<ul>
+<li>timeFormat - Either <code>ctime</code> or <code>epoch</code>, the format which time is output</li>
 </ul>
 
 <h5>
