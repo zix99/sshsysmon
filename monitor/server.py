@@ -16,10 +16,10 @@ class Server:
 	def createAlerts(self):
 		alerts = []
 
-		for alert in self._monitors:
-			monitor_type = alert.get('type')
-			monitor_alarms = alert.get('alarms', {})
-			monitor_config = alert.get('config', {})
+		for monitor in self._monitors:
+			monitor_type = monitor.get('type')
+			monitor_alarms = monitor.get('alarms', {})
+			monitor_config = monitor.get('config', {})
 
 			logging.debug("Creating inspector: %s..." % monitor_type)
 
