@@ -33,11 +33,11 @@ class Server:
 					raise Exception("Inspector returned no data: %s" % inspector.getName())
 
 				for alarm_name, statement in monitor_alarms.iteritems():
-					alerts.append(Alert(self._name, alarm_name, statement, metrics))
+					alerts.append(Alert(self._name, monitor_type, alarm_name, statement, metrics))
 
 			except Exception,e:
 				logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
-				alerts.append(Alert(self._name, "NO_DATA", "True", {}))
+				alerts.append(Alert(self._name, monitor_type, "NO_DATA", "True", {}))
 
 		return alerts
 
@@ -81,7 +81,7 @@ class Server:
 					logging.debug("Processing alarms...")
 					alarms = []
 					for alarm_name, statement in monitor_alarms.iteritems():
-						alert = Alert(self._name, alarm_name, statement, metrics)
+						alert = Alert(self._name, monitor_type, alarm_name, statement, metrics)
 						alarms.append({
 							"name" : alarm_name,
 							"fired" : alert.eval(),

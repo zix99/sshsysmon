@@ -11,6 +11,7 @@ _shared: &shared
     - type: email
       config:
         toAddr: <MY EMAIL>
+    - type: stdout
   monitors:
     - type: memory
       alarms:

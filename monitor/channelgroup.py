@@ -20,7 +20,8 @@ class ChannelGroup:
 		payload.update({
 			"server" : alert.serverName,
 			"alert" : alert.name,
-			"statement" : alert.statement
+			"statement" : alert.statement,
+			"inspector" : alert.inspector
 			})
 
 		for channel in self._channels:

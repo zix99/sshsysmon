@@ -9,10 +9,11 @@ def getLiteral(val):
 	return "\"\"\"%s\"\"\"" % val #Treat as multiline string
 
 class Alert:
-	def __init__(self, serverName, name, statement, data):
+	def __init__(self, serverName, inspectorType, name, statement, data):
 		self.serverName = serverName
 		self.name = name
 		self.statement = statement
+		self.inspector = inspectorType
 		self._data = data
 
 	def eval(self):
@@ -25,4 +26,4 @@ class Alert:
 		return True
 
 	def __repr__(self):
-		return "[%s:%s]" % (self.serverName, self.name)
+		return "[%s:%s:%s]" % (self.serverName, self.inspector, self.name)

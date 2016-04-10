@@ -21,7 +21,7 @@ def run_check(config):
 		except Exception, e:
 			logging.error("Error checking server %s: %s" % (server_name, e))
 
-	print "There were %d alert(s) triggered" % count
+	sys.stderr.write("There were %d alert(s) triggered\n" % count)
 
 def run_summary(config, templateName=None):
 	servers = []
