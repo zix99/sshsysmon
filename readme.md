@@ -175,6 +175,14 @@ There are a few variables passed in that can be used to format part of the comma
   * alert - The alert that triggered
   * metric - The metric that triggered the alert
 
+##### stdout
+
+Writes tab-separated data to stdout.  Can be appended to file with bash `>>` operator.
+
+Arguments:
+
+  * timeFormat - Either `ctime` or `epoch`, the format which time is output
+
 ##### command
 
 Executes a shell command on the machine in which the script is running.
