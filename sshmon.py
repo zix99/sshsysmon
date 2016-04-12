@@ -26,12 +26,13 @@ def run_check(config):
 def run_summary(config, templateName=None):
 	servers = []
 	for server_name, server in config["servers"].iteritems():
-		logging.debug("Checking server: %s..." % server_name)
-		try:
-			server = Server(server_name, server)
-			servers.append(server.getSummary())
-		except Exception, e:
-			logging.warning("Unable to add server summary for %s: %s" % (server_name, e))
+		if server.get('summarize', True):
+			logging.debug("Checking server: %s..." % server_name)
+			try:
+				server = Server(server_name, server)
+				servers.append(server.getSummary())
+			except Exception, e:
+				logging.warning("Unable to add server summary for %s: %s" % (server_name, e))
 
 	data = {
 		"ctime" : time.ctime(),
