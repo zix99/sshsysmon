@@ -24,6 +24,10 @@ Colors from: http://clrs.cc/
 		<!-- Chartjs -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.1.0/Chart.min.js"></script>
 
+		<script type="text/javascript">
+		Chart.defaults.global.animation = {{coalesce meta.animation 'true'}};
+		</script>
+
 		<style type="text/css">
 		.inspector {
 			height: 350px;

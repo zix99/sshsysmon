@@ -4,6 +4,7 @@
 meta:
   title: My System Monitor
   author: zix99
+  animation: 'false'
 
 # Define default alerts which can be used by multiple servers
 _shared: &shared
