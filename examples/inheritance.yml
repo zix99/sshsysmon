@@ -27,5 +27,13 @@ servers:
   localhost:
     <<: *default
     driver: local
-
+  other:
+    <<: *default
+    driver: ssh
+    config:
+      host: bla.example.com
+    monitors+: #Add more monitors in addition to inherited ones
+      - type: tcp
+        config:
+          ports: 22
 

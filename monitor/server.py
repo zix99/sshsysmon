@@ -9,8 +9,8 @@ class Server:
 	def __init__(self, name, config):
 		self._name = name
 		self._driver = drivers.createDriver(config.get("driver"), config.get("config", {}))
-		self._monitors = config.get('monitors', [])
-		self._channels = config.get("channels", [])
+		self._monitors = config.get('monitors', []) + config.get('monitors+', [])
+		self._channels = config.get('channels', []) + config.get('channels+', [])
 		self._meta = config.get('meta', {})
 
 

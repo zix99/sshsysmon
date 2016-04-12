@@ -127,7 +127,8 @@ servers:
         summarize: false # Optional, use if you don't want a monitor to show up in the summary
 ```
 
-You can often use YAML's inheritance to simplify your config for more than 1 server.
+You can often use YAML's inheritance to simplify your config for more than 1 server.  Each config section also
+has a corresponding `+` version to add more in addition to something merged in.  eg. `monitors+`.
 
 
 All servers are iterated through, and queried for given inspector types. The resulting `metrics` are compared to
