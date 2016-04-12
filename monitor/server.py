@@ -11,6 +11,7 @@ class Server:
 		self._driver = drivers.createDriver(config.get("driver"), config.get("config", {}))
 		self._monitors = config.get('monitors', [])
 		self._channels = config.get("channels", [])
+		self._meta = config.get('meta', {})
 
 
 	def createAlerts(self):
@@ -104,7 +105,8 @@ class Server:
 
 		return {
 			"name" : self._name,
-			"inspectors" : results
+			"inspectors" : results,
+			"meta" : self._meta
 		}
 
 
