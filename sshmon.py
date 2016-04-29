@@ -6,7 +6,7 @@ import logging
 import argparse
 from templates import template
 from monitor import *
-from util import sanitize
+from util import merge
 
 def run_check(config):
 	count = 0
@@ -48,10 +48,11 @@ def parseArgs(args):
 	p = argparse.ArgumentParser(description = "Run monitoring against servers defined in config")
 
 	p.add_argument('command', help="Command to execute", choices=['check', 'summary'])
-	p.add_argument('config', help="YML config file")
+	p.add_argument('configs', metavar='cfg', nargs='+', help="YML config file")
 
 	p.add_argument('-v', '--verbose', action='store_true', help="Enable verbose logging")
 	p.add_argument('-f', '--format', help="Specify template format to output summary (markdown)", default="md")
+	p.add_argument('-m', '--merge', help="Update-merge multiple configs from left to right", action='store_true')
 
 	return p.parse_args(args)
 
@@ -62,9 +63,15 @@ def main(args):
 	logging.getLogger('paramiko').setLevel(logging.WARNING)
 
 	try:
-		config = yaml.load(open(opts.config))
+		config = reduce(
+			lambda a,b: merge(a,b, overwrite=opts.merge),
+			map(
+				lambda filename: yaml.load(open(filename, 'r')),
+				opts.configs
+				)
+			)
 	except Exception, e:
-		logging.error("Error parsing config:" + str(e))
+		logging.error("Error parsing config: " + str(e))
 		sys.exit(1)
 
 	if opts.command == "check":
