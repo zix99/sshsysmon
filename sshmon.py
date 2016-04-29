@@ -51,8 +51,8 @@ def parseArgs(args):
 	p.add_argument('configs', metavar='cfg', nargs='+', help="YML config file")
 
 	p.add_argument('-v', '--verbose', action='store_true', help="Enable verbose logging")
-	p.add_argument('-f', '--format', help="Specify template format to output summary (markdown)", default="md")
 	p.add_argument('-m', '--merge', help="Update-merge multiple configs from left to right", action='store_true')
+	p.add_argument('-f', '--format', help="Specify template format to output summary (markdown)", default="md")
 
 	return p.parse_args(args)
 
