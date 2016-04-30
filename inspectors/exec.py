@@ -10,4 +10,5 @@ class Exec(Inspector):
 	def getMetrics(self):
 		return self._driver.sh(self._cmd)
 
-
+def create(driver, args):
+	return Exec(driver, **args)

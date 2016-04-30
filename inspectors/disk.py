@@ -39,3 +39,6 @@ class DiskSpace(Inspector):
 	def getSummary(self):
 		metrics = self.getMetrics()
 		return "%s: %s total, %s used, %s free (%s%%)\n" % (self._device or self._mount, metrics['size'], metrics['used'], metrics['available'], metrics['percent_full'])
+
+def create(driver, args):
+	return DiskSpace(driver, **args)

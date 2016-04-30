@@ -2,7 +2,6 @@ from channelgroup import *
 from alert import *
 from util import sanitize
 from util.plugins import loadPlugin
-import inspectors
 import logging
 
 class Server:
@@ -25,7 +24,7 @@ class Server:
 			logging.debug("Creating inspector: %s..." % monitor_type)
 
 			try:
-				inspector = inspectors.createInspector(monitor_type, self._driver, monitor_config)
+				inspector = loadPlugin("inspectors", monitor_type, self._driver, monitor_config)
 				if not inspector:
 					raise Exception("Unknown inspector type: %s" % monitor_type)
 
@@ -74,7 +73,7 @@ class Server:
 				logging.debug('Creating summary for %s...' % monitor_type)
 				try:
 					logging.debug("Creating inspector...")
-					inspector = inspectors.createInspector(monitor_type, self._driver, monitor_config)
+					inspector = loadPlugin("inspectors", monitor_type, self._driver, monitor_config)
 					
 					logging.debug("Retrieving metrics...")
 					metrics = inspector.getMetrics()

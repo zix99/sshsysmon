@@ -40,4 +40,5 @@ class Tcp(Inspector):
 
 		return o.getvalue()
 
-
+def create(driver, args):
+	return Tcp(driver, **args)

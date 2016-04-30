@@ -2,7 +2,7 @@ from os import path
 import imp
 import logging
 
-def loadPlugin(package, filename, args):
+def loadPlugin(package, filename, *args):
 	modName = "%s.%s" % (__name__, path.basename(filename))
 	
 	# Search for full filename
@@ -22,7 +22,7 @@ def loadPlugin(package, filename, args):
 		
 		# Create instance using `create`
 		logging.debug("Creating instance of module '%s'" % modName)
-		inst = module.create(args)
+		inst = module.create(*args)
 
 		# Validate
 		if not inst:
