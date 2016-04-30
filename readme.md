@@ -141,7 +141,7 @@ output, and size casting in the form of `b`, `kb`, `mb`, etc.  eg, you can write
 
 Percentages will always be presented in their 0-100 form.
 
---
+---
 
 ## Application
 
