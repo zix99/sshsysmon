@@ -134,8 +134,6 @@ has a corresponding `+` version to add more in addition to something merged in. 
 All servers are iterated through, and queried for given inspector types. The resulting `metrics` are compared to
 the `alarms`, and if any of them are unmet, a notification it sent to all configured `channels`.
 
-Configuration is built on three concepts: Drivers, Inspectors, and Channels.
-
 #### Data Format
 
 All sizes (that is, number of bytes), is enapsulated by the `ByteSize` class, which has helper methods for both friendly
@@ -144,6 +142,15 @@ output, and size casting in the form of `b`, `kb`, `mb`, etc.  eg, you can write
 Percentages will always be presented in their 0-100 form.
 
 --
+
+## Application
+
+### Components
+
+The applications is built on three components: `Drivers`, `Inspectors`, and `Channels`.
+
+Each has its corresponding folder with abstract implementation.  They are loaded dynamically with their
+name or path provided in the configuration.
 
 #### Drivers
 
@@ -303,6 +310,13 @@ Metrics:
 ### Templating
 
 SshSysMon uses handlebars to template its summary output.  See the [templating](/templates) for more information.
+
+### Writing Your Own Component
+
+To learn how to write a specific type of component, visit its readme in the appropriate subfolder.
+
+All components must define `def create(args):` as a well-known method to instantiate the class.  `args` will
+be the configuration `dict` given in the configuration.
 
 ---
 
