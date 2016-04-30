@@ -9,3 +9,5 @@ class Command(Channel):
 		parsed = self._command.format(**model)
 		subprocess.call(parsed, shell=True)
 
+def create(args):
+	return Command(**args)

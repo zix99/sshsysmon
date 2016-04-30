@@ -1,5 +1,5 @@
-import channels
 import logging
+from util.plugins import loadPlugin
 
 class ChannelGroup:
 	def __init__(self, channelList):
@@ -10,7 +10,7 @@ class ChannelGroup:
 			channel_config = channel.get('config', {})
 
 			try:
-				inst = channels.createChannel(channel_type, channel_config)
+				inst = loadPlugin("channels", channel_type, channel_config)
 				self._channels.append(inst)
 			except Exception, e:
 				logging.warning("Error notifying channel: %s" % e)

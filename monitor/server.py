@@ -1,7 +1,7 @@
 from channelgroup import *
 from alert import *
-from util import sanitize, loadPlugin
-import drivers
+from util import sanitize
+from util.plugins import loadPlugin
 import inspectors
 import logging
 
