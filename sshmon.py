@@ -5,8 +5,8 @@ import time
 import logging
 import argparse
 from templates import template
-from monitor import *
-from util import merge
+from lib.monitor import *
+from lib.util import merge
 
 def run_check(config):
 	count = 0

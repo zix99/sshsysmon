@@ -1,6 +1,6 @@
 from inspector import Inspector
 from StringIO import StringIO
-from util import ByteSize, parsers
+from lib.util import ByteSize, parsers
 
 class MemInfo(Inspector):
 	def __init__(self, driver):

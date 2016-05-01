@@ -1,6 +1,6 @@
 from fnmatch import fnmatch
 from inspector import Inspector
-from util import ByteSize
+from lib.util import ByteSize
 
 class DiskSpace(Inspector):
 	def __init__(self, driver, device = None, mount = "/"):

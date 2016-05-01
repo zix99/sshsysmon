@@ -1,7 +1,7 @@
 from channelgroup import *
 from alert import *
-from util import sanitize
-from util.plugins import loadPlugin
+from lib.util import sanitize
+from lib.plugins import loadPlugin
 import logging
 
 class Server:

@@ -1,5 +1,5 @@
 import logging
-from util.plugins import loadPlugin
+from lib.plugins import loadPlugin
 
 class ChannelGroup:
 	def __init__(self, channelList):
