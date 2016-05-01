@@ -1,6 +1,6 @@
 from fnmatch import fnmatch
 from inspector import Inspector
-from util import ByteSize
+from lib.util import ByteSize
 
 class DiskSpace(Inspector):
 	def __init__(self, driver, device = None, mount = "/"):
@@ -39,3 +39,6 @@ class DiskSpace(Inspector):
 	def getSummary(self):
 		metrics = self.getMetrics()
 		return "%s: %s total, %s used, %s free (%s%%)\n" % (self._device or self._mount, metrics['size'], metrics['used'], metrics['available'], metrics['percent_full'])
+
+def create(driver, args):
+	return DiskSpace(driver, **args)

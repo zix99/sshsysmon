@@ -2,7 +2,7 @@ from os import path
 import json
 import logging
 import pybars
-from util import sanitize
+from lib.util import sanitize
 
 TEMPLATE_PATH = path.dirname(path.realpath(__file__))
 

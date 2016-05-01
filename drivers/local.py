@@ -22,3 +22,6 @@ class Local(Driver):
 
 	def getHost(self):
 		return "127.0.0.1"
+
+def create(args):
+	return Local(**args)

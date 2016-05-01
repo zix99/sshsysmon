@@ -56,3 +56,6 @@ class Ssh(Driver):
 
 	def getHost(self):
 		return self._host
+
+def create(args):
+	return Ssh(**args)

@@ -51,3 +51,6 @@ class Http(Inspector):
 
 	def getName(self):
 		return "Http: %s" % self._path
+
+def create(driver, args):
+	return Http(driver, **args)

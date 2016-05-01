@@ -15,3 +15,6 @@ class LoadAvg(Inspector):
 
 	def getName(self):
 		return "CPU Load Average"
+
+def create(driver, args):
+	return LoadAvg(driver, **args)

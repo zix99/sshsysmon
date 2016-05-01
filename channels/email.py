@@ -55,3 +55,6 @@ SshSysMon
 			server.close()
 		except Exception, e:
 			logging.error("There was an error sending an email %s" % e)
+
+def create(args):
+	return Email(**args)

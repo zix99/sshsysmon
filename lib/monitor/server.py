@@ -1,14 +1,13 @@
 from channelgroup import *
 from alert import *
-from util import sanitize
-import drivers
-import inspectors
+from lib.util import sanitize
+from lib.plugins import loadPlugin
 import logging
 
 class Server:
 	def __init__(self, name, config):
 		self._name = name
-		self._driver = drivers.createDriver(config.get("driver"), config.get("config", {}))
+		self._driver = loadPlugin("drivers", config.get("driver"), config.get("config", {}))
 		self._monitors = config.get('monitors', []) + config.get('monitors+', [])
 		self._channels = config.get('channels', []) + config.get('channels+', [])
 		self._meta = config.get('meta', {})
@@ -25,7 +24,7 @@ class Server:
 			logging.debug("Creating inspector: %s..." % monitor_type)
 
 			try:
-				inspector = inspectors.createInspector(monitor_type, self._driver, monitor_config)
+				inspector = loadPlugin("inspectors", monitor_type, self._driver, monitor_config)
 				if not inspector:
 					raise Exception("Unknown inspector type: %s" % monitor_type)
 
@@ -74,7 +73,7 @@ class Server:
 				logging.debug('Creating summary for %s...' % monitor_type)
 				try:
 					logging.debug("Creating inspector...")
-					inspector = inspectors.createInspector(monitor_type, self._driver, monitor_config)
+					inspector = loadPlugin("inspectors", monitor_type, self._driver, monitor_config)
 					
 					logging.debug("Retrieving metrics...")
 					metrics = inspector.getMetrics()

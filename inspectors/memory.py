@@ -1,7 +1,6 @@
 from inspector import Inspector
 from StringIO import StringIO
-from util import ByteSize
-import parsers
+from lib.util import ByteSize, parsers
 
 class MemInfo(Inspector):
 	def __init__(self, driver):
@@ -30,3 +29,6 @@ class MemInfo(Inspector):
 		o.write("Swap Free:  %s\n" % metrics["swap_free"])
 
 		return o.getvalue()
+
+def create(driver, args):
+	return MemInfo(driver, **args)

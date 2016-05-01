@@ -27,3 +27,6 @@ class Process(Inspector):
 
 	def getName(self):
 		return "Process: %s" % self._process
+
+def create(driver, args):
+	return Process(driver, **args)
