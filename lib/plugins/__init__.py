@@ -1,12 +1,15 @@
 from os import path
+import sys
 import imp
 import logging
+
+_ROOT = path.join(path.dirname(path.realpath(__file__)), "../../")
 
 def loadPlugin(package, filename, *args):
 	modName = "%s.%s" % (__name__, path.basename(filename))
 	
 	# Search for full filename
-	fullPath = path.join(package, filename)
+	fullPath = path.join(_ROOT, package, filename)
 	if not path.isfile(fullPath):
 		fullPath = fullPath + ".py"
 	if not path.isfile(fullPath):
