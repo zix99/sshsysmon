@@ -45,6 +45,14 @@ servers without the traditional overhead of a monitoring system.</p>
 <h3>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
 
+<h4>
+<a id="via-pypi" class="anchor" href="#via-pypi" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Via PyPi</h4>
+
+<div class="highlight highlight-source-shell"><pre>pip install sshsysmon</pre></div>
+
+<h4>
+<a id="manually-no-install" class="anchor" href="#manually-no-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Manually (No Install)</h4>
+
 <div class="highlight highlight-source-shell"><pre><span class="pl-c"># Requires python 2.x and pip:</span>
 sudo apt-get install -y python python-pip python-dev
 
@@ -56,7 +64,7 @@ wget -O - https://github.com/zix99/sshsysmon/archive/master.tar.gz <span class="
 sudo pip install -r requirements.txt
 
 <span class="pl-c"># Test it out!</span>
-./sshmon.py summary examples/starter.yml</pre></div>
+./sshmon summary examples/starter.yml</pre></div>
 
 <h3>
 <a id="setting-up-a-ssh-key-pair" class="anchor" href="#setting-up-a-ssh-key-pair" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting up a ssh key pair</h3>
@@ -159,12 +167,11 @@ servers:
         summarize: false # Optional, use if you don't want a monitor to show up in the summary
 </code></pre>
 
-<p>You can often use YAML's inheritance to simplify your config for more than 1 server.</p>
+<p>You can often use YAML's inheritance to simplify your config for more than 1 server.  Each config section also
+has a corresponding <code>+</code> version to add more in addition to something merged in.  eg. <code>monitors+</code>.</p>
 
 <p>All servers are iterated through, and queried for given inspector types. The resulting <code>metrics</code> are compared to
 the <code>alarms</code>, and if any of them are unmet, a notification it sent to all configured <code>channels</code>.</p>
-
-<p>Configuration is built on three concepts: Drivers, Inspectors, and Channels.</p>
 
 <h4>
 <a id="data-format" class="anchor" href="#data-format" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Data Format</h4>
@@ -174,7 +181,18 @@ output, and size casting in the form of <code>b</code>, <code>kb</code>, <code>m
 
 <p>Percentages will always be presented in their 0-100 form.</p>
 
-<h2></h2>
+<hr>
+
+<h2>
+<a id="application" class="anchor" href="#application" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Application</h2>
+
+<h3>
+<a id="components" class="anchor" href="#components" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Components</h3>
+
+<p>The applications is built on three components: <code>Drivers</code>, <code>Inspectors</code>, and <code>Channels</code>.</p>
+
+<p>Each has its corresponding folder with abstract implementation.  They are loaded dynamically with their
+name or path provided in the configuration.</p>
 
 <h4>
 <a id="drivers" class="anchor" href="#drivers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Drivers</h4>
@@ -223,7 +241,10 @@ output, and size casting in the form of <code>b</code>, <code>kb</code>, <code>m
 <p>Arguments:</p>
 
 <ul>
-<li>timeFormat - Either <code>ctime</code> or <code>epoch</code>, the format which time is output</li>
+<li>timeFormat - Either <code>ctime</code> or <code>epoch</code>, the format which time is output. Default: <code>ctime</code>
+</li>
+<li>format - The format string used to write output. Default: <code>{time}\t{server}\t{inspector}\t{alert}</code>
+</li>
 </ul>
 
 <h5>
@@ -371,19 +392,13 @@ not verify anything more than that the port is willing to establish a connection
 
 <p>SshSysMon uses handlebars to template its summary output.  See the <a href="/templates">templating</a> for more information.</p>
 
-<hr>
+<h3>
+<a id="writing-your-own-component" class="anchor" href="#writing-your-own-component" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Writing Your Own Component</h3>
 
-<h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+<p>To learn how to write a specific type of component, visit its readme in the appropriate subfolder.</p>
 
-<p>The MIT License (MIT)
-Copyright (c) 2016 Chris LaPointe</p>
-
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-
-<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>All components must define <code>def create(args):</code> as a well-known method to instantiate the class.  <code>args</code> will
+be the configuration <code>dict</code> given in the configuration.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/zix99">zix99</a></p>
