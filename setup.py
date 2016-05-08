@@ -1,17 +1,14 @@
 #!/usr/bin/env python
-
 from setuptools import setup, find_packages
 
-def createReadmeRst():
-	readme = open('README.md').read()
-	try:
-		import pypandoc, re
-		readme = re.sub('\!\[.+\]\(.+\)', '', readme) # Remove embedded pictures
-		readme = pypandoc.convert(readme, 'rst', format='md')
-	except Exception as e:
-		print "Expected pypandoc and pandoc to be installed!"
-		print e
-	return readme
+readme = open('README.md').read()
+try:
+	import pypandoc, re
+	readme = re.sub('\!\[.+\]\(.+\)', '', readme) # Remove embedded pictures
+	readme = pypandoc.convert(readme, 'rst', format='md')
+except Exception as e:
+	print "Expected pypandoc and pandoc to be installed!"
+	print e
 
 setup(name="SshSysMon",
 	packages=find_packages(),
@@ -24,13 +21,12 @@ setup(name="SshSysMon",
 			'inspectors/*.md', 'inspectors/*.py'
 			],
 		},
-	version="0.2",
+	version="0.2.1",
 	description="Ssh Unix System Monitoring",
-	long_description=createReadmeRst(),
+	long_description=readme,
 	author="Chris LaPointe",
 	author_email="chris@zdyn.net",
 	url="https://github.com/zix99/sshsysmon",
-	download_url="https://github.com/zix99/sshsysmon/tarball/0.1",
 	license="MIT",
 	keywords=["monitoring", "ssh", "linux", "unix"],
 	install_requires=[
