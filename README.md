@@ -36,7 +36,7 @@ cd sshsysmon-master/
 sudo pip install -r requirements.txt
 
 # Test it out!
-./sshmon.py summary examples/starter.yml
+./sshmon summary examples/starter.yml
 ```
 
 ### Setting up a ssh key pair
