@@ -1,2 +1,5 @@
 *.pyc
-config.yml
+*.egg-info
+test.yml
+build/
+dist/

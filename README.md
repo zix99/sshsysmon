@@ -16,6 +16,14 @@ It monitors things in /proc and with simple command executions to monitor system
 
 ### Installation
 
+#### Via PyPi
+
+```bash
+pip install sshsysmon
+```
+
+#### Manually (No Install)
+
 ```bash
 # Requires python 2.x and pip:
 sudo apt-get install -y python python-pip python-dev
@@ -318,15 +326,3 @@ To learn how to write a specific type of component, visit its readme in the appr
 All components must define `def create(args):` as a well-known method to instantiate the class.  `args` will
 be the configuration `dict` given in the configuration.
 
----
-
-## License
-
-The MIT License (MIT)
-Copyright (c) 2016 Chris LaPointe
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
