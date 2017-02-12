@@ -2,6 +2,15 @@ from inspector import Inspector
 from StringIO import StringIO
 import socket
 
+"""
+Description:
+	Examines if a tcp port is connectable on the host
+Constructor:
+	- ports: an int, or array of ints, or CSV ints, that represents ports to be tested
+Metrics:
+	- all:		bool if all ports were connectable
+	- port_{n}:	If a given port was connectable, where {n} is the port
+"""
 class Tcp(Inspector):
 	def __init__(self, driver, ports):
 		self._driver = driver

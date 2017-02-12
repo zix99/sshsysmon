@@ -1,5 +1,13 @@
 from inspector import Inspector
 
+"""
+Description:
+	Determines the load average of the remote host
+Metrics:
+	- load_1m: load for the past minute
+	- load_5m: load for the past 5 minutes
+	- load_15m: load for the past 15 minutes
+"""
 class LoadAvg(Inspector):
 	def __init__(self, driver):
 		self._driver = driver

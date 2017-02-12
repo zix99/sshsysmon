@@ -2,6 +2,16 @@ from inspector import Inspector
 from StringIO import StringIO
 from lib.util import ByteSize, parsers
 
+"""
+Description:
+	Inspects the memory of the remote host
+Metrics:
+	- mem_total:	ByteSize of the total memory on the host
+	- mem_free:		The memory free on the host
+	- cached:		The amount of memory that the kernel is using for caching
+	- swap_total:	The total amount of swap available
+	- swap_free:	The total amount of swap free
+"""
 class MemInfo(Inspector):
 	def __init__(self, driver):
 		self._driver = driver

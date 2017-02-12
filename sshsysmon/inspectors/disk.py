@@ -2,6 +2,20 @@ from fnmatch import fnmatch
 from inspector import Inspector
 from lib.util import ByteSize
 
+"""
+Description:
+	DiskSpace executes `df` to discover how much diskspace is remaining
+
+Constructor:
+	device: The unix device (eg /dev/sda) to examine for disk space (Default: None)
+	mount:	The mount point to examine (Default: /)
+
+Metrics:
+	size: ByteSize of the device
+	used: ByteSize of used disk space
+	available: ByteSize of the available disk space
+	percentage_full: The integer percentage of how full the device is
+"""
 class DiskSpace(Inspector):
 	def __init__(self, driver, device = None, mount = "/"):
 		self._driver = driver
