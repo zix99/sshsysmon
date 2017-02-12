@@ -147,6 +147,9 @@ the `alarms`, and if any of them are unmet, a notification it sent to all config
 All sizes (that is, number of bytes), is enapsulated by the `ByteSize` class, which has helper methods for both friendly
 output, and size casting in the form of `b`, `kb`, `mb`, etc.  eg, you can write `mem_free.mb > 50`.
 
+All timedelta's are encapsulated by the `TimeSpan` class, which has properties that expose reduced forms.
+They are `seconds`, `minutes`, `hours`, and `days`.
+
 Percentages will always be presented in their 0-100 form.
 
 ---
@@ -312,7 +315,28 @@ Metrics:
   * stderr: The err string of the command
   * status: The returncode of the command (0 means normal)
 
+##### File/Path Metadata (FileMeta)
 
+`filemeta` gathers all the metadata of all files in a path
+
+Config:
+
+  * path: Path to gather the file data
+  * match: Matcher to select files within path
+
+Metrics:
+
+  * count: Number of files that match
+  * oldest: The TimeSpan object of the oldest file
+  * newest: The TimeSpan object of the newest file
+  * largest: ByteSize of the largest file
+  * smallest: ByteSize of smallest file
+  * files: Array of files
+    * path: Path to the file
+    * size: ByteSize of the file
+    * last_access: access date
+    * last_modified: last modified time
+    * age: TimeSpan since last modified
 
 
 ### Templating

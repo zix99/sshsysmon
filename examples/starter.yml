@@ -30,6 +30,13 @@ _shared: &shared
     - type: loadavg
       alarms:
         "High load" : "load_15m > 1"
+    - type: filemeta
+      config:
+        path: /var/log
+        match: "*.log"
+      alarms:
+        "Nothing is logging" : "newest.days > 1"
+      summarize: false
   
 # Define our servers
 servers:

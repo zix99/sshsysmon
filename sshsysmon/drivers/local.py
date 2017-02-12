@@ -8,7 +8,7 @@ class Local(Driver):
 		Driver.__init__(self)
 		self._path = path
 
-	def readFile(self, path):
+	def readProc(self, path):
 		return open(os.path.join(self._path, path), 'r').read()
 
 	def sh(self, cmd):

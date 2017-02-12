@@ -17,7 +17,7 @@ class MemInfo(Inspector):
 		self._driver = driver
 
 	def getMetrics(self):
-		vals = parsers.splitLines(self._driver.readFile("meminfo"))
+		vals = parsers.splitLines(self._driver.readProc("meminfo"))
 		return {
 			"mem_total": ByteSize(vals.get("memtotal"), "kb"),
 			"mem_free" : ByteSize(vals.get("memfree"), "kb"),
