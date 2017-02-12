@@ -147,6 +147,9 @@ the `alarms`, and if any of them are unmet, a notification it sent to all config
 All sizes (that is, number of bytes), is enapsulated by the `ByteSize` class, which has helper methods for both friendly
 output, and size casting in the form of `b`, `kb`, `mb`, etc.  eg, you can write `mem_free.mb > 50`.
 
+All timedelta's are encapsulated by the `TimeSpan` class, which has properties that expose reduced forms.
+They are `seconds`, `minutes`, `hours`, and `days`.
+
 Percentages will always be presented in their 0-100 form.
 
 ---
