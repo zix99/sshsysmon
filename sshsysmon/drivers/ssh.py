@@ -22,7 +22,7 @@ class Ssh(Driver):
 		else:
 			self._key = None
 
-	def readFile(self, path):
+	def readProc(self, path):
 		sftp = self._connectFtp()
 
 		o = StringIO()

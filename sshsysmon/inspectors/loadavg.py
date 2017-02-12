@@ -13,7 +13,7 @@ class LoadAvg(Inspector):
 		self._driver = driver
 
 	def getMetrics(self):
-		data = self._driver.readFile("loadavg").split()
+		data = self._driver.readProc("loadavg").split()
 
 		return {
 			"load_1m" : float(data[0]),
