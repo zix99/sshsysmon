@@ -312,7 +312,28 @@ Metrics:
   * stderr: The err string of the command
   * status: The returncode of the command (0 means normal)
 
+##### File/Path Metadata (FileMeta)
 
+`filemeta` gathers all the metadata of all files in a path
+
+Config:
+
+  * path: Path to gather the file data
+  * match: Matcher to select files within path
+
+Metrics:
+
+  * count: Number of files that match
+  * oldest: The TimeSpan object of the oldest file
+  * newest: The TimeSpan object of the newest file
+  * largest: ByteSize of the largest file
+  * smallest: ByteSize of smallest file
+  * files: Array of files
+    * path: Path to the file
+    * size: ByteSize of the file
+    * last_access: access date
+    * last_modified: last modified time
+    * age: TimeSpan since last modified
 
 
 ### Templating
