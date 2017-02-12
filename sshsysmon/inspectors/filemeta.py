@@ -14,6 +14,8 @@ Metrics:
 	- count: Number of files that match
 	- oldest: The TimeSpan object of the oldest file
 	- newest: The TimeSpan object of the newest file
+	- largest: ByteSize of the largest file
+	- smallest: ByteSize of smallest file
 	- files: Array of files
 		- path: Path to the file
 		- size: ByteSize of the file
@@ -35,7 +37,9 @@ class FileMeta(Inspector):
 			'count': len(files),
 			'files' : [],
 			'oldest' : TimeSpan(0),
-			'newest' : TimeSpan(0)
+			'newest' : TimeSpan(0),
+			'largest' : ByteSize(0),
+			'smallest' : ByteSize(0)
 		}
 
 		for file in files:
@@ -75,6 +79,8 @@ class FileMeta(Inspector):
 		if len(metrics['files']) > 0:
 			metrics['oldest'] = max(map(lambda x: x['age'], metrics['files']))
 			metrics['newest'] = min(map(lambda x: x['age'], metrics['files']))
+			metrics['largest'] = max(map(lambda x: x['size'], metrics['files']))
+			metrics['smallest'] = min(map(lambda x: x['size'], metrics['files']))
 
 		return metrics
 
@@ -88,6 +94,8 @@ class FileMeta(Inspector):
 
 		o.write("Oldest: %s\n" % metrics['oldest'])
 		o.write("Newest: %s\n" % metrics['newest'])
+		o.write("Largest: %s\n" % metrics['largest'])
+		o.write("Smallest: %s\n" % metrics['smallest'])
 
 		return o.getvalue()
 
