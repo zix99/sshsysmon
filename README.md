@@ -323,6 +323,8 @@ Config:
 
   * path: Path to gather the file data
   * match: Matcher to select files within path
+  * maxDepth: The max depth it searches for files
+  * minDepth: The min depth it searches for files
 
 Metrics:
 
