@@ -3,6 +3,14 @@ from StringIO import StringIO
 from fnmatch import fnmatch
 from lib.util import ByteSize, parsers
 
+"""
+Description:
+	Gets network interface traffic statistics
+Constructor:
+	- match: Wildcard match for interface name (Default: None)
+Metrics:
+
+"""
 class Network(Inspector):
 	def __init__(self, driver, match = None):
 		self._driver = driver
@@ -31,13 +39,23 @@ class Network(Inspector):
 					}
 				}
 
-		return ret
+		return {
+			'interfaces' : ret,
+			'totals' : {
+				'received' : ByteSize(sum(map(lambda x: int(x['receive']['bytes']), ret.itervalues() ))),
+				'transmitted' : ByteSize(sum(map(lambda x: int(x['transmit']['bytes']), ret.itervalues() )))
+			}
+		}
 
 	def getSummary(self):
-		devices = self.getMetrics()
+		data = self.getMetrics()
 		o = StringIO()
 
-		for d,metrics in devices.iteritems():
+		o.write("Totals:\n")
+		o.write("  Received:    %s\n" % data['totals']['received'])
+		o.write("  Transmitted: %s\n" % data['totals']['transmitted'])
+
+		for d,metrics in data['interfaces'].iteritems():
 			o.write("%s\n" % d)
 
 			o.write("  Receive:\n")
