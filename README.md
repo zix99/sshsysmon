@@ -340,6 +340,21 @@ Metrics:
     * last_modified: last modified time
     * age: TimeSpan since last modified
 
+##### Networking Metrics (network)
+
+`network` gathers information about the network usage of system interfaces.
+
+Config:
+
+  * match: Wildcard match to interface name (Default: None)
+
+Metrics:
+
+  * totals
+    * received
+    * tranmitted
+  * interfaces
+
 ##### Core System Metrics (system)
 
 Metrics:
