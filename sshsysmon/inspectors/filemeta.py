@@ -103,15 +103,11 @@ class FileMeta(Inspector):
 		o = StringIO()
 
 		o.write("Count: %s\n" % len(metrics['files']))
-		o.write("Files:\n")
-		for file in metrics['files']:
-			o.write("  %s: Size: %dKB Access: %s Age: %s\n" % (file['path'], file['size'].kb, file['last_access'], file['age']))
-
+		o.write("Size: %s\n" % metrics['size'])
 		o.write("Oldest: %s\n" % metrics['oldest'])
 		o.write("Newest: %s\n" % metrics['newest'])
 		o.write("Largest: %s\n" % metrics['largest'])
 		o.write("Smallest: %s\n" % metrics['smallest'])
-		o.write("Size: %s\n" % metrics['size'])
 
 		return o.getvalue()
 
