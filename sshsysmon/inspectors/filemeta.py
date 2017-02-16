@@ -111,7 +111,7 @@ class FileMeta(Inspector):
 		return o.getvalue()
 
 	def getName(self):
-		return "FileMeta: %s" % (self._path)
+		return "Files: %s" % (self._path)
 
 def create(driver, args):
 	return FileMeta(driver, **args)
