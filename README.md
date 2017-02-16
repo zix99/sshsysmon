@@ -323,6 +323,8 @@ Config:
 
   * path: Path to gather the file data
   * match: Matcher to select files within path
+  * maxDepth: The max depth it searches for files
+  * minDepth: The min depth it searches for files
 
 Metrics:
 
@@ -338,6 +340,27 @@ Metrics:
     * last_modified: last modified time
     * age: TimeSpan since last modified
 
+##### Networking Metrics (network)
+
+`network` gathers information about the network usage of system interfaces.
+
+Config:
+
+  * match: Wildcard match to interface name (Default: None)
+
+Metrics:
+
+  * totals
+    * received
+    * tranmitted
+  * interfaces
+
+##### Core System Metrics (system)
+
+Metrics:
+
+  * uptime: TimeSpan of the time up
+  * idle: CPU time that is idle
 
 ### Templating
 

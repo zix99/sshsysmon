@@ -310,6 +310,83 @@ Colors from: http://clrs.cc/
 
 							{{/ifEq}}
 
+							{{!-- FileMeta --}}
+							{{#ifEq type 'filemeta'}}
+							<table class="table table-striped table-condensed">
+								<tr>
+									<td>Count</td>
+									<td>{{metrics.count}}</td>
+								</tr>
+								<tr>
+									<td>Size</td>
+									<td>{{metrics.size}}</td>
+								</tr>
+								<tr>
+									<td>Largest</td>
+									<td>{{metrics.largest}}</td>
+								</tr>
+								<tr>
+									<td>Smallest</td>
+									<td>{{metrics.smallest}}</td>
+								</tr>
+								<tr>
+									<td>Newest</td>
+									<td>{{metrics.newest}}</td>
+								</tr>
+								<tr>
+									<td>Oldest</td>
+									<td>{{metrics.oldest}}</td>
+								</tr>
+							</table>
+							{{/ifEq}}
+
+							{{!-- system --}}
+							{{#ifEq type 'system'}}
+							<table class="table table-striped table-condensed">
+								<tr>
+									<td>Uptime</td>
+									<td>{{metrics.uptime}}</td>
+								</tr>
+								<tr>
+									<td>Idle</td>
+									<td>{{metrics.idle}}</td>
+								</tr>
+							</table>
+							{{/ifEq}}
+
+							{{!-- network --}}
+							{{#ifEq type 'network'}}
+								<canvas id="network-{{alphanum ../name}}" width="300" height="150"></canvas>
+								<script type="text/javascript">
+								(function(){
+									var data = {
+										labels: [ {{#each metrics.interfaces}}'{{@key}}', {{/each}} ],
+										datasets: [
+											{
+												label: "Received",
+												fillColor: "rgba(151,205,187,0.5)",
+									            strokeColor: "rgba(151,205,187,0.8)",
+									            highlightFill: "rgba(151,205,187,0.75)",
+									            highlightStroke: "rgba(151,205,187,1)",
+												data: [{{#each metrics.interfaces}}{{receive.bytes.gb}},{{/each}}]
+											},
+											{
+												label: "Transmitted",
+												fillColor: "rgba(205,187,151,0.5)",
+									            strokeColor: "rgba(205,187,151,0.8)",
+									            highlightFill: "rgba(205,187,151,0.75)",
+									            highlightStroke: "rgba(205,187,151,1)",
+												data: [{{#each metrics.interfaces}}{{transmit.bytes.gb}},{{/each}}]
+											}
+										]
+									};
+
+									var ctx = document.getElementById("network-{{alphanum ../name}}").getContext("2d");
+									new Chart(ctx).Bar(data);
+								})();
+								</script>
+							{{/ifEq}}
+
 						</div>
 					{{/inspectors}}
 				</div>

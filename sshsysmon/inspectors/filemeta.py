@@ -9,7 +9,9 @@ Description:
 	Retrieve metadata for one or more files
 Constructor:
 	- path: Path of the files to look
-	- match: Pattern to match for filename
+	- match: Pattern to match for filename (Default: None)
+	- maxDepth: The depth in the file system to search (set to 1 for no recurse)
+	- minDepth: The minimum depth to start looking for files
 Metrics:
 	- count: Number of files that match
 	- oldest: The TimeSpan object of the oldest file
@@ -24,13 +26,22 @@ Metrics:
 		- age: TimeSpan since last modified
 """
 class FileMeta(Inspector):
-	def __init__(self, driver, path, match = None):
+	def __init__(self, driver, path, match = None, maxDepth = None, minDepth = None):
 		self._driver = driver
 		self._path = path
 		self._match = match
+		self._maxDepth = maxDepth
+		self._minDepth = minDepth
 
 	def getMetrics(self):
-		stats = self._driver.sh("find \"%s\" -type f | xargs stat -t" % self._path)
+		shFind = ["find", "\"%s\"" % self._path, "-type", "f"]
+		if self._maxDepth != None: shFind.extend(["-maxdepth", self._maxDepth])
+		if self._minDepth != None: shFind.extend(["-mindepth", self._minDepth])
+
+		cmd = str.join(' ', map(str, shFind)) + " | xargs stat -t"
+
+		stats = self._driver.sh(cmd)
+
 		files = stats['stdout'].splitlines()
 
 		metrics = {
@@ -39,7 +50,8 @@ class FileMeta(Inspector):
 			'oldest' : TimeSpan(0),
 			'newest' : TimeSpan(0),
 			'largest' : ByteSize(0),
-			'smallest' : ByteSize(0)
+			'smallest' : ByteSize(0),
+			'size' : ByteSize(0)
 		}
 
 		for file in files:
@@ -81,6 +93,7 @@ class FileMeta(Inspector):
 			metrics['newest'] = min(map(lambda x: x['age'], metrics['files']))
 			metrics['largest'] = max(map(lambda x: x['size'], metrics['files']))
 			metrics['smallest'] = min(map(lambda x: x['size'], metrics['files']))
+			metrics['size'] = ByteSize(sum(map(lambda x: int(x['size']), metrics['files'])))
 
 		return metrics
 
@@ -88,10 +101,9 @@ class FileMeta(Inspector):
 		metrics = self.getMetrics()
 
 		o = StringIO()
-		o.write("Files:\n")
-		for file in metrics['files']:
-			o.write("  %s: Size: %dKB Access: %s Age: %s\n" % (file['path'], file['size'].kb, file['last_access'], file['age']))
 
+		o.write("Count: %s\n" % len(metrics['files']))
+		o.write("Size: %s\n" % metrics['size'])
 		o.write("Oldest: %s\n" % metrics['oldest'])
 		o.write("Newest: %s\n" % metrics['newest'])
 		o.write("Largest: %s\n" % metrics['largest'])
@@ -100,7 +112,7 @@ class FileMeta(Inspector):
 		return o.getvalue()
 
 	def getName(self):
-		return "FileMeta: %s" % (self._path)
+		return "Files: %s" % (self._path)
 
 def create(driver, args):
 	return FileMeta(driver, **args)
