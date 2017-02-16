@@ -354,6 +354,39 @@ Colors from: http://clrs.cc/
 							</table>
 							{{/ifEq}}
 
+							{{!-- network --}}
+							{{#ifEq type 'network'}}
+								<canvas id="network-{{alphanum ../name}}" width="300" height="150"></canvas>
+								<script type="text/javascript">
+								(function(){
+									var data = {
+										labels: [ {{#each metrics.interfaces}}'{{@key}}', {{/each}} ],
+										datasets: [
+											{
+												label: "Received",
+												fillColor: "rgba(151,205,187,0.5)",
+									            strokeColor: "rgba(151,205,187,0.8)",
+									            highlightFill: "rgba(151,205,187,0.75)",
+									            highlightStroke: "rgba(151,205,187,1)",
+												data: [{{#each metrics.interfaces}}{{receive.bytes.gb}},{{/each}}]
+											},
+											{
+												label: "Transmitted",
+												fillColor: "rgba(205,187,151,0.5)",
+									            strokeColor: "rgba(205,187,151,0.8)",
+									            highlightFill: "rgba(205,187,151,0.75)",
+									            highlightStroke: "rgba(205,187,151,1)",
+												data: [{{#each metrics.interfaces}}{{transmit.bytes.gb}},{{/each}}]
+											}
+										]
+									};
+
+									var ctx = document.getElementById("network-{{alphanum ../name}}").getContext("2d");
+									new Chart(ctx).Bar(data);
+								})();
+								</script>
+							{{/ifEq}}
+
 						</div>
 					{{/inspectors}}
 				</div>

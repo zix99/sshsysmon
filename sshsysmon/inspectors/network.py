@@ -42,8 +42,8 @@ class Network(Inspector):
 		return {
 			'interfaces' : interfaces,
 			'totals' : {
-				'received' : ByteSize(sum(map(lambda x: int(x['receive']['bytes']), ret.itervalues() ))),
-				'transmitted' : ByteSize(sum(map(lambda x: int(x['transmit']['bytes']), ret.itervalues() )))
+				'received' : ByteSize(sum(map(lambda x: int(x['receive']['bytes']), interfaces.itervalues() ))),
+				'transmitted' : ByteSize(sum(map(lambda x: int(x['transmit']['bytes']), interfaces.itervalues() )))
 			}
 		}
 
