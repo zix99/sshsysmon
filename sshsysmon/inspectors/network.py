@@ -19,12 +19,12 @@ class Network(Inspector):
 	def getMetrics(self):
 		devices = parsers.splitLines(self._driver.readProc("net/dev"))
 
-		ret = {}
+		interfaces = {}
 
 		for d,v in devices:
 			if self._match == None or fnmatch(d, self._match):
 				#0,8:bytes, packets, errs, drop, fifo, frame, compressed, [multicast]
-				ret[d] = {
+				interfaces[d] = {
 					'receive' : {
 						'bytes' : ByteSize(v[0]),
 						'packets' : v[1],
@@ -40,7 +40,7 @@ class Network(Inspector):
 				}
 
 		return {
-			'interfaces' : ret,
+			'interfaces' : interfaces,
 			'totals' : {
 				'received' : ByteSize(sum(map(lambda x: int(x['receive']['bytes']), ret.itervalues() ))),
 				'transmitted' : ByteSize(sum(map(lambda x: int(x['transmit']['bytes']), ret.itervalues() )))
