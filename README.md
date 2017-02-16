@@ -340,6 +340,12 @@ Metrics:
     * last_modified: last modified time
     * age: TimeSpan since last modified
 
+##### Core System Metrics (system)
+
+Metrics:
+
+  * uptime: TimeSpan of the time up
+  * idle: CPU time that is idle
 
 ### Templating
 
