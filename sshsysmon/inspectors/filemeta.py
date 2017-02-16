@@ -41,6 +41,7 @@ class FileMeta(Inspector):
 		cmd = str.join(' ', map(str, shFind)) + " | xargs stat -t"
 
 		stats = self._driver.sh(cmd)
+
 		files = stats['stdout'].splitlines()
 
 		metrics = {
@@ -102,6 +103,10 @@ class FileMeta(Inspector):
 		o = StringIO()
 
 		o.write("Count: %s\n" % len(metrics['files']))
+		o.write("Files:\n")
+		for file in metrics['files']:
+			o.write("  %s: Size: %dKB Access: %s Age: %s\n" % (file['path'], file['size'].kb, file['last_access'], file['age']))
+
 		o.write("Oldest: %s\n" % metrics['oldest'])
 		o.write("Newest: %s\n" % metrics['newest'])
 		o.write("Largest: %s\n" % metrics['largest'])
