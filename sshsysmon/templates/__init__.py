@@ -38,7 +38,7 @@ def __template(src, data):
 	return hbTemplate(data, helpers = __helpers)
 
 def __getPath(name):
-	if name.startswith(".") or name.startswith("/"):
+	if name.startswith("./") or name.startswith("/"):
 		return name
 	return path.join(TEMPLATE_PATH, name + ".hb")
 
