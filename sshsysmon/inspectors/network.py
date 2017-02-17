@@ -8,13 +8,15 @@ Description:
 	Gets network interface traffic statistics
 Constructor:
 	- match: Wildcard match for interface name (Default: None)
+	- hideEmpty: Hide interfaces
 Metrics:
 
 """
 class Network(Inspector):
-	def __init__(self, driver, match = None):
+	def __init__(self, driver, match = None, hideEmpty = False):
 		self._driver = driver
 		self._match = match
+		self._hideEmpty = hideEmpty
 
 	def getMetrics(self):
 		devices = parsers.splitLines(self._driver.readProc("net/dev"))
@@ -22,7 +24,7 @@ class Network(Inspector):
 		interfaces = {}
 
 		for d,v in devices:
-			if self._match == None or fnmatch(d, self._match):
+			if (self._match == None or fnmatch(d, self._match)) and (not self._hideEmpty or int(v[1]) > 0 or int(v[9]) > 0):
 				#0,8:bytes, packets, errs, drop, fifo, frame, compressed, [multicast]
 				interfaces[d] = {
 					'receive' : {

@@ -347,6 +347,7 @@ Metrics:
 Config:
 
   * match: Wildcard match to interface name (Default: None)
+  * hideEmpty: Hide interfaces that are empty (no traffic) (Default: False)
 
 Metrics:
 
