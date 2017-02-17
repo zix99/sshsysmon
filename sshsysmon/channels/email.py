@@ -15,6 +15,9 @@ class Email(Channel):
 	DEFAULT_BODY = """
 There was an alert on your server.
 
+Server: {server}
+Alert: {alert} ({metric})
+
 Sincerely,
 SshSysMon
 """
@@ -36,8 +39,9 @@ SshSysMon
 			fromAddr = self._from
 			toAddr = self._to.split()
 			subj = self._subject.format(**model)
+			body = self._body.format(**model)
 
-			message = "From: {frm}\nTo: {to}\nSubject: {subject}\n\n{body}".format(frm=self._from, to=self._to, subject=subj, body=self._body)
+			message = "From: {frm}\nTo: {to}\nSubject: {subject}\n\n{body}".format(frm=self._from, to=self._to, subject=subj, body=body)
 
 			if self._ssl:
 				server = smtplib.SMTP_SSL(self._host, self._port)
