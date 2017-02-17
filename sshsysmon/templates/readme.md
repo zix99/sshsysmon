@@ -79,3 +79,12 @@ Example:
 ```
 {{alphanum text '-'}}
 ```
+
+### format
+
+Passes the arguments through python's `str.format` using the first argument as the string.
+
+Example:
+```
+{{format '{:.2f}' myval}}
+```

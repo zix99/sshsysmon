@@ -368,7 +368,7 @@ Colors from: http://clrs.cc/
 									            strokeColor: "rgba(151,205,187,0.8)",
 									            highlightFill: "rgba(151,205,187,0.75)",
 									            highlightStroke: "rgba(151,205,187,1)",
-												data: [{{#each metrics.interfaces}}{{receive.bytes.gb}},{{/each}}]
+												data: [{{#each metrics.interfaces}}{{format '{:.2f}' receive.bytes.gb}},{{/each}}]
 											},
 											{
 												label: "Transmitted",
@@ -376,13 +376,17 @@ Colors from: http://clrs.cc/
 									            strokeColor: "rgba(205,187,151,0.8)",
 									            highlightFill: "rgba(205,187,151,0.75)",
 									            highlightStroke: "rgba(205,187,151,1)",
-												data: [{{#each metrics.interfaces}}{{transmit.bytes.gb}},{{/each}}]
+												data: [{{#each metrics.interfaces}}{{format '{:.2f}' transmit.bytes.gb}},{{/each}}]
 											}
 										]
 									};
 
+									var options = {
+										scaleLabel: "<%=value%> GB"
+									};
+
 									var ctx = document.getElementById("network-{{alphanum ../name}}").getContext("2d");
-									new Chart(ctx).Bar(data);
+									new Chart(ctx).Bar(data, options);
 								})();
 								</script>
 							{{/ifEq}}

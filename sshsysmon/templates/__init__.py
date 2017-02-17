@@ -17,6 +17,9 @@ def __ifEq(this, options, left, right):
 def __replace(this, val, match, withVal):
 	return val.replace(match.decode('string_escape'), withVal.decode('string_escape'))
 
+def __format(this, s, *args):
+	return s.format(*args)
+
 def __coalesce(this, *args):
 	for arg in args:
 		if arg: return arg
@@ -29,7 +32,8 @@ __helpers = {
 	'ifEq' : __ifEq,
 	'replace' : __replace,
 	'coalesce' : __coalesce,
-	'alphanum': __alphanum
+	'alphanum': __alphanum,
+	'format': __format
 }
 
 def __template(src, data):
