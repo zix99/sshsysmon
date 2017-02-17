@@ -191,8 +191,9 @@ Channels define what can happen if an alert fires.  There a few built-in.
 There are a few variables passed in that can be used to format part of the commands:
 
   * server - The server that the alert triggered on
-  * alert - The alert that triggered
-  * metric - The metric that triggered the alert
+  * alert - The alert that triggered (the name)
+  * inspector - The inspector that triggered the alert
+  * statement - The statement of the inspector that fired the alert
 
 ##### stdout
 

@@ -16,7 +16,8 @@ class Email(Channel):
 There was an alert on your server.
 
 Server: {server}
-Alert: {alert} ({metric})
+Inspector: {inspector}
+Alert: {alert} ({statement})
 
 Sincerely,
 SshSysMon
