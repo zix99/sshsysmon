@@ -3,14 +3,15 @@ import requests
 import logging
 
 class WebHook(Channel):
-	def __init__(self, url, method = "POST", headers = {}):
+	def __init__(self, url, method = "POST", headers = {}, verifySSL = True):
 		self._url = url;
 		self._method = method
 		self._headers = headers
+		self._verify = verifySSL
 
 	def notify(self, model):
 		try:
-			req = requests.request(self._method, self._url, data=model, headers=self._headers)
+			req = requests.request(self._method, self._url, data=model, headers=self._headers, verify=self._verify)
 			if req.status_code / 100 != 2:
 				raise Exception('Status code not 2xx')
 		except Exception, e:

@@ -240,6 +240,7 @@ Arguments:
  * url - The URL to call
  * method - The method to use in the http request (default: POST)
  * headers - A dict of any additional headers to add to the request
+ * verifySSL - Whether or not to verify SSL cert (default: True)
 
 --
 
