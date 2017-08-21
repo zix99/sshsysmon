@@ -231,6 +231,16 @@ Arguments:
   * tls - Should use tls (default: false)
   * ssl - Should use ssl (default: false)
 
+##### webhook
+
+Calls an http/https endpoint and passes it the JSON model.
+
+Arguments:
+
+ * url - The URL to call
+ * method - The method to use in the http request (default: POST)
+ * headers - A dict of any additional headers to add to the request
+
 --
 
 #### Inspectors (Alert Types)
