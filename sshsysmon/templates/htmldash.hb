@@ -284,11 +284,25 @@ Colors from: http://clrs.cc/
 							{{!-- Exec --}}
 							{{#ifEq type 'exec'}}
 							<p>Exec: <code>{{config.command}}</code></p>
-							<p>Return: <code>{{metrics.status}}</code></p>
+							{{#if metrics.status}}<p>Return: <code>{{metrics.status}}</code></p>{{/if}}
+							{{#if metrics.stdout}}
 							Stdout:
 							<pre class="cmdbox">{{metrics.stdout}}</pre>
+							{{/if}}
+							{{#if metrics.stderr}}
 							Stderr:
 							<pre class="cmdbox">{{metrics.stderr}}</pre>
+							{{/if}}
+							{{#if config.extract}}
+							<table class="table table-striped">
+								{{#each metrics}}
+								<tr>
+									<td>{{@key}}</td>
+									<td>{{.}}</td>
+								</tr>
+								{{/each}}
+							</table>
+							{{/if}}
 							{{/ifEq}}
 
 							{{!-- Process --}}

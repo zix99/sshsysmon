@@ -21,7 +21,7 @@
 		<h3>{{name}}</h3>
 		<p>Type: {{type}}</p>
 
-		<p>{{{replace text "\n" '<br />'}}}</p>
+		<p><pre>{{{text}}}</pre></p>
 	{{/inspectors}}
 	<hr />
 {{/servers}}
