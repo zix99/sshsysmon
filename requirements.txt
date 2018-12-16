@@ -2,3 +2,4 @@ paramiko==1.16.0
 pyaml==15.8.2
 pybars3==0.9.1
 requests==2.20.0
+python-dateutil==2.7.5
