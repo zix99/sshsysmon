@@ -1,4 +1,5 @@
 from timespan import TimeSpan
+from size import ByteSize
 from datetime import datetime
 from dateutil.parser import parse
 
@@ -49,6 +50,8 @@ def findTyped(obj, path, default = None):
 			return str(resolved)
 		if objType == 'int':
 			return int(resolved)
+		if objType == 'ByteSize':
+			return ByteSize(int(resolved))
 		if objType == 'TimeSpan':
 			return TimeSpan(int(resolved))
 		if objType == 'TimeSpanFromNow':
