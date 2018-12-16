@@ -320,8 +320,15 @@ Metrics:
 Config:
 
   * command: The shell command to execute
+  * environment: Optional object of environment variables (Default: {})
+  * json: Try to parse the command's output as json (Default: false)
+  * extract: Dict of name:path pairs to extract as metrics, eg `a.[1].c` (Default: None) See: Extracting Typed Json below; json must be `true`
+
+Properties extracted as metrics can be used in alarms
 
 Metrics:
+
+**If json, those will be the output metrics instead**
 
   * stdout: The out string of the command
   * stderr: The err string of the command
@@ -374,6 +381,38 @@ Metrics:
 
   * uptime: TimeSpan of the time up
   * idle: CPU time that is idle
+
+### Data
+
+#### Extracting Typed Objects
+
+In cases where SshSysMon can parse and explore json applications, you might want to interpret data
+in a certain way. For example, it may be useful to grab a nested property and compute the TimeSpan
+from now.
+
+Object path selections are separated by `.`, and the optional type follows a `:`
+
+For example, if you have this object:
+```json
+{
+  "a" : {
+    "b" : [
+      "2018-12-15T15:57:17.619242731+01:00"
+    ]
+  }
+}
+```
+
+And you wanted to extract the number of time that has passed between that date and now, your
+selector would be `a.b.[0]:TimeSpanFromNow`
+
+The following types are supported:
+
+  * str: Convert object to string
+  * int: Convert object to int
+  * TimeSpan: Assume object is int number-of-seconds, and make TimeSpan
+  * TimeSpanFromNow: Assume object is parseable datetime, and compute TimeSpan between then and now
+  * DateTime: Parse string as datetime
 
 ### Templating
 

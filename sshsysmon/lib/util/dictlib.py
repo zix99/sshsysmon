@@ -1,4 +1,6 @@
-
+from timespan import TimeSpan
+from datetime import datetime
+from dateutil.parser import parse
 
 def merge(a, b, path=[], overwrite=False):
 	o = dict(a) # Clone
@@ -16,3 +18,44 @@ def merge(a, b, path=[], overwrite=False):
 		else:
 			o[key] = b[key]
 	return o
+
+def find(obj, path, default = None):
+	paths = path.split('.')
+
+	try:
+		ret = obj
+		for k in paths:
+			if not k:
+				continue
+			elif k.startswith('[') and k.endswith(']'):
+				# numeric
+				ret = ret[int(k[1:-1])]
+			else:
+				ret = ret[k]
+
+		return ret
+	except:
+		return default
+
+def findTyped(obj, path, default = None):
+	decl = path.split(':')
+	objPath = decl[0]
+	objType = decl[1] if len(decl) >= 2 else None
+
+	resolved = find(obj, objPath, default)
+
+	try:
+		if objType == 'str':
+			return str(resolved)
+		if objType == 'int':
+			return int(resolved)
+		if objType == 'TimeSpan':
+			return TimeSpan(int(resolved))
+		if objType == 'TimeSpanFromNow':
+			return TimeSpan((datetime.now() - parse(resolved).replace(tzinfo=None)).total_seconds())
+		if objType == 'DateTime':
+			return parse(resolved)
+	except Exception,e:
+		pass
+
+	return resolved
