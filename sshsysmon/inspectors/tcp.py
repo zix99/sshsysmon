@@ -41,7 +41,7 @@ class Tcp(Inspector):
 		return ret
 
 	def getSummary(self):
-		metrics = self.getMetrics();
+		metrics = self.getMetricsCached();
 
 		o = StringIO()
 		for k,v in metrics.iteritems():

@@ -30,7 +30,7 @@ class MemInfo(Inspector):
 		return "Memory"
 
 	def getSummary(self):
-		metrics = self.getMetrics()
+		metrics = self.getMetricsCached()
 
 		o = StringIO()
 		o.write("Mem Total:  %s\n" % metrics["mem_total"])

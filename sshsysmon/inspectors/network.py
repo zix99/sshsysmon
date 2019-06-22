@@ -50,7 +50,7 @@ class Network(Inspector):
 		}
 
 	def getSummary(self):
-		data = self.getMetrics()
+		data = self.getMetricsCached()
 		o = StringIO()
 
 		o.write("Totals:\n")

@@ -28,7 +28,7 @@ class Server:
 				if not inspector:
 					raise Exception("Unknown inspector type: %s" % monitor_type)
 
-				metrics = inspector.getMetrics()
+				metrics = inspector.getMetricsCached()
 				if not metrics:
 					raise Exception("Inspector returned no data: %s" % inspector.getName())
 
@@ -76,7 +76,7 @@ class Server:
 					inspector = loadPlugin("inspectors", monitor_type, self._driver, monitor_config)
 					
 					logging.debug("Retrieving metrics...")
-					metrics = inspector.getMetrics()
+					metrics = inspector.getMetricsCached()
 
 					logging.debug("Processing alarms...")
 					alarms = []

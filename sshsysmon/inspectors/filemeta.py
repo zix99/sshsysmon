@@ -98,7 +98,7 @@ class FileMeta(Inspector):
 		return metrics
 
 	def getSummary(self):
-		metrics = self.getMetrics()
+		metrics = self.getMetricsCached()
 
 		o = StringIO()
 
