@@ -1,7 +1,6 @@
 from driver import *
 import os
 import subprocess
-from StringIO import StringIO
 
 class Local(Driver):
 	def __init__(self, path = "/proc"):
@@ -13,10 +12,11 @@ class Local(Driver):
 
 	def sh(self, cmd):
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-		proc.wait()
+		stdout, stderr = proc.communicate()
+
 		return {
-			"stdout": proc.stdout.read(),
-			"stderr": proc.stderr.read(),
+			"stdout": stdout,
+			"stderr": stderr,
 			"status": proc.returncode
 		}
 

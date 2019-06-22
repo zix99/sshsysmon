@@ -31,6 +31,9 @@ class Exec(Inspector):
 		cmd = str.format("{} {}", envs, self._cmd)
 		ret = self._driver.sh(cmd)
 
+		if ret['status'] != 0:
+			raise Exception('Process returned non-zero exit code')
+
 		# Parse
 		if self._parseJson:
 			parsed = json.loads(ret['stdout'].strip())
