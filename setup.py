@@ -21,7 +21,7 @@ setup(name="SshSysMon",
 			'inspectors/*.md', 'inspectors/*.py'
 			],
 		},
-	version="0.2.2",
+	version="0.2.3",
 	description="Ssh Unix System Monitoring",
 	long_description=readme,
 	author="Chris LaPointe",
