@@ -1,14 +1,9 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
+import re
 
 readme = open('README.md').read()
-try:
-	import pypandoc, re
-	readme = re.sub('\!\[.+\]\(.+\)', '', readme) # Remove embedded pictures
-	readme = pypandoc.convert(readme, 'rst', format='md')
-except Exception as e:
-	print "Expected pypandoc and pandoc to be installed!"
-	print e
+readme = re.sub('\!\[.+\]\(.+\)', '', readme) # Remove embedded pictures
 
 setup(name="SshSysMon",
 	packages=find_packages(),
@@ -24,6 +19,7 @@ setup(name="SshSysMon",
 	version="0.2.3",
 	description="Ssh Unix System Monitoring",
 	long_description=readme,
+	long_description_content_type='text/markdown',
 	author="Chris LaPointe",
 	author_email="chris@zdyn.net",
 	url="https://github.com/zix99/sshsysmon",
