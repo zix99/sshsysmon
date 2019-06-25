@@ -1,5 +1,7 @@
 # Unix System Monitoring Over SSH
 
+[![Build Status](https://travis-ci.org/zix99/sshsysmon.svg?branch=master)](https://travis-ci.org/zix99/sshsysmon)
+
 SshSysMon is a system/server monitoring tool that executes all of its operations over SSH without the
 need for installing agents across machines.
 
