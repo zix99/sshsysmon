@@ -1,7 +1,7 @@
 from channelgroup import *
 from alert import *
-from lib.util import sanitize
-from lib.plugins import loadPlugin
+from sshsysmon.lib.util import sanitize
+from sshsysmon.lib.plugins import loadPlugin
 import logging
 
 class Server:

@@ -79,7 +79,7 @@ def main(args):
 	elif opts.command == "summary":
 		run_summary(config, opts.format)
 	else:
-		show_help()
+		logging.error("Invalid command %s", opts.command)
 		sys.exit(1)
 
 if __name__=="__main__":

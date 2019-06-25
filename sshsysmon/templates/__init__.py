@@ -2,7 +2,7 @@ from os import path
 import json
 import logging
 import pybars
-from lib.util import sanitize
+from sshsysmon.lib.util import sanitize
 
 TEMPLATE_PATH = path.dirname(path.realpath(__file__))
 
@@ -47,7 +47,7 @@ def __getPath(name):
 	return path.join(TEMPLATE_PATH, name + ".hb")
 
 class __ComplexEncoder(json.JSONEncoder):
-	def default(self, obj):
+	def default(self, obj): # pylint: disable=E0202
 		if hasattr(obj, '__json__'):
 			return obj.__json__()
 		else:

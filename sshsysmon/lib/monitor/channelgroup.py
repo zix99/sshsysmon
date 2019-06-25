@@ -1,5 +1,5 @@
 import logging
-from lib.plugins import loadPlugin
+from sshsysmon.lib.plugins import loadPlugin
 
 class ChannelGroup:
 	def __init__(self, channelList):
