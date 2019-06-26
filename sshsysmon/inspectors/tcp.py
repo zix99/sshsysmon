@@ -36,7 +36,7 @@ class Tcp(Inspector):
 			ret['port_%d' % port] = (sock.connect_ex((self._driver.getHost(), port)) == 0)
 			sock.close()
 
-		ret['all'] = sum(1 for p in ret.itervalues() if not p) == 0
+		ret['all'] = sum(1 for p in ret.values() if not p) == 0
 
 		return ret
 
@@ -44,7 +44,7 @@ class Tcp(Inspector):
 		metrics = self.getMetricsCached();
 
 		o = StringIO()
-		for k,v in metrics.iteritems():
+		for k,v in metrics.items():
 			o.write("Port %s: %s\n" % (k, "Open" if v else "Closed"))
 
 		return o.getvalue()

@@ -1,5 +1,5 @@
-from timespan import TimeSpan
-from size import ByteSize
+from .timespan import TimeSpan
+from .size import ByteSize
 from datetime import datetime
 from dateutil.parser import parse
 

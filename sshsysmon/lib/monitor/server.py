@@ -32,7 +32,7 @@ class Server:
 				if not metrics:
 					raise Exception("Inspector returned no data: %s" % inspector.getName())
 
-				for alarm_name, statement in monitor_alarms.iteritems():
+				for alarm_name, statement in monitor_alarms.items():
 					alerts.append(Alert(self._name, monitor_type, alarm_name, statement, metrics))
 
 			except Exception as e:
@@ -80,7 +80,7 @@ class Server:
 
 					logging.debug("Processing alarms...")
 					alarms = []
-					for alarm_name, statement in monitor_alarms.iteritems():
+					for alarm_name, statement in monitor_alarms.items():
 						alert = Alert(self._name, monitor_type, alarm_name, statement, metrics)
 						alarms.append({
 							"name" : alarm_name,

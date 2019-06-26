@@ -22,7 +22,7 @@ def normalizeDataType(val):
 class Lookup:
 	def __init__(self, dic):
 		self._data = {}
-		for k,v in dic.iteritems():
+		for k,v in dic.items():
 			self._data[k.upper()] = v if isinstance(v, list) else [v]
 
 	def __getitem__(self, key):

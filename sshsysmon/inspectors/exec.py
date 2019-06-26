@@ -40,7 +40,7 @@ class Exec(Inspector):
 
 			if self._extract:
 				extracted = {}
-				for k,v in self._extract.iteritems():
+				for k,v in self._extract.items():
 					extracted[k] = findTyped(parsed, v)
 				return extracted
 
