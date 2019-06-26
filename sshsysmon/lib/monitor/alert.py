@@ -18,7 +18,7 @@ class Alert:
 
 	def eval(self):
 		try:
-			for k in self._data.iterkeys():
+			for k in self._data.keys():
 				exec("%s = self._data['%s']" % (k, k))
 			return eval(self.statement)
 		except Exception as e:
