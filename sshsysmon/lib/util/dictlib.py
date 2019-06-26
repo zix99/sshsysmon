@@ -58,7 +58,7 @@ def findTyped(obj, path, default = None):
 			return TimeSpan((datetime.now() - parse(resolved).replace(tzinfo=None)).total_seconds())
 		if objType == 'DateTime':
 			return parse(resolved)
-	except Exception,e:
+	except Exception as e:
 		pass
 
 	return resolved

@@ -3,7 +3,7 @@ def splitLines(data, delim = ':'):
 	vals = {}
 
 	for line in data.splitlines():
-		s = map(lambda x: x.strip(), line.split(delim))
+		s = list(map(lambda x: x.strip(), line.split(delim)))
 		if len(s) == 2:
 			vals[s[0].lower()] = map(lambda x: normalizeDataType(x), s[1].split())
 
@@ -29,7 +29,7 @@ class Lookup:
 		return self._data[key.upper()]
 
 	def __iter__(self):
-		return self._data.iteritems()
+		return iter(self._data.items())
 
 	def get(self, key, idx=0, default = None):
 		rKey = key.upper()

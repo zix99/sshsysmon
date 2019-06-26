@@ -1,7 +1,7 @@
-from channelgroup import *
-from alert import *
-from sshsysmon.lib.util import sanitize
-from sshsysmon.lib.plugins import loadPlugin
+from .channelgroup import *
+from .alert import *
+from ..util import sanitize
+from ..plugins import loadPlugin
 import logging
 
 class Server:
@@ -35,7 +35,7 @@ class Server:
 				for alarm_name, statement in monitor_alarms.iteritems():
 					alerts.append(Alert(self._name, monitor_type, alarm_name, statement, metrics))
 
-			except Exception,e:
+			except Exception as e:
 				logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
 				alerts.append(Alert(self._name, monitor_type, "NO_DATA", "True", {}))
 
@@ -99,7 +99,7 @@ class Server:
 						"alarms" : alarms
 					})
 
-				except Exception, e:
+				except Exception as e:
 					logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
 
 		return {

@@ -4,9 +4,10 @@ import yaml
 import time
 import logging
 import argparse
-from templates import template
-from lib.monitor import *
-from lib.util import merge
+from functools import reduce
+from .templates import template
+from .lib.monitor import *
+from .lib.util import merge
 
 def run_check(config):
 	count = 0
@@ -18,7 +19,7 @@ def run_check(config):
 			server = config["servers"][server_name]
 			server = Server(server_name, server)
 			count += len(server.notifyChannelsOfAlerts())
-		except Exception, e:
+		except Exception as e:
 			logging.error("Error checking server %s: %s" % (server_name, e))
 
 	sys.stderr.write("There were %d alert(s) triggered\n" % count)
@@ -31,7 +32,7 @@ def run_summary(config, templateName=None):
 			try:
 				server = Server(server_name, server)
 				servers.append(server.getSummary())
-			except Exception, e:
+			except Exception as e:
 				logging.warning("Unable to add server summary for %s: %s" % (server_name, e))
 
 	data = {
@@ -40,7 +41,7 @@ def run_summary(config, templateName=None):
 		"meta" : config.get('meta', {})
 	}
 
-	print template(templateName, data)
+	print(template(templateName, data))
 
 
 
@@ -70,7 +71,7 @@ def main(args):
 				opts.configs
 				)
 			)
-	except Exception, e:
+	except Exception as e:
 		logging.error("Error parsing config: " + str(e))
 		sys.exit(1)
 

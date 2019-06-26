@@ -12,7 +12,7 @@ class ChannelGroup:
 			try:
 				inst = loadPlugin("channels", channel_type, channel_config)
 				self._channels.append(inst)
-			except Exception, e:
+			except Exception as e:
 				logging.warning("Error notifying channel: %s" % e)
 
 	def notify(self, alert, data = {}):
@@ -27,5 +27,5 @@ class ChannelGroup:
 		for channel in self._channels:
 			try:
 				channel.notify(payload)
-			except Exception, e:
+			except Exception as e:
 				logging.warning("Error notifying channel %s: %s" % (channel, e))

@@ -21,7 +21,7 @@ class Alert:
 			for k in self._data.iterkeys():
 				exec("%s = self._data['%s']" % (k, k))
 			return eval(self.statement)
-		except Exception, e:
+		except Exception as e:
 			logging.warning("Error validating alert %s:%s: %s" % (self.serverName, self.name, e))
 		return True
 

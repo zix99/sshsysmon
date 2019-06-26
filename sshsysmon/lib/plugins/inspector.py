@@ -1,4 +1,4 @@
-from StringIO import StringIO
+from io import StringIO
 
 class Inspector:
 	def __init__(self):
