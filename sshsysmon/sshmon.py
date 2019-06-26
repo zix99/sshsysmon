@@ -11,6 +11,7 @@ from .lib.util import merge
 
 def run_check(config):
 	count = 0
+	count_exc = 0
 
 	for server_name in config["servers"]:
 		logging.info("Checking server: %s..." % server_name)
@@ -21,11 +22,16 @@ def run_check(config):
 			count += len(server.notifyChannelsOfAlerts())
 		except Exception as e:
 			logging.error("Error checking server %s: %s" % (server_name, e))
+			count_exc += 1
 
 	sys.stderr.write("There were %d alert(s) triggered\n" % count)
 
+	if count_exc > 0:
+		sys.exit(1)
+
 def run_summary(config, templateName=None):
 	servers = []
+	count_exc = 0
 	for server_name, server in config["servers"].items():
 		if server.get('summarize', True):
 			logging.debug("Checking server: %s..." % server_name)
@@ -34,6 +40,7 @@ def run_summary(config, templateName=None):
 				servers.append(server.getSummary())
 			except Exception as e:
 				logging.warning("Unable to add server summary for %s: %s" % (server_name, e))
+				count_exc += 1
 
 	data = {
 		"ctime" : time.ctime(),
@@ -41,7 +48,13 @@ def run_summary(config, templateName=None):
 		"meta" : config.get('meta', {})
 	}
 
-	print(template(templateName, data))
+	sys.stdout.write(template(templateName, data))
+
+	if count_exc > 0:
+		sys.exit(1)
+
+	if any(map(lambda x: len(x['errors']) > 0, servers)):
+		sys.exit(4)
 
 
 

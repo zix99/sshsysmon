@@ -63,6 +63,7 @@ class Server:
 
 	# Prints out summary to stdout
 	def getSummary(self):
+		errors = []
 		results = []
 		for monitor in self._monitors:
 			if monitor.get('summarize', True): #Ability to hide at monitor level
@@ -101,11 +102,13 @@ class Server:
 
 				except Exception as e:
 					logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
+					errors.append(e)
 
 		return {
 			"name" : self._name,
 			"inspectors" : results,
-			"meta" : self._meta
+			"meta" : self._meta,
+			"errors" : errors,
 		}
 
 
