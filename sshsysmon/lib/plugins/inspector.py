@@ -22,8 +22,8 @@ class Inspector:
 
 		if metrics:
 			for key in itemFilter or metrics:
-				o.write("%s: %s\n" % (key.upper(), metrics.get(key, "<Missing>")))
+				o.write(u"%s: %s\n" % (key.upper(), metrics.get(key, "<Missing>")))
 		else:
-			o.write("Unable to retrieve metrics")
+			o.write(u"Unable to retrieve metrics")
 
 		return o.getvalue()
