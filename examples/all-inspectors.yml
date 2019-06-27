@@ -1,0 +1,65 @@
+# This config will cover a normal case
+# It provides simple defaults, and alerts, based on a normal use-case
+
+meta:
+  title: My System Monitor
+  author: zix99
+  animation: 'false'
+  
+# Define our servers
+servers:
+  "localhost":
+    driver: local
+    channels:
+    - type: stdout
+    monitors:
+      - type: memory
+        alarms:
+          "Memory < 1MB" : "mem_free.mb < 1"
+          "Swap < 10MB" : "swap_free.mb < 10"
+      - type: disk
+        alarms:
+          "Disk Space < 1GB" : "available.gb < 1"
+      - type: tcp
+        config:
+          ports: 22
+        alarms:
+          "Not listening on ssh" : "not port_22"
+        summarize: false # We don't want TCP to show explicitely in the summary
+      - type: loadavg
+        alarms:
+          "High load" : "load_15m > 1"
+      - type: filemeta
+        config:
+          path: /var/log
+          match: "*.log"
+        alarms:
+          "Nothing is logging" : "newest.days > 1"
+        summarize: false
+      - type: process
+        config:
+          name: '*'
+        alarms:
+          "Has PID": "not pid"
+      - type: http
+        config:
+          port: 8000
+          path: /dnasdf
+        alarms:
+          'Not listening on http': 'success'
+          'Correct status': 'status != 0'
+      - type: exec
+        config:
+          command: "echo {\\\"abc\\\": 223}"
+          json: True
+          environment:
+            VAL: 223
+          extract:
+            a: 'abc'
+        alarms:
+          'Has key': 'a != 223'
+      - type: network
+      - type: system
+        alarms:
+          'Is up': 'uptime.seconds < 1'
+

@@ -1,4 +1,4 @@
-from inspector import Inspector
+from lib.plugins import Inspector
 from fnmatch import fnmatch
 
 """
@@ -22,7 +22,7 @@ class Process(Inspector):
 	def getMetrics(self):
 		data = self._driver.sh("ps -A u")['stdout']
 
-		for line in data.splitlines():
+		for line in data.splitlines()[1:]:
 			# User, pid, cpu, mem, vsz, rss, tty, stat, start, time, cmd
 			parts = line.split()
 			if fnmatch(parts[10], self._process):

@@ -2,7 +2,8 @@ from os import path
 import json
 import logging
 import pybars
-from sshsysmon.lib.util import sanitize
+import io
+from ..lib.util import sanitize
 
 TEMPLATE_PATH = path.dirname(path.realpath(__file__))
 
@@ -38,7 +39,7 @@ __helpers = {
 
 def __template(src, data):
 	hbCompiler = pybars.Compiler()
-	hbTemplate = hbCompiler.compile(unicode(src))
+	hbTemplate = hbCompiler.compile(src)
 	return hbTemplate(data, helpers = __helpers)
 
 def __getPath(name):
@@ -58,7 +59,7 @@ def template(name, data):
 		tplPath = __getPath(name)
 		if path.isfile(tplPath):
 			logging.debug("Building template with: " + tplPath)
-			return __template(open(tplPath, 'r').read(), data)
+			return __template(io.open(tplPath, 'r', encoding='utf-8').read(), data)
 		else:
 			logging.error("Unable to find requested template: " + name)
 

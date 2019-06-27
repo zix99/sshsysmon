@@ -1,5 +1,5 @@
 import subprocess
-from channel import Channel
+from lib.plugins import Channel
 
 class Command(Channel):
 	def __init__(self, command):

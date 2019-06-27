@@ -1,6 +1,11 @@
-from inspector import Inspector
+from lib.plugins import Inspector
 import re
-import urllib2
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import urlopen
 import json as jsonParser
 
 """
@@ -44,8 +49,8 @@ class Http(Inspector):
 		}
 		
 		try:
-			req = urllib2.Request(url)
-			response = urllib2.urlopen(req)
+			logging.debug("Making request to %s", url)
+			response = urlopen(url)
 			content = response.read()
 			out['status'] = response.getcode()
 
@@ -56,11 +61,8 @@ class Http(Inspector):
 
 			if self._json:
 				out['json'] = jsonParser.loads(content)
-
-		except urllib2.HTTPError, e:
-			out['status'] = e.getcode()
-			out['success'] = False
-		except:
+		except Exception as e:
+			out['status'] = getattr(e, 'code', 0)
 			out['success'] = False
 
 		return out

@@ -1,5 +1,5 @@
-from inspector import Inspector
-from StringIO import StringIO
+from lib.plugins import Inspector
+from io import StringIO
 from lib.util import ByteSize, parsers
 
 """
@@ -33,10 +33,10 @@ class MemInfo(Inspector):
 		metrics = self.getMetricsCached()
 
 		o = StringIO()
-		o.write("Mem Total:  %s\n" % metrics["mem_total"])
-		o.write("Mem Free :  %s\n" % metrics["mem_free"])
-		o.write("Swap Total: %s\n" % metrics["swap_total"])
-		o.write("Swap Free:  %s\n" % metrics["swap_free"])
+		o.write(u"Mem Total:  %s\n" % metrics["mem_total"])
+		o.write(u"Mem Free :  %s\n" % metrics["mem_free"])
+		o.write(u"Swap Total: %s\n" % metrics["swap_total"])
+		o.write(u"Swap Free:  %s\n" % metrics["swap_free"])
 
 		return o.getvalue()
 

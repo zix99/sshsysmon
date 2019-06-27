@@ -1,8 +1,9 @@
-from timespan import TimeSpan
-from size import ByteSize
+from .timespan import TimeSpan
+from .size import ByteSize
 from datetime import datetime
 from dateutil.parser import parse
 
+# Merge b into a. path is for logging
 def merge(a, b, path=[], overwrite=False):
 	o = dict(a) # Clone
 
@@ -20,6 +21,8 @@ def merge(a, b, path=[], overwrite=False):
 			o[key] = b[key]
 	return o
 
+# given a path such as a.b.[3]
+# resolve what is in the object at that location, or default
 def find(obj, path, default = None):
 	paths = path.split('.')
 
@@ -38,6 +41,8 @@ def find(obj, path, default = None):
 	except:
 		return default
 
+# Given the format "path:type", where type is one listed below
+# resolve the value of the object at the given path to the required type
 def findTyped(obj, path, default = None):
 	decl = path.split(':')
 	objPath = decl[0]
@@ -58,7 +63,7 @@ def findTyped(obj, path, default = None):
 			return TimeSpan((datetime.now() - parse(resolved).replace(tzinfo=None)).total_seconds())
 		if objType == 'DateTime':
 			return parse(resolved)
-	except Exception,e:
+	except Exception as e:
 		pass
 
 	return resolved

@@ -22,6 +22,7 @@ It monitors things in /proc and with simple command executions to monitor system
 
 ```bash
 pip install sshsysmon
+sshmon --help
 ```
 
 #### Manually (No Install)
@@ -35,7 +36,7 @@ wget -O - https://github.com/zix99/sshsysmon/archive/master.tar.gz | tar xzv
 
 # Make sure the dependencies are installed:
 cd sshsysmon-master/
-sudo pip install -r requirements.txt
+pip install -r requirements.txt
 
 # Test it out!
 ./sshmon summary examples/starter.yml

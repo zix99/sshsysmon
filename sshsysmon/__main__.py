@@ -1,3 +1,3 @@
 import sys
-import sshmon
+from sshsysmon import sshmon
 sshmon.main(sys.argv[1:])

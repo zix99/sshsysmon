@@ -1,7 +1,7 @@
 
 
 """
-Wrapper for timedelta class to provide nicer access
+Wrapper for timedelta class to provide nicer access for alarms
 """
 class TimeSpan:
 	def __init__(self, seconds):

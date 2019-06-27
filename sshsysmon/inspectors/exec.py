@@ -1,5 +1,5 @@
 import logging
-from inspector import Inspector
+from lib.plugins import Inspector
 from lib.util import findTyped
 import json
 
@@ -22,7 +22,7 @@ class Exec(Inspector):
 
 	def getMetrics(self):
 		# Serialize environment
-		envs = str.join(' ', map(lambda (k,v): str.format('{}="{}"', k, v), self._environment.items()))
+		envs = str.join(' ', map(lambda kv: str.format('{}="{}"', kv[0], kv[1]), self._environment.items()))
 
 		# Log; Intentionally don't log formed command, could have secrets
 		logging.debug("Executing command: %s", self._cmd)
@@ -40,7 +40,7 @@ class Exec(Inspector):
 
 			if self._extract:
 				extracted = {}
-				for k,v in self._extract.iteritems():
+				for k,v in self._extract.items():
 					extracted[k] = findTyped(parsed, v)
 				return extracted
 

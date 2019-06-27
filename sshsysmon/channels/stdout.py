@@ -1,4 +1,4 @@
-from channel import Channel
+from lib.plugins import Channel
 import time
 
 class StdOut(Channel):
@@ -20,7 +20,7 @@ class StdOut(Channel):
 		}
 		data.update(model)
 
-		print self._format.format(**data)
+		print(self._format.format(**data))
 
 def create(args):
 	return StdOut(**args)

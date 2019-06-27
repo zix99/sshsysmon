@@ -1,8 +1,9 @@
-from channelgroup import *
-from alert import *
-from sshsysmon.lib.util import sanitize
-from sshsysmon.lib.plugins import loadPlugin
+from .channelgroup import *
+from .alert import *
+from ..util import sanitize
+from ..plugins import loadPlugin
 import logging
+import traceback
 
 class Server:
 	def __init__(self, name, config):
@@ -32,11 +33,12 @@ class Server:
 				if not metrics:
 					raise Exception("Inspector returned no data: %s" % inspector.getName())
 
-				for alarm_name, statement in monitor_alarms.iteritems():
+				for alarm_name, statement in monitor_alarms.items():
 					alerts.append(Alert(self._name, monitor_type, alarm_name, statement, metrics))
 
-			except Exception,e:
+			except Exception as e:
 				logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
+				logging.debug(traceback.format_exc())
 				alerts.append(Alert(self._name, monitor_type, "NO_DATA", "True", {}))
 
 		return alerts
@@ -63,6 +65,7 @@ class Server:
 
 	# Prints out summary to stdout
 	def getSummary(self):
+		errors = []
 		results = []
 		for monitor in self._monitors:
 			if monitor.get('summarize', True): #Ability to hide at monitor level
@@ -80,7 +83,7 @@ class Server:
 
 					logging.debug("Processing alarms...")
 					alarms = []
-					for alarm_name, statement in monitor_alarms.iteritems():
+					for alarm_name, statement in monitor_alarms.items():
 						alert = Alert(self._name, monitor_type, alarm_name, statement, metrics)
 						alarms.append({
 							"name" : alarm_name,
@@ -99,13 +102,16 @@ class Server:
 						"alarms" : alarms
 					})
 
-				except Exception, e:
+				except Exception as e:
 					logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
+					logging.debug(traceback.format_exc())
+					errors.append(e)
 
 		return {
 			"name" : self._name,
 			"inspectors" : results,
-			"meta" : self._meta
+			"meta" : self._meta,
+			"errors" : errors,
 		}
 
 

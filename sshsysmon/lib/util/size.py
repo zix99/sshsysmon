@@ -1,4 +1,5 @@
 
+# A smart ByteSize object that can be used to query and retrieve sizes of objects
 class ByteSize:
 	SIZE_SUFFIX = ["B", "KB", "MB", "GB", "TB", "PB"]
 
