@@ -45,7 +45,7 @@ class Tcp(Inspector):
 
 		o = StringIO()
 		for k,v in metrics.items():
-			o.write("Port %s: %s\n" % (k, "Open" if v else "Closed"))
+			o.write(u"Port %s: %s\n" % (k, "Open" if v else "Closed"))
 
 		return o.getvalue()
 

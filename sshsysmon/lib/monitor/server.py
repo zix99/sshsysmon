@@ -3,6 +3,7 @@ from .alert import *
 from ..util import sanitize
 from ..plugins import loadPlugin
 import logging
+import traceback
 
 class Server:
 	def __init__(self, name, config):
@@ -37,6 +38,7 @@ class Server:
 
 			except Exception as e:
 				logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
+				logging.debug(traceback.format_exc())
 				alerts.append(Alert(self._name, monitor_type, "NO_DATA", "True", {}))
 
 		return alerts
@@ -102,6 +104,7 @@ class Server:
 
 				except Exception as e:
 					logging.warning("Error executing inspector %s: %s" % (monitor_type, e))
+					logging.debug(traceback.format_exc())
 					errors.append(e)
 
 		return {

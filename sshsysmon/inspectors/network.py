@@ -53,24 +53,24 @@ class Network(Inspector):
 		data = self.getMetricsCached()
 		o = StringIO()
 
-		o.write("Totals:\n")
-		o.write("  Received:    %s\n" % data['totals']['received'])
-		o.write("  Transmitted: %s\n" % data['totals']['transmitted'])
+		o.write(u"Totals:\n")
+		o.write(u"  Received:    %s\n" % data['totals']['received'])
+		o.write(u"  Transmitted: %s\n" % data['totals']['transmitted'])
 
 		for d,metrics in data['interfaces'].items():
-			o.write("%s\n" % d)
+			o.write(u"%s\n" % d)
 
-			o.write("  Receive:\n")
-			o.write("    Bytes:   %s\n" % metrics['receive']['bytes'])
-			o.write("    Packets: %s\n" % metrics['receive']['packets'])
-			o.write("    Errors:  %s\n" % metrics['receive']['errors'])
-			o.write("    Drop:    %s\n" % metrics['receive']['drop'])
+			o.write(u"  Receive:\n")
+			o.write(u"    Bytes:   %s\n" % metrics['receive']['bytes'])
+			o.write(u"    Packets: %s\n" % metrics['receive']['packets'])
+			o.write(u"    Errors:  %s\n" % metrics['receive']['errors'])
+			o.write(u"    Drop:    %s\n" % metrics['receive']['drop'])
 
-			o.write("  Transmit:\n")
-			o.write("    Bytes:   %s\n" % metrics['transmit']['bytes'])
-			o.write("    Packets: %s\n" % metrics['transmit']['packets'])
-			o.write("    Errors:  %s\n" % metrics['transmit']['errors'])
-			o.write("    Drop:    %s\n" % metrics['transmit']['drop'])
+			o.write(u"  Transmit:\n")
+			o.write(u"    Bytes:   %s\n" % metrics['transmit']['bytes'])
+			o.write(u"    Packets: %s\n" % metrics['transmit']['packets'])
+			o.write(u"    Errors:  %s\n" % metrics['transmit']['errors'])
+			o.write(u"    Drop:    %s\n" % metrics['transmit']['drop'])
 
 		return o.getvalue()
 
