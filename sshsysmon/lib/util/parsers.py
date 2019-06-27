@@ -1,4 +1,8 @@
 
+# Parse pairs of deliminated values into a lookup table
+# eg:
+# a: 123
+# b:    567
 def splitLines(data, delim = ':'):
 	vals = {}
 
@@ -9,7 +13,7 @@ def splitLines(data, delim = ':'):
 
 	return Lookup(vals)
 
-
+# NTry to turn a data type into a numeric
 def normalizeDataType(val):
 	try:
 		return int(val)
@@ -19,6 +23,7 @@ def normalizeDataType(val):
 	except: pass
 	return val
 
+# Lookup table changes a dict into a js-style object with __getitem__ acceosrs
 class Lookup:
 	def __init__(self, dic):
 		self._data = {}
