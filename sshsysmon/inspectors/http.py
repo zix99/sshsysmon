@@ -1,4 +1,4 @@
-from inspector import Inspector
+from lib.plugins import Inspector
 import re
 import urllib2
 import json as jsonParser
@@ -57,7 +57,7 @@ class Http(Inspector):
 			if self._json:
 				out['json'] = jsonParser.loads(content)
 
-		except urllib2.HTTPError, e:
+		except urllib2.HTTPError as e:
 			out['status'] = e.getcode()
 			out['success'] = False
 		except:

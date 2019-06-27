@@ -5,7 +5,7 @@ def splitLines(data, delim = ':'):
 	for line in data.splitlines():
 		s = list(map(lambda x: x.strip(), line.split(delim)))
 		if len(s) == 2:
-			vals[s[0].lower()] = map(lambda x: normalizeDataType(x), s[1].split())
+			vals[s[0].lower()] = list(map(lambda x: normalizeDataType(x), s[1].split()))
 
 	return Lookup(vals)
 

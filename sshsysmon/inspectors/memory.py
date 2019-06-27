@@ -1,5 +1,5 @@
-from inspector import Inspector
-from StringIO import StringIO
+from lib.plugins import Inspector
+from io import StringIO
 from lib.util import ByteSize, parsers
 
 """

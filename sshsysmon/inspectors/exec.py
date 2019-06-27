@@ -1,5 +1,5 @@
 import logging
-from inspector import Inspector
+from lib.plugins import Inspector
 from lib.util import findTyped
 import json
 

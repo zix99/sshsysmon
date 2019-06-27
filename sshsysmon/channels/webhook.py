@@ -1,4 +1,4 @@
-from channel import Channel
+from lib.plugins import Channel
 import requests
 import logging
 
@@ -14,7 +14,7 @@ class WebHook(Channel):
 			req = requests.request(self._method, self._url, data=model, headers=self._headers, verify=self._verify)
 			if req.status_code / 100 != 2:
 				raise Exception('Status code not 2xx')
-		except Exception, e:
+		except Exception as e:
 			logging.error("There was an error calling the webhook %s: %s" % (self._url, e))
 
 def create(args):

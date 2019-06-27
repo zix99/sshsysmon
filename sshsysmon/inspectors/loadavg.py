@@ -1,4 +1,4 @@
-from inspector import Inspector
+from lib.plugins import Inspector
 
 """
 Description:

@@ -1,5 +1,5 @@
 from fnmatch import fnmatch
-from inspector import Inspector
+from lib.plugins import Inspector
 from lib.util import ByteSize
 
 """

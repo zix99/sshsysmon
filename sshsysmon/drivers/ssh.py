@@ -1,4 +1,4 @@
-from driver import *
+from lib.plugins import Driver
 import os
 from paramiko import SSHClient, RSAKey, AutoAddPolicy
 from StringIO import StringIO

@@ -1,4 +1,4 @@
-from driver import *
+from lib.plugins import Driver
 import os
 import subprocess
 
@@ -15,8 +15,8 @@ class Local(Driver):
 		stdout, stderr = proc.communicate()
 
 		return {
-			"stdout": stdout,
-			"stderr": stderr,
+			"stdout": stdout.decode('utf-8'),
+			"stderr": stderr.decode('utf-8'),
 			"status": proc.returncode
 		}
 
