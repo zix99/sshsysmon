@@ -42,8 +42,12 @@ servers:
         alarms:
           "Has PID": "not pid"
       - type: http
+        config:
+          port: 8000
+          path: /dnasdf
         alarms:
           'Not listening on http': 'success'
+          'Correct status': 'status != 0'
       - type: exec
         config:
           command: "echo {\\\"abc\\\": 223}"
