@@ -1,7 +1,7 @@
 from lib.plugins import Driver
 import os
 from paramiko import SSHClient, RSAKey, AutoAddPolicy
-from StringIO import StringIO
+from io import StringIO
 
 class Ssh(Driver):
 	DEFAULT_KEY_PATH = "~/.ssh/id_rsa"
