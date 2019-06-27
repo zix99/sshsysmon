@@ -35,8 +35,8 @@ class Ssh(Driver):
 		client = self._connect()
 		stdin, stdout, stderr = client.exec_command(cmd)
 		return {
-			"stdout": stdout.read(),
-			"stderr": stderr.read(),
+			"stdout": stdout.read().decode('utf-8'),
+			"stderr": stderr.read().decode('utf-8'),
 			"status": stdout.channel.recv_exit_status()
 		}
 
