@@ -9,4 +9,4 @@ install:
 script:
 - ./validate.sh
 - pylint sshsysmon
-- ./sshmon summary examples/starter.yml
+- ./sshmon summary examples/all-inspectors.yml
