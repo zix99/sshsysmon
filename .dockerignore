@@ -1,0 +1,4 @@
+dist/
+SshSysMon.egg-info/
+*.pyc
+test.yml

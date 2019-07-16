@@ -25,6 +25,22 @@ pip install sshsysmon
 sshmon --help
 ```
 
+#### Via Docker
+
+There is a docker image available on dockerhub based on alpine.
+
+It can be run with the following:
+
+```bash
+docker run -it zix99/sshsysmon summary examples/starter.yml
+```
+
+If you have a config you wish to pass in, you can do so via a volume or swarm config.
+
+```bash
+docker run -it -v config.yml:config.yml zix99/sshsysmon summary config.yml
+```
+
 #### Manually (No Install)
 
 ```bash
