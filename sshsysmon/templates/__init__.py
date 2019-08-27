@@ -29,12 +29,20 @@ def __coalesce(this, *args):
 def __alphanum(this, val, replaceWith='_'):
 	return sanitize(val, replaceWith)
 
+def __numeric(this, val):
+	if hasattr(val, '__float__'):
+		return float(val)
+	if hasattr(val, '__int__'):
+		return int(val)
+	return str(val)
+
 __helpers = {
 	'ifEq' : __ifEq,
 	'replace' : __replace,
 	'coalesce' : __coalesce,
 	'alphanum': __alphanum,
-	'format': __format
+	'format': __format,
+	'numeric': __numeric,
 }
 
 def __template(src, data):
