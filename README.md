@@ -437,6 +437,14 @@ The following types are supported:
 
 SshSysMon uses handlebars to template its summary output.  See the [templating](/templates) for more information.
 
+#### Prometheus
+
+SshSysMon supports writing to a format supported by prometheus, which can in-turn be pushed to a pushgateway via a pipe.
+
+```sh
+sshmon -f prometheus myconfig.yml | curl --data-binary @- http://prometheus.example.com/metrics/job/sshmon
+```
+
 ### Writing Your Own Component
 
 To learn how to write a specific type of component, visit its readme in the appropriate subfolder.
