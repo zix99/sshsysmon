@@ -26,7 +26,7 @@ setup(name="SshSysMon",
 	license="MIT",
 	keywords=["monitoring", "ssh", "linux", "unix"],
 	install_requires=[
-		"paramiko==1.16.0",
+		"paramiko==2.10.1",
 		"pyaml==15.8.2",
 		"pybars3==0.9.1"
 		],
