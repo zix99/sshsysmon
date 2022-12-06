@@ -80,7 +80,7 @@ def main(args):
 		config = reduce(
 			lambda a,b: merge(a,b, overwrite=opts.merge),
 			map(
-				lambda filename: yaml.load(open(filename, 'r')),
+				lambda filename: yaml.safe_load(open(filename, 'r')),
 				opts.configs
 				)
 			)
