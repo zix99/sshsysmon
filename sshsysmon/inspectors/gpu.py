@@ -1,5 +1,3 @@
-import logging
-from fnmatch import fnmatch
 from lib.plugins import Inspector
 from lib.util import ByteSize
 
@@ -9,6 +7,7 @@ Description:
 
 Constructor:
     device: The gpu id (eg 0 or 1) (Default: 0)
+    vendor: The GPU vendor (eg NVIDIA) (Default: NVIDIA)
 
 Metrics:
     size: ByteSize of the device
@@ -17,19 +16,22 @@ Metrics:
     percentage_full: The integer percentage of how full the memory is
 """
 class GPUMemory(Inspector):
-    def __init__(self, driver, device = 0):
+    def __init__(self, driver, device = 0, vendor = 'NVIDIA'):
         self._driver = driver
         self._device = device
+        self._vendor = vendor
 
     def getMetrics(self):
-        df = self._driver.sh('nvidia-smi --query-gpu=memory.total,memory.used,memory.free --format=csv')
+        if self._vendor == 'NVIDIA':
+            df = self._driver.sh('nvidia-smi --query-gpu=memory.total,memory.used,memory.free --format=csv')
 
-        metric = None
+            #Parse and find matching metric
+            line = df['stdout'].splitlines()[1 + self._device]
+            segs = line.replace('MiB', '').split(', ')
+            metric = list(map(int, segs))
 
-        #Parse and find matching metric
-        line = df['stdout'].splitlines()[1 + self._device]
-        segs = line.replace('MiB', '').split(', ')
-        metric = list(map(int, segs))
+        else:
+            raise NotImplementedError(f"No implementation found for vendor '{self._vendor}'!")
 
         if not metric:
             return {}
