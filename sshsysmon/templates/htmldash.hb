@@ -63,7 +63,7 @@ Colors from: http://clrs.cc/
 				</div>
 			</div>
 		</nav>
-		
+
 		<a name="top"></a>
 
 		<div class="container">
@@ -80,7 +80,7 @@ Colors from: http://clrs.cc/
 			<div class="container-fluid">
 				<div class="row">
 					{{!-- Alarms --}}
-					<div class="col-xs-4 inspector">
+					<div class="col-xs-12 col-md-4 inspector">
 						<h2>Alarms</h2>
 						<table class="table table-condensed table-striped">
 							{{#inspectors}}{{#alarms}}
@@ -100,7 +100,7 @@ Colors from: http://clrs.cc/
 
 
 					{{#inspectors}}
-						<div class="col-xs-4 inspector">
+						<div class="col-xs-12 col-md-4 inspector">
 							<h2>{{name}}</h2>
 
 							{{!-- MEMORY --}}
@@ -185,6 +185,44 @@ Colors from: http://clrs.cc/
 									];
 
 									var ctx = document.getElementById("disk-{{alphanum ../name}}-{{alphanum name}}").getContext("2d");
+									new Chart(ctx).Pie(data);
+								})();
+								</script>
+								<table class="table table-striped table-condensed">
+									<tr>
+										<td>Used</td>
+										<td>{{metrics.used}}</td>
+									</tr>
+									<tr>
+										<td>Free</td>
+										<td>{{metrics.available}}</td>
+									</tr>
+									<tr>
+										<td>Total</td>
+										<td>{{metrics.size}}</td>
+									</tr>
+								</table>
+							{{/ifEq}}
+
+							{{!-- GPU Mem --}}
+							{{#ifEq type 'gpu'}}
+								<canvas id="gpu-{{alphanum ../name}}-{{alphanum name}}" width="150" height="150"></canvas>
+								<script type="text/javascript">
+								(function(){
+									var data = [
+										{
+											value: {{metrics.used.gb}}|0,
+											color: "#001f3f",
+											label: "Used (GB)"
+										},
+										{
+											value: {{metrics.available.gb}}|0,
+											color: "#DDDDDD",
+											label: "Free(GB)"
+										}
+									];
+
+									var ctx = document.getElementById("gpu-{{alphanum ../name}}-{{alphanum name}}").getContext("2d");
 									new Chart(ctx).Pie(data);
 								})();
 								</script>
